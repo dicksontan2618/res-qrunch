@@ -135,45 +135,59 @@ export default function Home() {
         <h1>Food Delivery App</h1>
       </header>
 
-      <div id="location-section">
-        <label htmlFor="location-input">Enter Your Location:</label>
-        <input type="text" id="location-input" placeholder="E.g., Your City" />
-        <button onClick="saveLocation()">Save Location</button>
+      <div className="hidden md:flex md:justify-center md:items-center md:w-screen md:h-screen ">
+        <h1>Application only available in mobile view!</h1>
       </div>
 
-      <div id="vendor-section">
-        <label htmlFor="vendor-select">Select Vendor:</label>
-        <select id="vendor-select">
-          <option value="all">All Vendors</option>
-          <option value="vendor1">Vendor 1</option>
-          <option value="vendor2">Vendor 2</option>
-          {/* Add more options as needed */}
-        </select>
-      </div>
+      <div className="block md:hidden">
+        <div id="location-section">
+          <label htmlFor="location-input">Enter Your Location:</label>
+          <input
+            type="text"
+            id="location-input"
+            placeholder="E.g., Your City"
+          />
+          <button onClick="saveLocation()">Save Location</button>
+        </div>
 
-      <div id="search-bar">
-        <input type="text" id="search-input" placeholder="Search for food..." />
-        <select id="food-filter">
-          <option value="all">All</option>
-          <option value="pizza">Pizza</option>
-          <option value="burger">Burger</option>
-          <option value="sushi">Sushi</option>
-          {/* Add more options as needed */}
-        </select>
-      </div>
+        <div id="vendor-section">
+          <label htmlFor="vendor-select">Select Vendor:</label>
+          <select id="vendor-select">
+            <option value="all">All Vendors</option>
+            <option value="vendor1">Vendor 1</option>
+            <option value="vendor2">Vendor 2</option>
+            {/* Add more options as needed */}
+          </select>
+        </div>
 
-      <div id="food-list">
-        {/* Food items will be dynamically added here using JavaScript */}
-      </div>
+        <div id="search-bar">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Search for food..."
+          />
+          <select id="food-filter">
+            <option value="all">All</option>
+            <option value="pizza">Pizza</option>
+            <option value="burger">Burger</option>
+            <option value="sushi">Sushi</option>
+            {/* Add more options as needed */}
+          </select>
+        </div>
 
-      <div id="shopping-cart">
-        <h2>Shopping Cart</h2>
-        <ul id="cart-items">
+        <div id="food-list">
           {/* Food items will be dynamically added here using JavaScript */}
-        </ul>
-        <p>
-          Total: $<span id="cart-total">0.00</span>
-        </p>
+        </div>
+
+        <div id="shopping-cart">
+          <h2>Shopping Cart</h2>
+          <ul id="cart-items">
+            {/* Food items will be dynamically added here using JavaScript */}
+          </ul>
+          <p>
+            Total: $<span id="cart-total">0.00</span>
+          </p>
+        </div>
       </div>
     </main>
   );
