@@ -1,133 +1,94 @@
 "use client"
 
 import Image from 'next/image'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
+const Home = () => {
+  const [vendorData, setVendorData] = useState({
+    vendor1: [
+      { id: 1, name: "Margherita Pizza", type: "pizza", price: 10.99 },
+      { id: 2, name: "Classic Burger", type: "burger", price: 8.99 },
+    ],
+    vendor2: [
+      { id: 3, name: "Salmon Sushi", type: "sushi", price: 12.99 },
+      { id: 3, name: "Teriyaki Bento", type: "bento", price: 18.99 },
+      // Add more items for vendor2
+    ],
+    // Add more vendors as needed
+  });
 
-export default function Home() {
+  const [cart, setCart] = useState([]);
+  const [selectedVendor, setSelectedVendor] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterType, setFilterType] = useState('all');
 
   useEffect(() => {
-    const vendorData = {
-      vendor1: [
-        { id: 1, name: "Margherita Pizza", type: "pizza", price: 10.99 },
-        { id: 2, name: "Classic Burger", type: "burger", price: 8.99 },
-      ],
-      vendor2: [
-        { id: 3, name: "Salmon Sushi", type: "sushi", price: 12.99 },
-        // Add more items for vendor2
-      ],
-      // Add more vendors as needed
-    };
+    renderFoodItems();
+  }, [searchTerm, filterType, selectedVendor]);
 
-    const vendorSelect = document.getElementById("vendor-select");
-    const searchInput = document.getElementById("search-input");
-    const foodFilter = document.getElementById("food-filter");
-    const foodList = document.getElementById("food-list");
-    const cartItems = document.getElementById("cart-items");
-    const cartTotal = document.getElementById("cart-total");
-    const locationInput = document.getElementById("location-input");
+  useEffect(() => {
+    renderAllFoodItems(); // Ensure this function is called when the component mounts
+  }, []);
 
-    let cart = [];
+  const renderAllFoodItems = () => {
+    return Object.values(vendorData).flatMap((vendorItems) =>
+      vendorItems.map((food) => (
+        <div key={food.id} className="food-item">
+          <h3>{food.name}</h3>
+          <p>{food.type}</p>
+          <p>${food.price.toFixed(2)}</p>
+          <button onClick={() => addToCart(food)}>Add to Cart</button>
+        </div>
+      ))
+    );
+  };
 
-    // Function to render all food items initially
-    function renderAllFoodItems() {
-      foodList.innerHTML = "";
-
-      // Loop through all vendors and render their items
-      Object.values(vendorData).forEach((vendorItems) => {
-        vendorItems.forEach((food) => {
-          const foodItem = document.createElement("div");
-          foodItem.classList.add("food-item");
-          foodItem.innerHTML = `
-              <h3>${food.name}</h3>
-              <p>${food.type}</p>
-              <p>$${food.price.toFixed(2)}</p>
-              <button onclick="addToCart(${food.id}, '${
-            food.vendor
-          }')">Add to Cart</button>
-          `;
-          foodList.appendChild(foodItem);
-        });
-      });
+  const renderFoodItems = () => {
+    const allFoodItems = Object.values(vendorData).flat();
+    
+    let filteredFood;
+  
+    if (selectedVendor === "all") {
+      // If all vendors are selected, filter from all items
+      filteredFood = allFoodItems;
+    } else {
+      // If a specific vendor is selected, filter from that vendor's items
+      filteredFood = vendorData[selectedVendor] || [];
     }
-
-    // Function to render food items based on search, filter, and vendor
-    function renderFoodItems() {
-      const searchTerm = searchInput.value.toLowerCase();
-      const filterType = foodFilter.value;
-      const selectedVendor = vendorSelect.value;
-
-      // Get food items based on selected vendor
-      const vendorFood =
-        selectedVendor === "all"
-          ? Object.values(vendorData).flat()
-          : vendorData[selectedVendor] || [];
-
-      const filteredFood = vendorFood.filter((food) => {
-        const matchesSearch = food.name.toLowerCase().includes(searchTerm);
-        const matchesFilter = filterType === "all" || food.type === filterType;
-        return matchesSearch && matchesFilter;
-      });
-
-      foodList.innerHTML = "";
-
-      filteredFood.forEach((food) => {
-        const foodItem = document.createElement("div");
-        foodItem.classList.add("food-item");
-        foodItem.innerHTML = `
-          <h3>${food.name}</h3>
-          <p>${food.type}</p>
-          <p>$${food.price.toFixed(2)}</p>
-          <button onclick="addToCart(${food.id}, '${
-          food.vendor
-        }')">Add to Cart</button>
-      `;
-        foodList.appendChild(foodItem);
-      });
+  
+    if (filterType.toLowerCase() !== "all") {
+      // If filterType is a specific type, filter items by type
+      filteredFood = filteredFood.filter(food => food.type.toLowerCase() === filterType.toLowerCase());
     }
+  
+    const matchesSearch = food => food.name.toLowerCase().includes(searchTerm);
+    filteredFood = filteredFood.filter(matchesSearch);
+  
+    return filteredFood.map((food) => (
+      <div key={food.id} className="food-item">
+        <h3>{food.name}</h3>
+        <p>{food.type}</p>
+        <p>${food.price.toFixed(2)}</p>
+        <button onClick={() => addToCart(food)}>Add to Cart</button>
+      </div>
+    ));
+  };
+  
+  
+  
+  const addToCart = (food) => {
+    setCart((prevCart) => [...prevCart, food]);
+  };
 
-    // Function to add item to the cart
-    function addToCart(foodId, vendor) {
-      const selectedFood = vendorData[vendor].find(
-        (food) => food.id === foodId
-      );
+  const updateCart = () => {
+    // You can calculate the total here if needed
+  };
 
-      if (selectedFood) {
-        cart.push(selectedFood);
-        updateCart();
-      }
-    }
-
-    // Function to update the cart
-    function updateCart() {
-      cartItems.innerHTML = "";
-      let total = 0;
-
-      cart.forEach((item) => {
-        const cartItem = document.createElement("li");
-        cartItem.innerHTML = `${item.name} - $${item.price.toFixed(2)}`;
-        cartItems.appendChild(cartItem);
-        total += item.price;
-      });
-
-      cartTotal.textContent = total.toFixed(2);
-    }
-
-    // Function to save the user's location
-    function saveLocation() {
-      const userLocation = locationInput.value;
-      // You can use the user's location for various purposes (e.g., filtering restaurants based on location)
-      console.log("User Location:", userLocation);
-    }
-
-    // Event listeners
-    searchInput.addEventListener("input", renderFoodItems);
-    foodFilter.addEventListener("change", renderFoodItems);
-    vendorSelect.addEventListener("change", renderFoodItems);
-
-    // Initial render
-    renderAllFoodItems();
-  });
+  const saveLocation = () => {
+    const userLocation = locationInput.value;
+    // You can use the user's location for various purposes (e.g., filtering restaurants based on location)
+    console.log("User Location:", userLocation);
+  };
 
   return (
     <main className="">
@@ -147,12 +108,16 @@ export default function Home() {
             id="location-input"
             placeholder="E.g., Your City"
           />
-          <button onClick="saveLocation()">Save Location</button>
+          <button onClick={saveLocation}>Save Location</button>
         </div>
 
         <div id="vendor-section">
           <label htmlFor="vendor-select">Select Vendor:</label>
-          <select id="vendor-select">
+          <select
+            id="vendor-select"
+            onChange={(e) => setSelectedVendor(e.target.value)}
+            value={selectedVendor}
+          >
             <option value="all">All Vendors</option>
             <option value="vendor1">Vendor 1</option>
             <option value="vendor2">Vendor 2</option>
@@ -165,31 +130,45 @@ export default function Home() {
             type="text"
             id="search-input"
             placeholder="Search for food..."
+            onChange={(e) => setSearchTerm(e.target.value)}
+            value={searchTerm}
           />
-          <select id="food-filter">
+          <select
+            id="food-filter"
+            onChange={(e) => setFilterType(e.target.value)}
+            value={filterType}
+          >
             <option value="all">All</option>
             <option value="pizza">Pizza</option>
             <option value="burger">Burger</option>
             <option value="sushi">Sushi</option>
+            <option value="bento">Bento</option>
             {/* Add more options as needed */}
           </select>
         </div>
 
         <div id="food-list">
-          {/* Food items will be dynamically added here using JavaScript */}
+          {(selectedVendor === "all" && filterType === "all")? renderAllFoodItems() : renderFoodItems()}
         </div>
 
         <div id="shopping-cart">
           <h2>Shopping Cart</h2>
-          <ul id="cart-items">
-            {/* Food items will be dynamically added here using JavaScript */}
+          <ul>
+            {cart.map((item) => (
+              <li key={item.id}>
+                {item.name} - ${item.price.toFixed(2)}
+              </li>
+            ))}
           </ul>
           <p>
-            Total: $<span id="cart-total">0.00</span>
+            Total: ${cart.reduce((total, item) => total + item.price, 0).toFixed(2)}
           </p>
         </div>
       </div>
     </main>
   );
-}
+};
+
+export default Home;
+
 
