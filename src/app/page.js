@@ -1,7 +1,9 @@
 "use client"
 
 import Image from 'next/image'
-import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import ShoppingCart from './components/ShoppingCart';
 
 const Home = () => {
   const [vendorData, setVendorData] = useState({
@@ -21,6 +23,7 @@ const Home = () => {
   const [selectedVendor, setSelectedVendor] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
+  const [showCart, setShowCart] = useState(false);
 
   useEffect(() => {
     renderFoodItems();
@@ -77,11 +80,38 @@ const Home = () => {
   
   
   const addToCart = (food) => {
-    setCart((prevCart) => [...prevCart, food]);
+    // Check if the item is already in the cart
+    const existingItem = cart.find((item) => item.id === food.id);
+  
+    if (existingItem) {
+      // If the item is already in the cart, update its quantity
+      const updatedCart = cart.map((item) =>
+        item.id === food.id ? { ...item, quantity: item.quantity + 1 } : item
+      );
+      setCart(updatedCart);
+    } else {
+      // If the item is not in the cart, add it with quantity set to 1
+      setCart((prevCart) => [...prevCart, { ...food, quantity: 1 }]);
+    }
   };
 
-  const updateCart = () => {
-    // You can calculate the total here if needed
+  const updateQuantity = (itemId, newQuantity) => {
+    // If the new quantity is less than or equal to 0, remove the item from the cart
+    if (newQuantity <= 0) {
+      setCart((prevCart) => prevCart.filter((item) => item.id !== itemId));
+    } else {
+      // Find the item in the cart and update its quantity
+      setCart((prevCart) =>
+        prevCart.map((item) =>
+          item.id === itemId ? { ...item, quantity: newQuantity } : item
+        )
+      );
+    }
+  };
+
+  const removeFromCart = (itemId) => {
+    // Remove the item from the cart
+    setCart((prevCart) => prevCart.filter((item) => item.id !== itemId));
   };
 
   const saveLocation = () => {
@@ -152,17 +182,13 @@ const Home = () => {
         </div>
 
         <div id="shopping-cart">
-          <h2>Shopping Cart</h2>
-          <ul>
-            {cart.map((item) => (
-              <li key={item.id}>
-                {item.name} - ${item.price.toFixed(2)}
-              </li>
-            ))}
-          </ul>
-          <p>
-            Total: ${cart.reduce((total, item) => total + item.price, 0).toFixed(2)}
-          </p>
+        <ShoppingCart cart={cart} updateQuantity={updateQuantity} removeFromCart={removeFromCart} />
+        </div>
+
+        <div id="bottom-menu">
+          <Link href="/page">Home</Link>
+          <Link href="/pages/shopping-cart">Cart</Link>
+          <Link href="/pages/profile">Profile</Link>
         </div>
       </div>
     </main>
@@ -170,5 +196,3 @@ const Home = () => {
 };
 
 export default Home;
-
-
