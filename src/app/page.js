@@ -150,7 +150,7 @@ const Home = () => {
         <h1>Food Delivery App</h1>
       </header>
 
-      <div className="hidden md:flex md:justify-center md:items-center md:w-screen md:h-screen ">
+      <div className="hidden md:flex md:justify-center md:items-center md:w-screen md:h-screen">
         <h1>Application only available in mobile view!</h1>
       </div>
 
