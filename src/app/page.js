@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Image from 'next/image'
 import Link from 'next/link';
@@ -6,24 +6,33 @@ import { useState, useEffect } from 'react';
 import ShoppingCart from './components/ShoppingCart';
 
 const Home = () => {
-  const [vendorData, setVendorData] = useState({
-    vendor1: [
-      { id: 1, name: "Margherita Pizza", type: "pizza", price: 10.99 },
-      { id: 2, name: "Classic Burger", type: "burger", price: 8.99 },
-    ],
-    vendor2: [
-      { id: 3, name: "Salmon Sushi", type: "sushi", price: 12.99 },
-      { id: 4, name: "Teriyaki Bento", type: "bento", price: 18.99 },
-      // Add more items for vendor2
-    ],
+  const [vendorData, setVendorData] = useState([
+    {
+      name: 'vendor1',
+      items: [
+        { id: 1, name: "Margherita Pizza", type: "pizza", price: 10.99 },
+        { id: 2, name: "Classic Burger", type: "burger", price: 8.99 },
+      ],
+      location: ["Bukit Mertajam", "Simpang Ampat"]
+    },
+    {
+      name: 'vendor2',
+      items: [
+        { id: 3, name: "Salmon Sushi", type: "sushi", price: 12.99 },
+        { id: 4, name: "Teriyaki Bento", type: "bento", price: 18.99 },
+        // Add more items for vendor2
+      ],
+      location: ["Simpang Ampat"]
+    },
     // Add more vendors as needed
-  });
+  ]);
 
   const [cart, setCart] = useState([]);
   const [selectedVendor, setSelectedVendor] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [showCart, setShowCart] = useState(false);
+  const [locationInput, setLocationInput] = useState('');
 
   useEffect(() => {
     renderFoodItems();
@@ -34,8 +43,8 @@ const Home = () => {
   }, []);
 
   const renderAllFoodItems = () => {
-    return Object.values(vendorData).flatMap((vendorItems) =>
-      vendorItems.map((food) => (
+    return vendorData.flatMap((vendor) =>
+      vendor.items.map((food) => (
         <div key={food.id} className="food-item">
           <h3>{food.name}</h3>
           <p>{food.type}</p>
@@ -47,32 +56,40 @@ const Home = () => {
   };
 
   const renderFoodItems = () => {
-    const allFoodItems = Object.values(vendorData).flat();
-  
+    const allFoodItems = vendorData.flatMap((vendor) => vendor.items);
+
     // Filter based on selected vendor
     let filteredFood =
-      selectedVendor === "all" ? allFoodItems : vendorData[selectedVendor] || [];
-  
+      selectedVendor === "all" ? allFoodItems : vendorData.find((vendor) => vendor.name === selectedVendor)?.items || [];
+
     // Filter based on food type
     if (filterType.toLowerCase() !== "all") {
       filteredFood = filteredFood.filter(
         (food) => food.type.toLowerCase() === filterType.toLowerCase()
       );
     }
-  
-    // Add a search filter
-    const matchesSearch = (food) => {
-      const vendorMatches = Object.keys(vendorData).some((vendor) =>
-        vendor.toLowerCase().includes(searchTerm.toLowerCase())
+
+    // Filter based on search term
+    const formattedSearchTerm = searchTerm.toLowerCase().replace(/\s/g, '');
+    filteredFood = filteredFood.filter((food) =>
+      food.name.toLowerCase().includes(formattedSearchTerm)
+    );
+
+    // Filter based on user location
+    if (locationInput) {
+      const formattedLocationInput = locationInput.toLowerCase().replace(/\s/g, '');
+
+      filteredFood = filteredFood.filter((food) =>
+        vendorData.some((vendor) =>
+          vendor.location.some((loc) =>
+            loc.toLowerCase().replace(/\s/g, '').includes(formattedLocationInput)
+          ) &&
+          vendor.items.includes(food)
+        )
       );
-      const foodMatches = food.name
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
-      return vendorMatches || foodMatches;
-    };
-  
-    filteredFood = filteredFood.filter(matchesSearch);
-  
+    }
+
+
     return filteredFood.map((food) => (
       <div key={food.id} className="food-item">
         <h3>{food.name}</h3>
@@ -81,9 +98,7 @@ const Home = () => {
         <button onClick={() => addToCart(food)}>Add to Cart</button>
       </div>
     ));
-  };  
-  
-  
+  };
   
   const addToCart = (food) => {
     // Check if the item is already in the cart
@@ -121,10 +136,13 @@ const Home = () => {
   };
 
   const saveLocation = () => {
-    const userLocation = locationInput.value;
-    // You can use the user's location for various purposes (e.g., filtering restaurants based on location)
+    // Now use the state variable to get the location value
+    const userLocation = locationInput.toLowerCase().replace(/\s/g, '');
+  
+    // You can use the user's location for various purposes
     console.log("User Location:", userLocation);
   };
+  
 
   return (
     <main className="">
@@ -143,6 +161,8 @@ const Home = () => {
             type="text"
             id="location-input"
             placeholder="E.g., Your City"
+            value={locationInput}  // Bind the value to the state variable
+            onChange={(e) => setLocationInput(e.target.value)}  // Update the state on input change
           />
           <button onClick={saveLocation}>Save Location</button>
         </div>
@@ -185,11 +205,11 @@ const Home = () => {
         </div>
 
         <div id="food-list">
-          {(selectedVendor === "all" && filterType === "all" && searchTerm == null)? renderAllFoodItems() : renderFoodItems()}
+          {(selectedVendor === "all" && filterType === "all" && searchTerm === '' && locationInput === '') ? renderAllFoodItems() : renderFoodItems()}
         </div>
 
         <div id="shopping-cart">
-        <ShoppingCart cart={cart} updateQuantity={updateQuantity} removeFromCart={removeFromCart} />
+          <ShoppingCart cart={cart} updateQuantity={updateQuantity} removeFromCart={removeFromCart} />
         </div>
 
         <div id="bottom-menu">
