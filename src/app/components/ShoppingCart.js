@@ -1,4 +1,6 @@
+// ShoppingCart.js
 import React from 'react';
+import Link from 'next/link';
 
 const ShoppingCart = ({ cart, updateQuantity, removeFromCart }) => {
   const calculateTotal = () => {
@@ -23,6 +25,9 @@ const ShoppingCart = ({ cart, updateQuantity, removeFromCart }) => {
         ))}
       </ul>
       <p>Total: RM{calculateTotal().toFixed(2)}</p>
+      
+      {/* Checkout button linking to the checkout page */}
+      <Link href="../pages/checkout">Checkout</Link>
     </div>
   );
 };

@@ -13,7 +13,7 @@ const Home = () => {
     ],
     vendor2: [
       { id: 3, name: "Salmon Sushi", type: "sushi", price: 12.99 },
-      { id: 3, name: "Teriyaki Bento", type: "bento", price: 18.99 },
+      { id: 4, name: "Teriyaki Bento", type: "bento", price: 18.99 },
       // Add more items for vendor2
     ],
     // Add more vendors as needed
@@ -48,23 +48,29 @@ const Home = () => {
 
   const renderFoodItems = () => {
     const allFoodItems = Object.values(vendorData).flat();
-    
-    let filteredFood;
   
-    if (selectedVendor === "all") {
-      // If all vendors are selected, filter from all items
-      filteredFood = allFoodItems;
-    } else {
-      // If a specific vendor is selected, filter from that vendor's items
-      filteredFood = vendorData[selectedVendor] || [];
-    }
+    // Filter based on selected vendor
+    let filteredFood =
+      selectedVendor === "all" ? allFoodItems : vendorData[selectedVendor] || [];
   
+    // Filter based on food type
     if (filterType.toLowerCase() !== "all") {
-      // If filterType is a specific type, filter items by type
-      filteredFood = filteredFood.filter(food => food.type.toLowerCase() === filterType.toLowerCase());
+      filteredFood = filteredFood.filter(
+        (food) => food.type.toLowerCase() === filterType.toLowerCase()
+      );
     }
   
-    const matchesSearch = food => food.name.toLowerCase().includes(searchTerm);
+    // Add a search filter
+    const matchesSearch = (food) => {
+      const vendorMatches = Object.keys(vendorData).some((vendor) =>
+        vendor.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      const foodMatches = food.name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      return vendorMatches || foodMatches;
+    };
+  
     filteredFood = filteredFood.filter(matchesSearch);
   
     return filteredFood.map((food) => (
@@ -75,7 +81,7 @@ const Home = () => {
         <button onClick={() => addToCart(food)}>Add to Cart</button>
       </div>
     ));
-  };
+  };  
   
   
   
@@ -163,6 +169,7 @@ const Home = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             value={searchTerm}
           />
+
           <select
             id="food-filter"
             onChange={(e) => setFilterType(e.target.value)}
@@ -178,7 +185,7 @@ const Home = () => {
         </div>
 
         <div id="food-list">
-          {(selectedVendor === "all" && filterType === "all")? renderAllFoodItems() : renderFoodItems()}
+          {(selectedVendor === "all" && filterType === "all" && searchTerm == null)? renderAllFoodItems() : renderFoodItems()}
         </div>
 
         <div id="shopping-cart">
