@@ -1,5 +1,5 @@
-import React from 'react';
-import ShoppingCart from '../components/ShoppingCart'; // Update the path accordingly
+import React from "react";
+import ShoppingCart from "../components/ShoppingCart"; // Update the path accordingly
 
 const ShoppingCartPage = () => {
   // Assuming you have a way to get the cart state, you might need to fetch it or pass it as a prop

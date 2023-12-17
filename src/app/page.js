@@ -214,7 +214,7 @@ const Home = () => {
 
         <div id="bottom-menu">
           <Link href="/page">Home</Link>
-          <Link href="/pages/shopping-cart">Cart</Link>
+          <Link href="/shopping-cart">Cart</Link>
           <Link href="/pages/profile">Profile</Link>
         </div>
       </div>
