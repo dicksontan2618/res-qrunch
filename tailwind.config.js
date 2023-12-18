@@ -10,6 +10,8 @@ module.exports = {
     extend: {
       colors: {
         "main-clr": "#F55353",
+        "nav-bg-clr" : "#F5F5F5",
+        "nav-text-clr" : "#797979",
       },
     },
   },

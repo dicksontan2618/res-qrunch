@@ -154,89 +154,73 @@ const Home = () => {
   };
 
   return (
-    <main className="">
-      <header>
-        <h1>Food Delivery App</h1>
-      </header>
-
-      <div className="hidden md:flex md:justify-center md:items-center md:w-screen md:h-screen">
-        <h1>Application only available in mobile view!</h1>
+    <div>
+      <div id="location-section">
+        <label htmlFor="location-input">Enter Your Location:</label>
+        <input
+          type="text"
+          id="location-input"
+          placeholder="E.g., Your City"
+          value={locationInput} // Bind the value to the state variable
+          onChange={(e) => setLocationInput(e.target.value)} // Update the state on input change
+        />
+        <button onClick={saveLocation}>Save Location</button>
       </div>
 
-      <div className="block md:hidden">
-        <div id="location-section">
-          <label htmlFor="location-input">Enter Your Location:</label>
-          <input
-            type="text"
-            id="location-input"
-            placeholder="E.g., Your City"
-            value={locationInput} // Bind the value to the state variable
-            onChange={(e) => setLocationInput(e.target.value)} // Update the state on input change
-          />
-          <button onClick={saveLocation}>Save Location</button>
-        </div>
-
-        <div id="vendor-section">
-          <label htmlFor="vendor-select">Select Vendor:</label>
-          <select
-            id="vendor-select"
-            onChange={(e) => setSelectedVendor(e.target.value)}
-            value={selectedVendor}
-          >
-            <option value="all">All Vendors</option>
-            <option value="vendor1">Vendor 1</option>
-            <option value="vendor2">Vendor 2</option>
-            {/* Add more options as needed */}
-          </select>
-        </div>
-
-        <div id="search-bar">
-          <input
-            type="text"
-            id="search-input"
-            placeholder="Search for food..."
-            onChange={(e) => setSearchTerm(e.target.value)}
-            value={searchTerm}
-          />
-
-          <select
-            id="food-filter"
-            onChange={(e) => setFilterType(e.target.value)}
-            value={filterType}
-          >
-            <option value="all">All</option>
-            <option value="pizza">Pizza</option>
-            <option value="burger">Burger</option>
-            <option value="sushi">Sushi</option>
-            <option value="bento">Bento</option>
-            {/* Add more options as needed */}
-          </select>
-        </div>
-
-        <div id="food-list">
-          {selectedVendor === "all" &&
-          filterType === "all" &&
-          searchTerm === "" &&
-          locationInput === ""
-            ? renderAllFoodItems()
-            : renderFoodItems()}
-        </div>
-
-        <div id="shopping-cart">
-          <ShoppingCart
-            cart={cart}
-            updateQuantity={updateQuantity}
-            removeFromCart={removeFromCart}
-          />
-        </div>
-
-        <div id="bottom-menu">
-          <ul><Link class="pageSelection" href="/home">Home</Link></ul>
-          <ul><Link class="pageSelection" href="/shopping-cart">Cart</Link></ul>
-          <ul><Link class="pageSelection" href="/profile">Profile</Link></ul>
-        </div>
+      <div id="vendor-section">
+        <label htmlFor="vendor-select">Select Vendor:</label>
+        <select
+          id="vendor-select"
+          onChange={(e) => setSelectedVendor(e.target.value)}
+          value={selectedVendor}
+        >
+          <option value="all">All Vendors</option>
+          <option value="vendor1">Vendor 1</option>
+          <option value="vendor2">Vendor 2</option>
+          {/* Add more options as needed */}
+        </select>
       </div>
-    </main>
+
+      <div id="search-bar">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Search for food..."
+          onChange={(e) => setSearchTerm(e.target.value)}
+          value={searchTerm}
+        />
+
+        <select
+          id="food-filter"
+          onChange={(e) => setFilterType(e.target.value)}
+          value={filterType}
+        >
+          <option value="all">All</option>
+          <option value="pizza">Pizza</option>
+          <option value="burger">Burger</option>
+          <option value="sushi">Sushi</option>
+          <option value="bento">Bento</option>
+          {/* Add more options as needed */}
+        </select>
+      </div>
+
+      <div id="food-list">
+        {selectedVendor === "all" &&
+        filterType === "all" &&
+        searchTerm === "" &&
+        locationInput === ""
+          ? renderAllFoodItems()
+          : renderFoodItems()}
+      </div>
+
+      <div id="shopping-cart">
+        <ShoppingCart
+          cart={cart}
+          updateQuantity={updateQuantity}
+          removeFromCart={removeFromCart}
+        />
+      </div>
+    </div>
   );
 };
 

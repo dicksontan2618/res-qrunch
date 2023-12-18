@@ -65,7 +65,7 @@ header {
 
 #bottom-menu{
   width: 100%;
-  background-color: #F55353;
+  /* background-color: #F55353; */
   overflow: auto;
   color: white;
 }
