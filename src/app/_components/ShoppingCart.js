@@ -9,7 +9,7 @@ const ShoppingCart = ({ cart, updateQuantity, removeFromCart }) => {
 
   return (
     <div>
-      <h2>Shopping Cart</h2>
+      <h2>My Cart</h2>
       <ul>
         {cart.map((item) => (
           <li key={item.id}>

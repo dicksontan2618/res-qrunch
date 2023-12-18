@@ -1,5 +1,6 @@
 import React from "react";
 import ShoppingCart from "../_components/ShoppingCart"; // Update the path accordingly
+import Link from 'next/link';
 
 const ShoppingCartPage = () => {
   // Assuming you have a way to get the cart state, you might need to fetch it or pass it as a prop
@@ -7,7 +8,13 @@ const ShoppingCartPage = () => {
 
   return (
     <div>
-      <h1>Shopping Cart Page</h1>
+      <header>
+        <Link href="/home">
+          <button>Back</button>
+        </Link>
+        <h1>My Cart</h1>
+      </header>
+      <br></br><br></br>
       <ShoppingCart cart={cart} />
     </div>
   );

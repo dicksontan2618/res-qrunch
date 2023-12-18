@@ -47,7 +47,7 @@ const Home = () => {
       vendor.items.map((food) => (
         <div key={food.id} className="food-item">
           <h3>{food.name}</h3>
-          <p>{food.type}</p>
+          <p>{vendorData.find((vendor) => vendor.items.includes(food))?.name}</p>
           <p>${food.price.toFixed(2)}</p>
           <button onClick={() => addToCart(food)}>Add to Cart</button>
         </div>
@@ -75,7 +75,10 @@ const Home = () => {
     // Filter based on search term
     const formattedSearchTerm = searchTerm.toLowerCase().replace(/\s/g, "");
     filteredFood = filteredFood.filter((food) =>
-      food.name.toLowerCase().includes(formattedSearchTerm)
+      food.name.toLowerCase().includes(formattedSearchTerm) ||
+      vendorData.find((vendor) => vendor.items.includes(food))?.name
+        .toLowerCase()
+        .includes(formattedSearchTerm)
     );
 
     // Filter based on user location
@@ -100,7 +103,7 @@ const Home = () => {
     return filteredFood.map((food) => (
       <div key={food.id} className="food-item">
         <h3>{food.name}</h3>
-        <p>{food.type}</p>
+        <p>{vendorData.find((vendor) => vendor.items.includes(food))?.name}</p>
         <p>${food.price.toFixed(2)}</p>
         <button onClick={() => addToCart(food)}>Add to Cart</button>
       </div>
@@ -228,9 +231,9 @@ const Home = () => {
         </div>
 
         <div id="bottom-menu">
-          <Link href="/page">Home</Link>
-          <Link href="/shopping-cart">Cart</Link>
-          <Link href="/pages/profile">Profile</Link>
+          <ul><Link class="pageSelection" href="/home">Home</Link></ul>
+          <ul><Link class="pageSelection" href="/shopping-cart">Cart</Link></ul>
+          <ul><Link class="pageSelection" href="/profile">Profile</Link></ul>
         </div>
       </div>
     </main>

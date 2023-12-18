@@ -26,6 +26,9 @@ header {
   color: white;
   padding: 1em;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 #search-bar {
@@ -38,15 +41,16 @@ header {
 #food-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: space-between;
   padding: 1em;
 }
 
 .food-item {
   border: 1px solid #000;
+  border-radius: 15px;
   padding: 1em;
-  margin: 1em;
-  width: 200px;
+  width: 48%; /* Adjust the width to leave some space between items */
+  margin-bottom: 16px;
   text-align: center;
 }
 
@@ -57,4 +61,60 @@ header {
   position: fixed;
   bottom: 0;
   right: 0;
+}
+
+#bottom-menu{
+  width: 100%;
+  background-color: #F55353;
+  overflow: auto;
+  color: white;
+}
+
+.pageSelection{
+  float: left;
+  padding: 12px;
+  color: white;
+  text-decoration: none;
+  font-size: 17px;
+  /* width: 33.33%;  */
+  text-align: center; 
+}
+
+.profile-section{
+  display: flex;
+  flex-direction: row;
+  padding: 15px;
+  border-bottom-width: 1px;
+  border-bottom-color: lightgray;
+}
+
+.profile-button-section{
+  border-bottom-width: 3px;
+  border-bottom-color: lightgray;
+}
+
+.profile-button-section button{
+  width: 33.33%;
+  padding: 10px;
+}
+
+.profile-subsection{
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-subsection #language-selection{
+  padding: 15px;
+}
+
+.profile-subsection button {
+  text-align: left;
+  width:100%;
+  padding:15px;
+  white-space: normal;
+  border-width: 2px;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  border-color: lightgray;
 }
