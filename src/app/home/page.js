@@ -1,38 +1,38 @@
 "use client";
 
-import Image from 'next/image'
-import Link from 'next/link';
-import { useState, useEffect } from 'react';
-import ShoppingCart from './_components/ShoppingCart';
+import Image from "next/image";
+import Link from "next/link";
+import { useState, useEffect } from "react";
+import ShoppingCart from "../_components/ShoppingCart";
 
 const Home = () => {
   const [vendorData, setVendorData] = useState([
     {
-      name: 'vendor1',
+      name: "vendor1",
       items: [
         { id: 1, name: "Margherita Pizza", type: "pizza", price: 10.99 },
         { id: 2, name: "Classic Burger", type: "burger", price: 8.99 },
       ],
-      location: ["Bukit Mertajam", "Simpang Ampat"]
+      location: ["Bukit Mertajam", "Simpang Ampat"],
     },
     {
-      name: 'vendor2',
+      name: "vendor2",
       items: [
         { id: 3, name: "Salmon Sushi", type: "sushi", price: 12.99 },
         { id: 4, name: "Teriyaki Bento", type: "bento", price: 18.99 },
         // Add more items for vendor2
       ],
-      location: ["Simpang Ampat"]
+      location: ["Simpang Ampat"],
     },
     // Add more vendors as needed
   ]);
 
   const [cart, setCart] = useState([]);
-  const [selectedVendor, setSelectedVendor] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState('all');
+  const [selectedVendor, setSelectedVendor] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterType, setFilterType] = useState("all");
   const [showCart, setShowCart] = useState(false);
-  const [locationInput, setLocationInput] = useState('');
+  const [locationInput, setLocationInput] = useState("");
 
   useEffect(() => {
     renderFoodItems();
@@ -60,7 +60,10 @@ const Home = () => {
 
     // Filter based on selected vendor
     let filteredFood =
-      selectedVendor === "all" ? allFoodItems : vendorData.find((vendor) => vendor.name === selectedVendor)?.items || [];
+      selectedVendor === "all"
+        ? allFoodItems
+        : vendorData.find((vendor) => vendor.name === selectedVendor)?.items ||
+          [];
 
     // Filter based on food type
     if (filterType.toLowerCase() !== "all") {
@@ -70,25 +73,29 @@ const Home = () => {
     }
 
     // Filter based on search term
-    const formattedSearchTerm = searchTerm.toLowerCase().replace(/\s/g, '');
+    const formattedSearchTerm = searchTerm.toLowerCase().replace(/\s/g, "");
     filteredFood = filteredFood.filter((food) =>
       food.name.toLowerCase().includes(formattedSearchTerm)
     );
 
     // Filter based on user location
     if (locationInput) {
-      const formattedLocationInput = locationInput.toLowerCase().replace(/\s/g, '');
+      const formattedLocationInput = locationInput
+        .toLowerCase()
+        .replace(/\s/g, "");
 
       filteredFood = filteredFood.filter((food) =>
-        vendorData.some((vendor) =>
-          vendor.location.some((loc) =>
-            loc.toLowerCase().replace(/\s/g, '').includes(formattedLocationInput)
-          ) &&
-          vendor.items.includes(food)
+        vendorData.some(
+          (vendor) =>
+            vendor.location.some((loc) =>
+              loc
+                .toLowerCase()
+                .replace(/\s/g, "")
+                .includes(formattedLocationInput)
+            ) && vendor.items.includes(food)
         )
       );
     }
-
 
     return filteredFood.map((food) => (
       <div key={food.id} className="food-item">
@@ -99,11 +106,11 @@ const Home = () => {
       </div>
     ));
   };
-  
+
   const addToCart = (food) => {
     // Check if the item is already in the cart
     const existingItem = cart.find((item) => item.id === food.id);
-  
+
     if (existingItem) {
       // If the item is already in the cart, update its quantity
       const updatedCart = cart.map((item) =>
@@ -137,12 +144,11 @@ const Home = () => {
 
   const saveLocation = () => {
     // Now use the state variable to get the location value
-    const userLocation = locationInput.toLowerCase().replace(/\s/g, '');
-  
+    const userLocation = locationInput.toLowerCase().replace(/\s/g, "");
+
     // You can use the user's location for various purposes
     console.log("User Location:", userLocation);
   };
-  
 
   return (
     <main className="">
@@ -161,8 +167,8 @@ const Home = () => {
             type="text"
             id="location-input"
             placeholder="E.g., Your City"
-            value={locationInput}  // Bind the value to the state variable
-            onChange={(e) => setLocationInput(e.target.value)}  // Update the state on input change
+            value={locationInput} // Bind the value to the state variable
+            onChange={(e) => setLocationInput(e.target.value)} // Update the state on input change
           />
           <button onClick={saveLocation}>Save Location</button>
         </div>
@@ -205,11 +211,20 @@ const Home = () => {
         </div>
 
         <div id="food-list">
-          {(selectedVendor === "all" && filterType === "all" && searchTerm === '' && locationInput === '') ? renderAllFoodItems() : renderFoodItems()}
+          {selectedVendor === "all" &&
+          filterType === "all" &&
+          searchTerm === "" &&
+          locationInput === ""
+            ? renderAllFoodItems()
+            : renderFoodItems()}
         </div>
 
         <div id="shopping-cart">
-          <ShoppingCart cart={cart} updateQuantity={updateQuantity} removeFromCart={removeFromCart} />
+          <ShoppingCart
+            cart={cart}
+            updateQuantity={updateQuantity}
+            removeFromCart={removeFromCart}
+          />
         </div>
 
         <div id="bottom-menu">

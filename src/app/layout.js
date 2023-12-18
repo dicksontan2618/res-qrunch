@@ -11,7 +11,14 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <main>
+          <div className="hidden md:flex md:justify-center md:items-center md:w-screen md:h-screen ">
+            <h1>Application only available in mobile view!</h1>
+          </div>
+          <div className="block md:hidden">{children}</div>
+        </main>
+      </body>
     </html>
-  )
+  );
 }
