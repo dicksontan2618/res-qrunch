@@ -124,6 +124,8 @@ const Home = () => {
       // If the item is not in the cart, add it with quantity set to 1
       setCart((prevCart) => [...prevCart, { ...food, quantity: 1 }]);
     }
+
+    console.log(cart);
   };
 
   const updateQuantity = (itemId, newQuantity) => {

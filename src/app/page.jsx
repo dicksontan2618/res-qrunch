@@ -7,10 +7,15 @@ const StartScreen = () => {
             <div className='flex flex-col items-center gap-y-8'>
                 {/* TODO: Insert Logo Image here  */}
                 <p className='text-4xl font-semibold text-white'>ResQrunch</p>
-                <div className=''>
+                <div className='flex flex-col justify-center gap-y-4'>
                     <Link href="./home">
                         <button className='btn btn-wide bg-white text-main-clr text-md border-white'>
-                            Get Started!
+                            Customer Login
+                        </button>
+                    </Link>
+                    <Link href="./home">
+                        <button className='btn btn-wide bg-white text-main-clr text-md border-white'>
+                            Vendor Login
                         </button>
                     </Link>
                 </div>
