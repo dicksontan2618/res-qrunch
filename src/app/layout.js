@@ -11,7 +11,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-white`}>
         <main>
           <div className="hidden md:flex md:justify-center md:items-center md:w-screen md:h-screen ">
             <h1>Application only available in mobile view!</h1>
