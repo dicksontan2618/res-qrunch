@@ -13,7 +13,7 @@ const StartScreen = () => {
                             Customer Login
                         </button>
                     </Link>
-                    <Link href="./home">
+                    <Link href="./vendor/sign-up">
                         <button className='btn btn-wide bg-white text-main-clr text-md border-white'>
                             Vendor Login
                         </button>

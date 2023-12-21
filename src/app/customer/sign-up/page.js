@@ -14,7 +14,7 @@ function customerSignUp () {
     const handleSignUpForm = async (event) => {
 
       event.preventDefault();  
-            
+
       const { result, error } = await signUp(email, password);
 
       if(error) {
@@ -40,7 +40,7 @@ function customerSignUp () {
                   type="email"
                   name="email"
                   id="email"
-                  placeholder="user@gmail.com"
+                  placeholder="vendor@gmail.com"
                 />
               </label>
             </div>
