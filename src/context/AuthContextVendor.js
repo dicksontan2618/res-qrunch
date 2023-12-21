@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import {createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { onAuthStateChanged, getAuth } from "firebase/auth";
 import { app, auth } from "@/utils/firebase";
 
@@ -16,6 +16,7 @@ export const AuthContextProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
+        window.localStorage.setItem("session_user", "vendor");
       } else {
         setUser(null);
       }

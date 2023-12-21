@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useAuthContext } from "@/context/AuthContext";
+import { useAuthContext } from "@/context/AuthContextVendor";
 import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
 import { auth } from "@/utils/firebase";
@@ -11,7 +11,7 @@ const VendorScreen = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (user == null) {
+    if (user == null && window.localStorage.getItem("session_user") != "vendor") {
       router.push("/");
     }
   }, [user]);
@@ -21,6 +21,7 @@ const VendorScreen = () => {
       .then(() => {
         // Sign-out successful.
         router.push("/");
+        window.localStorage.removeItem("session_user");
       })
       .catch((error) => {
         // An error happened.
