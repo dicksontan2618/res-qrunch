@@ -40,7 +40,7 @@ function customerSignUp () {
                   type="email"
                   name="email"
                   id="email"
-                  placeholder="vendor@gmail.com"
+                  placeholder="user@gmail.com"
                 />
               </label>
             </div>

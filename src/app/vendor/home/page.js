@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import { useAuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { signOut } from "firebase/auth";
+import { auth } from "@/utils/firebase";
 
 const VendorScreen = () => {
   const { user } = useAuthContext();
@@ -14,9 +16,23 @@ const VendorScreen = () => {
     }
   }, [user]);
 
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        router.push("/");
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
+
   return (
-    <div className="bg-main-clr h-screen flex justify-center items-center">
-      <p>Vendor Page</p>
+    <div className="bg-main-clr h-screen flex flex-col justify-center items-center gap-y-4">
+      <p className="text-white">Vendor Page</p>
+      <button className="btn btn-active" onClick={handleLogout}>
+        <p className="text-lg font-bold">Checkout</p>
+      </button>
     </div>
   );
 };

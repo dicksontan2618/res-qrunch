@@ -29,7 +29,7 @@ export const AuthContextProvider = ({ children }) => {
     <AuthContext.Provider value={{ user }}>
       {loading ? (
         <div className="bg-white h-screen flex justify-center items-center">
-          <span className="loading loading-spinner loading-lg"></span>
+          <h1 className="text-4xl font-bold text-gray-800">Loading...</h1>
         </div>
       ) : (
         children
