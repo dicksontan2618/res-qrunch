@@ -27,7 +27,7 @@ function customerSignIn() {
   return (
     <div className="bg-main-clr h-screen flex justify-center items-center">
       <div className="card w-[80%] bg-white shadow-xl p-8">
-        <h1 className="text-xl font-bold mb-4 text-gray-800">User Login</h1>
+        <h1 className="text-xl font-bold mb-4 text-gray-800">Customer Login</h1>
         <form onSubmit={handleSignInForm} className="form">
           <div className="w-full my-1">
             <label htmlFor="email" className="text-gray-800 font-semibold">
