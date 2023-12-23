@@ -20,7 +20,7 @@ const VendorScreen = () => {
 
   const [orders, setOrders] = useState([
     { id: 1, items: ['Item1', 'Item2'], customer: 'Customer1', message: 'Hi, pls give me sauce'},
-    { id: 2, items: ['Item3', 'Item4'], customer: 'Customer2', message: 'Hi, pls ive more chili' },
+    { id: 2, items: ['Item3', 'Item4'], customer: 'Customer2', messages: 'Hi, pls ive more chili' },
     // ... more orders
   ]);
 
@@ -38,7 +38,6 @@ const VendorScreen = () => {
 
   return (
     <div>
-      <h1>Vendor Home Page</h1>
 
       <div>
         <h2>Orders</h2>
