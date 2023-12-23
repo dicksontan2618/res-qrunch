@@ -6,20 +6,6 @@ import Link from 'next/link';
 const ProfilePage = () => {
   return (
     <div>
-      <header id="profilePageHeader">
-        {/* Upper Taskbar */}
-        <div className="upper-taskbar">
-          {/* Back Button */}
-          <Link href="/home">
-            <button>Back</button>
-          </Link>
-
-          {/* Settings Button */}
-          <Link href="/settings">
-            <button>Settings</button>
-          </Link>
-        </div>
-      </header>
 
       {/* User Profile Section */}
       <div className="profile-section">
@@ -63,24 +49,6 @@ const ProfilePage = () => {
             Light Mode: <input type="checkbox" id="light-mode" />
           </button>
         </label>
-      </div>
-
-      <div id="bottom-menu">
-        <ul>
-          <Link className="pageSelection" href="/home">
-            Home
-          </Link>
-        </ul>
-        <ul>
-          <Link className="pageSelection" href="/shopping-cart">
-            Cart
-          </Link>
-        </ul>
-        <ul>
-          <Link className="pageSelection" href="/profile">
-            Profile
-          </Link>
-        </ul>
       </div>
     </div>
   );

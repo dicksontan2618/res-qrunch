@@ -1,17 +1,19 @@
-"use client";
-
 // ShoppingCart.js
 import React from 'react';
 import Link from 'next/link';
 
 const ShoppingCart = ({ cart, updateQuantity, removeFromCart }) => {
+  // Ensure cart is not null or undefined before using it
+  if (!cart || !Array.isArray(cart)) {
+    return <div>Your shopping cart is empty.</div>; 
+  }
 
   const calculateTotal = () => {
     return cart.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
   const setCartLocalStorage = (checkoutCart) => {
-    window.localStorage.setItem("session_shoppping_cart",JSON.stringify(checkoutCart));
+    window.localStorage.setItem("session_shoppping_cart", JSON.stringify(checkoutCart));
   }
 
   return (

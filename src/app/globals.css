@@ -68,6 +68,8 @@ header {
   /* background-color: #F55353; */
   overflow: auto;
   color: white;
+  position: sticky;
+  bottom: 0;
 }
 
 .pageSelection{

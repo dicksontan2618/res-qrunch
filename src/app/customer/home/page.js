@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
 import { auth } from "@/utils/firebase";
 import ShoppingCart from "@/app/_components/ShoppingCart";
+import Link from "next/link";
 
 const CustomerScreen = () => {
 
@@ -185,6 +186,7 @@ const CustomerScreen = () => {
 
   return (
     <div>
+
       <div id="location-section">
         <label htmlFor="location-input">Enter Your Location:</label>
         <input
@@ -250,6 +252,7 @@ const CustomerScreen = () => {
           removeFromCart={removeFromCart}
         />
       </div>
+      
       <button className="btn btn-active" onClick={handleLogout}>
         <p className="text-lg font-bold">Checkout</p>
       </button>

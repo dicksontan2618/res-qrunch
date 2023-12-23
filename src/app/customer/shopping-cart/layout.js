@@ -1,18 +1,24 @@
-"use client";
+// CustomerLayout.js
 import { AuthContextProvider } from "@/context/AuthContextUser";
 import Link from "next/link";
 
 export default function CustomerLayout({ children }) {
   return (
     <AuthContextProvider>
-      <div className="bg-white h-screen">
-        <header className="flex justify-center">
-          <h1 className="font-semibold text-xl">ResQrunch</h1>
+      <div className="bg-white h-screen flex flex-col relative">
+        
+        <header className="flex justify-start items-center p-4">
+          <Link href="./home">
+            <button className="text-white-500">Back</button>
+          </Link>
+          <h1 className="flex-grow text-center font-semibold text-xl">My Cart</h1>
         </header>
+        
         {children}
+
         <div
           id="bottom-menu"
-          className="fixed bottom-0 flex justify-around bg-nav-bg-clr"
+          className="fixed bottom-0 w-full flex justify-around bg-nav-bg-clr p-4"
         >
           <ul>
             <Link className="pageSelection" href="./home">
@@ -40,5 +46,3 @@ export default function CustomerLayout({ children }) {
     </AuthContextProvider>
   );
 }
-
-// Put it here for future ref
