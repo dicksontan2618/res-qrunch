@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuthContext } from "@/context/AuthContextVendor";
 import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
 import { auth } from "@/utils/firebase";
+import OrderList from "@/app/_components/OrderList";
+// import SalesChart from "@/app/_components/SalesChart";
 
 const VendorScreen = () => {
   const { user } = useAuthContext();
@@ -15,6 +17,12 @@ const VendorScreen = () => {
       router.push("/");
     }
   }, [user]);
+
+  const [orders, setOrders] = useState([
+    { id: 1, items: ['Item1', 'Item2'], customer: 'Customer1', message: 'Hi, pls give me sauce'},
+    { id: 2, items: ['Item3', 'Item4'], customer: 'Customer2', message: 'Hi, pls ive more chili' },
+    // ... more orders
+  ]);
 
   const handleLogout = () => {
     signOut(auth)
@@ -29,11 +37,19 @@ const VendorScreen = () => {
   };
 
   return (
-    <div className="bg-main-clr h-screen flex flex-col justify-center items-center gap-y-4">
-      <p className="text-white">Vendor Page</p>
-      <button className="btn btn-active" onClick={handleLogout}>
-        <p className="text-lg font-bold">Checkout</p>
-      </button>
+    <div>
+      <h1>Vendor Home Page</h1>
+
+      <div>
+        <h2>Orders</h2>
+        <OrderList orders={orders} />
+      </div>
+
+      {/* <div>
+        <h2>Sales</h2>
+        <SalesChart data={salesData} />
+      </div> */}
+
     </div>
   );
 };

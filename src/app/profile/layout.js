@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function CustomerLayout({ children }) {
   return (
     <AuthContextProvider>
-      <div className="bg-white h-screen flex flex-col relative">
+      <div className="flex flex-col min-h-screen bg-white relative">
         
         <header className="flex justify-start items-center p-4">
           <Link href="./home">
@@ -21,7 +21,7 @@ export default function CustomerLayout({ children }) {
 
         <div
           id="bottom-menu"
-          className="fixed bottom-0 w-full flex justify-around bg-nav-bg-clr p-4"
+          className="fixed bottom-0 w-full flex justify-around bg-nav-bg-clr p-4 z-10"
         >
           <ul>
             <Link className="pageSelection" href="/customer/home">

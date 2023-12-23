@@ -49,6 +49,11 @@ const ProfilePage = () => {
             Light Mode: <input type="checkbox" id="light-mode" />
           </button>
         </label>
+
+        <Link href="/logout">
+          <button>Log Out</button>
+        </Link>
+        
       </div>
     </div>
   );
