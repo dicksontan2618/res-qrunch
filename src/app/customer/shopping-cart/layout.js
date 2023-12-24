@@ -1,6 +1,7 @@
 // CustomerLayout.js
 import { AuthContextProvider } from "@/context/AuthContextUser";
 import Link from "next/link";
+import BottomNavCustomer from "@/app/_components/BottomNavCustomer";
 
 export default function CustomerLayout({ children }) {
   return (
@@ -16,32 +17,7 @@ export default function CustomerLayout({ children }) {
         
         {children}
 
-        <div
-          id="bottom-menu"
-          className="fixed bottom-0 w-full flex justify-around bg-nav-bg-clr p-4"
-        >
-          <ul>
-            <Link className="pageSelection" href="./home">
-              <div className="flex flex-col gap-y-4">
-                <p className="text-nav-text-clr">Home</p>
-              </div>
-            </Link>
-          </ul>
-          <ul>
-            <Link className="pageSelection" href="./shopping-cart">
-              <div className="flex flex-col gap-y-4">
-                <p className="text-nav-text-clr">Cart</p>
-              </div>
-            </Link>
-          </ul>
-          <ul>
-            <Link className="pageSelection" href="../profile">
-              <div className="flex flex-col gap-y-4">
-                <p className="text-nav-text-clr">Profile</p>
-              </div>
-            </Link>
-          </ul>
-        </div>
+        <BottomNavCustomer></BottomNavCustomer>        
       </div>
     </AuthContextProvider>
   );

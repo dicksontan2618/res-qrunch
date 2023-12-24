@@ -254,7 +254,7 @@ const CustomerScreen = () => {
       </div>
       
       <button className="btn btn-active" onClick={handleLogout}>
-        <p className="text-lg font-bold">Checkout</p>
+        <p className="text-lg font-bold">Logout</p>
       </button>
     </div>
   );

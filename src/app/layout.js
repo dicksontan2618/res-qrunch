@@ -1,5 +1,8 @@
 import { Inter } from 'next/font/google'
 import './globals.css'
+import "@fortawesome/fontawesome-svg-core/styles.css";
+import { config } from "@fortawesome/fontawesome-svg-core";
+config.autoAddCss = false;
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,7 +19,7 @@ export default function RootLayout({ children }) {
           <div className="hidden md:flex md:justify-center md:items-center md:w-screen md:h-screen ">
             <h1>Application only available in mobile view!</h1>
           </div>
-          <div className="block md:hidden">{children}</div>
+          <div className="block h-screen md:hidden">{children}</div>
         </main>
       </body>
     </html>

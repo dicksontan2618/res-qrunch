@@ -38,7 +38,6 @@ const VendorScreen = () => {
 
   return (
     <div>
-
       <div>
         <h2>Orders</h2>
         <OrderList orders={orders} />
@@ -49,6 +48,9 @@ const VendorScreen = () => {
         <SalesChart data={salesData} />
       </div> */}
 
+      <button className="btn btn-active" onClick={handleLogout}>
+        <p className="text-lg font-bold">Logout</p>
+      </button>
     </div>
   );
 };
