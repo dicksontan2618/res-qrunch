@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { signOut } from "firebase/auth";
+import { auth } from "@/utils/firebase";
 
 const VendorProfile = () => {
   const { user } = useAuthContext();
@@ -87,8 +89,19 @@ const VendorProfile = () => {
         }
       );
     }
-
   }
+
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        router.push("/");
+        window.localStorage.removeItem("session_user");
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
 
   useEffect(() => {
     if (
@@ -113,7 +126,9 @@ const VendorProfile = () => {
           </div>
           <form className="form" onSubmit={handleProfileImage}>
             <input type="file" accept="image/*" />
-            <button type="submit" className="btn btn-sm bg-white mt-2 border-1">Upload</button>
+            <button type="submit" className="btn btn-sm bg-white mt-2 border-1">
+              Upload
+            </button>
           </form>
         </div>
         <div>
@@ -147,6 +162,9 @@ const VendorProfile = () => {
             </button>
           </form>
         </div>
+        <button className="btn btn-active" onClick={handleLogout}>
+          <p className="text-lg font-bold">Logout</p>
+        </button>
       </div>
     </div>
   );

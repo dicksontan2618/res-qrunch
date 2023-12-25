@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import { useAuthContext } from "@/context/AuthContextVendor";
 import { useRouter } from "next/navigation";
-import { signOut } from "firebase/auth";
-import { auth } from "@/utils/firebase";
 import OrderList from "@/app/_components/OrderList";
 // import SalesChart from "@/app/_components/SalesChart";
 
@@ -24,18 +22,6 @@ const VendorScreen = () => {
     // ... more orders
   ]);
 
-  const handleLogout = () => {
-    signOut(auth)
-      .then(() => {
-        // Sign-out successful.
-        router.push("/");
-        window.localStorage.removeItem("session_user");
-      })
-      .catch((error) => {
-        // An error happened.
-      });
-  };
-
   return (
     <div>
       <div>
@@ -48,9 +34,6 @@ const VendorScreen = () => {
         <SalesChart data={salesData} />
       </div> */}
 
-      <button className="btn btn-active" onClick={handleLogout}>
-        <p className="text-lg font-bold">Logout</p>
-      </button>
     </div>
   );
 };
