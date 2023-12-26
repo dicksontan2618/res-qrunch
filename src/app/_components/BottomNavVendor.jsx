@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHouse, faUser } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars, faHouse, faUser } from "@fortawesome/free-solid-svg-icons";
 
 export default function BottomNavVendor(){
 
@@ -12,7 +12,13 @@ export default function BottomNavVendor(){
                     <span className="btm-nav-label text-nav-text-clr">Home</span>
                 </button>
             </Link>
-           <Link href="/vendor/profile">
+            <Link href="/vendor/menu">
+                <button className="flex flex-col items-center gap-y-1">
+                    <FontAwesomeIcon icon={faBars}></FontAwesomeIcon>
+                    <span className="btm-nav-label text-nav-text-clr">Menu</span>
+                </button>
+            </Link>
+            <Link href="/vendor/profile">
                 <button className="flex flex-col items-center gap-y-1">
                     <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
                     <span className="btm-nav-label text-nav-text-clr">Profile</span>
