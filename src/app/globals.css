@@ -82,13 +82,13 @@ header {
   text-align: center; 
 }
 
-.profile-section{
+/* .profile-section{
   display: flex;
   flex-direction: row;
   padding: 15px;
   border-bottom-width: 1px;
   border-bottom-color: lightgray;
-}
+} */
 
 .profile-button-section{
   border-bottom-width: 3px;

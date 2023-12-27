@@ -3,10 +3,7 @@
 import { useState, useEffect } from "react";
 import { useAuthContext } from "@/context/AuthContextUser";
 import { useRouter } from "next/navigation";
-import { signOut } from "firebase/auth";
-import { auth } from "@/utils/firebase";
 import ShoppingCart from "@/app/_components/ShoppingCart";
-import Link from "next/link";
 
 const CustomerScreen = () => {
 
@@ -18,18 +15,6 @@ const CustomerScreen = () => {
       router.push("/");
     }
   },[user])
-
-  const handleLogout = () => {
-    signOut(auth)
-      .then(() => {
-        // Sign-out successful.
-        router.push("/");
-        window.localStorage.removeItem("session_user");
-      })
-      .catch((error) => {
-        // An error happened.
-      });
-  };
 
   const [vendorData, setVendorData] = useState([
     {
@@ -252,10 +237,6 @@ const CustomerScreen = () => {
           removeFromCart={removeFromCart}
         />
       </div>
-      
-      <button className="btn btn-active" onClick={handleLogout}>
-        <p className="text-lg font-bold">Logout</p>
-      </button>
     </div>
   );
 };
