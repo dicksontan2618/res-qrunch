@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useAuthContext } from "@/context/AuthContextVendor";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import { db } from "@/utils/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
@@ -14,21 +15,6 @@ const VendorMenu = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [isEmpty, setIsEmpty] = useState(true);
 
-  async function initVendorMenuItems(vendor) {
-    
-    const q = query(collection(db, "menuItems"), where("vendor", "==", vendor.email));
-    const querySnapshot = await getDocs(q);
-    const menu_items = querySnapshot.docs.map((doc) => Object.assign(doc.data(), {id: doc.id}));
-    
-    if (!(querySnapshot.empty)) {
-      setIsEmpty(false);
-      console.log(menu_items);
-    }
-    else{
-      setIsEmpty(true);
-    }
-  }
-
   useEffect(() => {
     if (
       user == null &&
@@ -36,90 +22,58 @@ const VendorMenu = () => {
     ) {
       router.push("/");
     }
-    else{
-      initVendorMenuItems(user);
-    }
   }, [user]);
+
+  useEffect(()=>{
+
+    async function initVendorMenuItems(vendor) {
+      const q = query(
+        collection(db, "menuItems"),
+        where("vendor", "==", vendor.email)
+      );
+      const querySnapshot = await getDocs(q);
+      const menu_items = querySnapshot.docs.map((doc) =>
+        Object.assign(doc.data(), { id: doc.id })
+      );
+
+      if (!querySnapshot.empty) {
+        setIsEmpty(false);
+        setMenuItems(menu_items);
+      } else {
+        setIsEmpty(true);
+      }
+    }
+
+    initVendorMenuItems(user);
+  },[]);
 
   return (
     <div className="flex justify-center">
       <div className="flex flex-col w-[80%] mt-12 mb-24 gap-y-8 justify-center items-center">
-        <div className="card bg-base-100 shadow-xl">
-          <figure>
-            <img
-              src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
-              alt="Shoes"
-            />
-          </figure>
-          <div className="card-body">
-            <h2 className="card-title">
-              Shoes!
-              <div className="badge badge-secondary">NEW</div>
-            </h2>
-            <p>If a dog chews shoes whose shoes does he choose?</p>
-            <div className="card-actions justify-end">
-              <div className="badge badge-outline">Fashion</div>
-              <div className="badge badge-outline">Products</div>
-            </div>
-          </div>
-        </div>
-        <div className="card bg-base-100 shadow-xl">
-          <figure>
-            <img
-              src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
-              alt="Shoes"
-            />
-          </figure>
-          <div className="card-body">
-            <h2 className="card-title">
-              Shoes!
-              <div className="badge badge-secondary">NEW</div>
-            </h2>
-            <p>If a dog chews shoes whose shoes does he choose?</p>
-            <div className="card-actions justify-end">
-              <div className="badge badge-outline">Fashion</div>
-              <div className="badge badge-outline">Products</div>
-            </div>
-          </div>
-        </div>
-        <div className="card bg-base-100 shadow-xl">
-          <figure>
-            <img
-              src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
-              alt="Shoes"
-            />
-          </figure>
-          <div className="card-body">
-            <h2 className="card-title">
-              Shoes!
-              <div className="badge badge-secondary">NEW</div>
-            </h2>
-            <p>If a dog chews shoes whose shoes does he choose?</p>
-            <div className="card-actions justify-end">
-              <div className="badge badge-outline">Fashion</div>
-              <div className="badge badge-outline">Products</div>
-            </div>
-          </div>
-        </div>
-        <div className="card bg-base-100 shadow-xl">
-          <figure>
-            <img
-              src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
-              alt="Shoes"
-            />
-          </figure>
-          <div className="card-body">
-            <h2 className="card-title">
-              Shoes!
-              <div className="badge badge-secondary">NEW</div>
-            </h2>
-            <p>If a dog chews shoes whose shoes does he choose?</p>
-            <div className="card-actions justify-end">
-              <div className="badge badge-outline">Fashion</div>
-              <div className="badge badge-outline">Products</div>
-            </div>
-          </div>
-        </div>
+        {!isEmpty && menuItems.map(menuItem=>{
+          return (
+            <Link href={`/vendor/menu/${menuItem.id}`} key={menuItem.id} className="w-full">
+              <div className="card w-full bg-white text-black shadow-xl">
+                <img className="object-cover" src={menuItem.img} />
+                <div className="card-body">
+                  <h2 className="card-title text-2xl font-bold">
+                    {menuItem.name}
+                  </h2>
+                  <p className="font-semibold">RM {menuItem.price}</p>
+                  <p className="font-semibold">Quantity: {menuItem.quantity}</p>
+                  <div className="card-actions justify-end mt-4">
+                    {menuItem.ingredients.map((ingredient) => {
+                      return (
+                        <div className="badge badge-outline">{ingredient}</div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </Link>
+          );
+        })}
+        <p className={isEmpty ? "block text-2xl font-bold text-black":"hidden"}>No Items !</p>
       </div>
     </div>
   );
