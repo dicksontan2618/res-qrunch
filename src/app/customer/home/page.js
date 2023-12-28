@@ -3,6 +3,10 @@
 import { useState, useEffect } from "react";
 import { useAuthContext } from "@/context/AuthContextUser";
 import { useRouter } from "next/navigation";
+import { db } from "@/utils/firebase";
+import { collection, getDocs } from "firebase/firestore";
+
+import Link from "next/link";
 import ShoppingCart from "@/app/_components/ShoppingCart";
 
 const CustomerScreen = () => {
@@ -10,11 +14,40 @@ const CustomerScreen = () => {
   const { user } = useAuthContext();
   const router = useRouter();
 
+  const [foodItems, setFoodItems] =  useState([]);
+  const [isEmpty, setIsEmpty] = useState(true);
+
   useEffect(()=>{
     if (user == null && window.localStorage.getItem("session_user") != "user") {
       router.push("/");
     }
   },[user])
+
+  useEffect(()=>{
+
+    async function initFoodItems(){
+      const docSnapshot = await getDocs(collection(db, "menuItems"));
+      const food_items = docSnapshot.docs.map((doc) =>
+        Object.assign(doc.data(), { id: doc.id })
+      );
+      if (!docSnapshot.empty) {
+        setIsEmpty(false);
+        setFoodItems(food_items);
+      } else {
+        setIsEmpty(true);
+      }
+    }
+
+    initFoodItems();
+
+  },[])
+
+  useEffect(()=>{
+    if (window.localStorage.getItem("initShoppingCart") == "false") {
+      window.localStorage.setItem("shoppingCart", "[]");
+      window.localStorage.setItem("initShoppingCart", "true");
+    }
+  },[])
 
   const [vendorData, setVendorData] = useState([
     {
@@ -170,8 +203,7 @@ const CustomerScreen = () => {
   };
 
   return (
-    <div>
-
+    <div className="flex flex-col justify-center items-center w-max-screen">
       <div id="location-section">
         <label htmlFor="location-input">Enter Your Location:</label>
         <input
@@ -221,22 +253,48 @@ const CustomerScreen = () => {
         </select>
       </div>
 
-      <div id="food-list">
+      {/* <div id="food-list">
         {selectedVendor === "all" &&
         filterType === "all" &&
         searchTerm === "" &&
         locationInput === ""
           ? renderAllFoodItems()
           : renderFoodItems()}
+      </div> */}
+
+      <div
+        id="food-list"
+        className="flex flex-col w-[80%] mt-12 mb-24 gap-y-8 justify-center items-center"
+      >
+        {!isEmpty &&
+          foodItems.map((foodItem) => {
+            return (
+              <Link
+                href={`/customer/${foodItem.id}`}
+                key={foodItem.id}
+                className="w-full"
+              >
+                <div className="card w-full bg-white text-black shadow-xl">
+                  <img className="object-cover" src={foodItem.img} />
+                  <div className="card-body">
+                    <h2 className="card-title text-2xl font-bold">
+                      {foodItem.name}
+                    </h2>
+                    <p className="font-semibold">RM {foodItem.price}</p>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
       </div>
 
-      <div id="shopping-cart">
+      {/* <div id="shopping-cart">
         <ShoppingCart
           cart={cart}
           updateQuantity={updateQuantity}
           removeFromCart={removeFromCart}
         />
-      </div>
+      </div> */}
     </div>
   );
 };

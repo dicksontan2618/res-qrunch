@@ -108,6 +108,7 @@ const ProfilePage = () => {
         // Sign-out successful.
         router.push("/");
         window.localStorage.removeItem("session_user");
+        window.localStorage.removeItem("shoppingCart");
       })
       .catch((error) => {
         // An error happened.

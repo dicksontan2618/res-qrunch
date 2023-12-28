@@ -1,7 +1,16 @@
+"use client"
+
 import Image from 'next/image'
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 const StartScreen = () => {
+
+    useEffect(() => {
+      window.localStorage.setItem(
+          "initShoppingCart", "false");
+    }, []);
+
     return(
         <div className='bg-main-clr h-screen flex justify-center items-center'>
             <div className='flex flex-col items-center gap-y-8'>

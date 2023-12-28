@@ -109,7 +109,7 @@ const VendorAddMenuItem = () => {
             </button>
           </form>
         </div>
-        <div>
+        <div className="mb-32">
           <form onSubmit={handleMenuItemForm} className="form">
             <div className="w-full my-1">
               <label className="text-gray-800 font-semibold">

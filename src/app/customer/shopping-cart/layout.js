@@ -3,10 +3,10 @@ import { AuthContextProvider } from "@/context/AuthContextUser";
 import Link from "next/link";
 import BottomNavCustomer from "@/app/_components/BottomNavCustomer";
 
-export default function CustomerLayout({ children }) {
+export default function CartLayout({ children }) {
   return (
     <AuthContextProvider>
-      <div className="flex flex-col min-h-screen bg-white relative">
+      <div className="flex flex-col h-min-screen bg-white relative">
         
         <header className="flex justify-start items-center p-4">
           <Link href="./home">

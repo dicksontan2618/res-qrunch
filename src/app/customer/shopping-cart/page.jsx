@@ -1,46 +1,67 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import ShoppingCart from "@/app/_components/ShoppingCart";
+import { useState, useEffect } from "react";
+import { useAuthContext } from "@/context/AuthContextUser";
+import { useRouter } from "next/navigation";
 
-const CheckoutPage = () => {
+import { db } from "@/utils/firebase";
+import { doc, getDoc } from "firebase/firestore";
+
+const CartPage = () => {
+
+  const { user } = useAuthContext();
+  const router = useRouter();
+
   // Assuming you have a way to get the cart state, you might need to fetch it or pass it as a prop
   const [checkoutCart, setCheckoutCart] = useState([]);
-
-  // const getCartLocalStorage = () => {
-  //   return(JSON.parse((window.localStorage.getItem("session_shoppping_cart"))));
-  // }
-
-  // useEffect(()=>{
-  //   setCheckoutCart(getCartLocalStorage());
-  // },[])
+  const [checkoutCartDetails, setCheckoutCartDetails] = useState([]);
+  const [isEmpty, setIsEmpty] =  useState(true);
+  const [fee, setFee] =  useState("");
 
   const getCartLocalStorage = () => {
-    const storedCart = window.localStorage.getItem("session_shoppping_cart");
-    try {
-      return JSON.parse(storedCart) || [];
-    } catch (error) {
-      console.error("Error parsing cart from local storage:", error);
-      return [];
+    const storedCartString = window.localStorage.getItem("shoppingCart");
+    if (storedCartString == "[]"){
+      setIsEmpty(true);
+    }
+    else{
+      setIsEmpty(false);
+      setCheckoutCart(JSON.parse(window.localStorage.getItem("shoppingCart")));
     }
   };
-  
 
+  async function getCartLocalStorageDetails(cart) {
+    cart.forEach(async (item) => {
+      const docRef = doc(db, "menuItems", item.id);
+      const docSnap = await getDoc(docRef);
+
+
+    });
+  };
+  
   useEffect(() => {
-    const storedCart = getCartLocalStorage();
-    console.log("Stored Cart:", storedCart);
-    setCheckoutCart(storedCart);
+    getCartLocalStorage();
   }, []);
+
+  useEffect(()=>{
+    if (user == null && window.localStorage.getItem("session_user") != "user") {
+      router.push("/");
+    }
+  },[user])
   
-
   return (
-    <div>
-
-      <br></br><br></br>
-      <ShoppingCart cart={checkoutCart} />
-
+    <div className="flex justify-center">
+      <div className="flex flex-col w-[85%] gap-y-6 mb-24">
+        {checkoutCart.map((cartItem, index)=>{
+          return(
+            <div key={index}>
+              <p>{cartItem.id}</p>
+              <p>{cartItem.amount}</p>
+            </div>
+          )
+        })}
+      </div>
     </div>
   );
 };
 
-export default CheckoutPage;
+export default CartPage;
