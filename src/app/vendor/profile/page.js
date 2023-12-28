@@ -18,6 +18,7 @@ const VendorProfile = () => {
   const [vendorAddress, setVendorAddress] = useState("");
   const [imgUrl, setImgUrl] = useState(null);
 
+  // function to initialize vendor profile
   async function initVendorProfile (vendor) {
     const docRef = doc(db, "vendors", vendor.uid);
     const docSnap = await getDoc(docRef);
@@ -34,6 +35,7 @@ const VendorProfile = () => {
     }
   }
 
+  // function that invoked when user submit edit profile form
   const handleEditProfileForm = async (event) => {
 
     event.preventDefault();
@@ -60,26 +62,15 @@ const VendorProfile = () => {
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          // Observe state change events such as progress, pause, and resume
           // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
-          switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
-              break;
-            case "running":
-              console.log("Upload is running");
-              break;
-          }
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log("Upload is " + progress + "% done");
         },
         (error) => {
           // Handle unsuccessful uploads
         },
         () => {
           // Handle successful uploads on complete
-          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
             setImgUrl(downloadURL);
             await setDoc(doc(db, "vendors", user.uid), {
@@ -91,6 +82,7 @@ const VendorProfile = () => {
     }
   }
 
+  // function invoked when user logout 
   const handleLogout = () => {
     signOut(auth)
       .then(() => {

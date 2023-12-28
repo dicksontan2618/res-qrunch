@@ -25,7 +25,6 @@ const VendorMenu = () => {
   }, [user]);
 
   useEffect(()=>{
-
     async function initVendorMenuItems(vendor) {
       const q = query(
         collection(db, "menuItems"),
@@ -45,6 +44,7 @@ const VendorMenu = () => {
     }
 
     initVendorMenuItems(user);
+    
   },[]);
 
   return (
@@ -62,9 +62,9 @@ const VendorMenu = () => {
                   <p className="font-semibold">RM {menuItem.price}</p>
                   <p className="font-semibold">Quantity: {menuItem.quantity}</p>
                   <div className="card-actions justify-end mt-4">
-                    {menuItem.ingredients.map((ingredient) => {
+                    {menuItem.ingredients.map((ingredient, index) => {
                       return (
-                        <div className="badge badge-outline">{ingredient}</div>
+                        <div className="badge badge-outline" key={index}>{ingredient}</div>
                       );
                     })}
                   </div>
