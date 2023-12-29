@@ -37,11 +37,14 @@ const FoodItem = ({params}) => {
         }
     }
 
-    const addToCart = () => {
-        const cartItem = {
-            id: id,
-            amount : amount,
-        }
+    const addToCart = async() => {
+        const additionalDetails = {
+          id : id,
+          amount: amount
+        };
+        const docRef = doc(db, "menuItems", id);
+        const docSnap = await getDoc(docRef);
+        const cartItem = Object.assign(docSnap.data(), additionalDetails);
         setCart([...cart, cartItem]);
     }
 
