@@ -16,6 +16,8 @@ const CustomerScreen = () => {
 
   const [foodItems, setFoodItems] =  useState([]);
   const [isEmpty, setIsEmpty] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [foodItemsCopy, setFoodItemsCopy] = useState([]);
 
   useEffect(()=>{
     if (user == null && window.localStorage.getItem("session_user") != "user") {
@@ -33,6 +35,7 @@ const CustomerScreen = () => {
       if (!docSnapshot.empty) {
         setIsEmpty(false);
         setFoodItems(food_items);
+        setFoodItemsCopy(food_items);
       } else {
         setIsEmpty(true);
       }
@@ -49,85 +52,20 @@ const CustomerScreen = () => {
     }
   },[])
 
-  const [vendorData, setVendorData] = useState([
-    {
-      name: "vendor1",
-      items: [
-        { id: 1, name: "Margherita Pizza", type: "pizza", price: 10.99 },
-        { id: 2, name: "Classic Burger", type: "burger", price: 8.99 },
-      ],
-      location: ["Bukit Mertajam", "Simpang Ampat"],
-    },
-    {
-      name: "vendor2",
-      items: [
-        { id: 3, name: "Salmon Sushi", type: "sushi", price: 12.99 },
-        { id: 4, name: "Teriyaki Bento", type: "bento", price: 18.99 },
-        // Add more items for vendor2
-      ],
-      location: ["Simpang Ampat"],
-    },
-    // Add more vendors as needed
-  ]);
-
-  const [cart, setCart] = useState([]);
-  const [selectedVendor, setSelectedVendor] = useState("all");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState("all");
-  const [showCart, setShowCart] = useState(false);
-  const [locationInput, setLocationInput] = useState("");
-
   useEffect(() => {
-    renderFoodItems();
-  }, [searchTerm, filterType, selectedVendor]);
+    reRenderFoodItems();
+  }, [searchTerm]);
 
-  useEffect(() => {
-    renderAllFoodItems(); // Ensure this function is called when the component mounts
-  }, []);
-
-  const renderAllFoodItems = () => {
-    return vendorData.flatMap((vendor) =>
-      vendor.items.map((food) => (
-        <div key={food.id} className="food-item">
-          <h3>{food.name}</h3>
-          <p>
-            {vendorData.find((vendor) => vendor.items.includes(food))?.name}
-          </p>
-          <p>${food.price.toFixed(2)}</p>
-          <button onClick={() => addToCart(food)}>Add to Cart</button>
-        </div>
-      ))
-    );
-  };
-
-  const renderFoodItems = () => {
-    const allFoodItems = vendorData.flatMap((vendor) => vendor.items);
-
-    // Filter based on selected vendor
-    let filteredFood =
-      selectedVendor === "all"
-        ? allFoodItems
-        : vendorData.find((vendor) => vendor.name === selectedVendor)?.items ||
-          [];
-
-    // Filter based on food type
-    if (filterType.toLowerCase() !== "all") {
-      filteredFood = filteredFood.filter(
-        (food) => food.type.toLowerCase() === filterType.toLowerCase()
-      );
-    }
+  const reRenderFoodItems = () => {
 
     // Filter based on search term
     const formattedSearchTerm = searchTerm.toLowerCase().replace(/\s/g, "");
-    filteredFood = filteredFood.filter(
-      (food) =>
-        food.name.toLowerCase().includes(formattedSearchTerm) ||
-        vendorData
-          .find((vendor) => vendor.items.includes(food))
-          ?.name.toLowerCase()
-          .includes(formattedSearchTerm)
-    );
+    let filteredFood = foodItemsCopy.filter((food) => food.name.toLowerCase().includes(formattedSearchTerm));
+    setFoodItems(filteredFood);
+  }
 
+  // For future location functionality reference
+  const renderFoodItems = () => {
     // Filter based on user location
     if (locationInput) {
       const formattedLocationInput = locationInput
@@ -157,43 +95,6 @@ const CustomerScreen = () => {
     ));
   };
 
-  const addToCart = (food) => {
-    // Check if the item is already in the cart
-    const existingItem = cart.find((item) => item.id === food.id);
-
-    if (existingItem) {
-      // If the item is already in the cart, update its quantity
-      const updatedCart = cart.map((item) =>
-        item.id === food.id ? { ...item, quantity: item.quantity + 1 } : item
-      );
-      setCart(updatedCart);
-    } else {
-      // If the item is not in the cart, add it with quantity set to 1
-      setCart((prevCart) => [...prevCart, { ...food, quantity: 1 }]);
-    }
-
-    console.log(cart);
-  };
-
-  const updateQuantity = (itemId, newQuantity) => {
-    // If the new quantity is less than or equal to 0, remove the item from the cart
-    if (newQuantity <= 0) {
-      setCart((prevCart) => prevCart.filter((item) => item.id !== itemId));
-    } else {
-      // Find the item in the cart and update its quantity
-      setCart((prevCart) =>
-        prevCart.map((item) =>
-          item.id === itemId ? { ...item, quantity: newQuantity } : item
-        )
-      );
-    }
-  };
-
-  const removeFromCart = (itemId) => {
-    // Remove the item from the cart
-    setCart((prevCart) => prevCart.filter((item) => item.id !== itemId));
-  };
-
   const saveLocation = () => {
     // Now use the state variable to get the location value
     const userLocation = locationInput.toLowerCase().replace(/\s/g, "");
@@ -204,7 +105,7 @@ const CustomerScreen = () => {
 
   return (
     <div className="flex flex-col justify-center items-center w-max-screen">
-      <div id="location-section">
+      {/* <div id="location-section">
         <label htmlFor="location-input">Enter Your Location:</label>
         <input
           type="text"
@@ -214,53 +115,18 @@ const CustomerScreen = () => {
           onChange={(e) => setLocationInput(e.target.value)} // Update the state on input change
         />
         <button onClick={saveLocation}>Save Location</button>
-      </div>
-
-      <div id="vendor-section">
-        <label htmlFor="vendor-select">Select Vendor:</label>
-        <select
-          id="vendor-select"
-          onChange={(e) => setSelectedVendor(e.target.value)}
-          value={selectedVendor}
-        >
-          <option value="all">All Vendors</option>
-          <option value="vendor1">Vendor 1</option>
-          <option value="vendor2">Vendor 2</option>
-          {/* Add more options as needed */}
-        </select>
-      </div>
+      </div>*/}
 
       <div id="search-bar">
         <input
+          className="input input-bordered w-full max-w-xs bg-white text-black"
           type="text"
-          id="search-input"
           placeholder="Search for food..."
           onChange={(e) => setSearchTerm(e.target.value)}
           value={searchTerm}
         />
 
-        <select
-          id="food-filter"
-          onChange={(e) => setFilterType(e.target.value)}
-          value={filterType}
-        >
-          <option value="all">All</option>
-          <option value="pizza">Pizza</option>
-          <option value="burger">Burger</option>
-          <option value="sushi">Sushi</option>
-          <option value="bento">Bento</option>
-          {/* Add more options as needed */}
-        </select>
       </div>
-
-      {/* <div id="food-list">
-        {selectedVendor === "all" &&
-        filterType === "all" &&
-        searchTerm === "" &&
-        locationInput === ""
-          ? renderAllFoodItems()
-          : renderFoodItems()}
-      </div> */}
 
       <div
         id="food-list"
@@ -275,7 +141,7 @@ const CustomerScreen = () => {
                 className="w-full"
               >
                 <div className="card w-full bg-white text-black shadow-xl">
-                  <img className="object-cover" src={foodItem.img} />
+                  <img className="object-cover h-48" src={foodItem.img} />
                   <div className="card-body">
                     <h2 className="card-title text-2xl font-bold">
                       {foodItem.name}
@@ -287,14 +153,6 @@ const CustomerScreen = () => {
             );
           })}
       </div>
-
-      {/* <div id="shopping-cart">
-        <ShoppingCart
-          cart={cart}
-          updateQuantity={updateQuantity}
-          removeFromCart={removeFromCart}
-        />
-      </div> */}
     </div>
   );
 };

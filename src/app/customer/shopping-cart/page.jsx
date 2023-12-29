@@ -4,10 +4,10 @@ import { useState, useEffect } from "react";
 import { useAuthContext } from "@/context/AuthContextUser";
 import { useRouter } from "next/navigation";
 
-import { db } from "@/utils/firebase";
-import { doc, getDoc } from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+
+import Link from "next/link";
 
 const CartPage = () => {
 
@@ -46,10 +46,6 @@ const CartPage = () => {
     setFee(fee- minusPrice);
   }
 
-  const checkout = () => {
-
-  }
-  
   useEffect(() => {
     getCartLocalStorage();
   }, []);
@@ -83,7 +79,7 @@ const CartPage = () => {
         })}
         <p className={isEmpty ? "block text-2xl font-bold text-black":"hidden"}>Cart Empty !</p>
         <p className="self-start text-gray-800 font-semibold">Fee : RM {fee}</p>
-        <button className="btn btn-block bg-main-clr text-white btn-ghost">Checkout</button>
+        <Link href="/customer/checkout"><button className="btn btn-block bg-main-clr text-white btn-ghost">Checkout</button></Link>
       </div>
     </div>
   );

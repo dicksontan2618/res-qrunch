@@ -46,6 +46,8 @@ const FoodItem = ({params}) => {
         const docSnap = await getDoc(docRef);
         const cartItem = Object.assign(docSnap.data(), additionalDetails);
         setCart([...cart, cartItem]);
+
+        router.push("/customer/home")
     }
 
     useEffect(() => {
