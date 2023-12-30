@@ -153,13 +153,6 @@ const CustomerScreen = () => {
         <button onClick={saveLocation}>Save Location</button>
       </div>*/}
 
-      
-      <div className="flex justify-end mt-3">
-        <button onClick={toggleFilterMenu} className="bg-blue-500 text-white px-2 py-1 rounded">
-          {showFilterMenu ? "Hide Filters" : "Show Filters"}
-        </button>
-      </div>
-
       <div id="search-bar" className="mt-3">
         <input
           className="input input-bordered w-full max-w-xs bg-white text-black"
@@ -168,6 +161,12 @@ const CustomerScreen = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
           value={searchTerm}
         />
+      </div>
+
+      <div className="flex justify-end mt-3">
+        <button onClick={toggleFilterMenu} className="bg-blue-500 text-white px-2 py-1 rounded">
+          {showFilterMenu ? "Hide Filters" : "Show Allergens Filters"}
+        </button>
       </div>
 
       <div

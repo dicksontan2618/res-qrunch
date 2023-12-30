@@ -128,7 +128,7 @@ const FoodItem = ({params}) => {
           <div className="flex flex-col h-8 gap-y-2">
             <p className="font-bold text-3xl text-gray-800">{foodName}</p>
             <p className="text-gray-800 font-semibold">
-              {ingredients.join(",")}
+              {ingredients.join(", ")}
             </p>
           </div>
           <div className="self-center mt-8">
