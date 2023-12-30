@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuthContext } from "@/context/AuthContextVendor";
 import { useRouter } from "next/navigation";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import { v4 as uuidv4 } from "uuid";
 
@@ -19,6 +19,16 @@ const VendorAddMenuItem = () => {
   const [ingredients, setIngredients] = useState([]);
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState(0);
+  const [vendorName, setVendorName] = useState("");
+
+  const getVendorDetail = async () => {
+    const docRef = doc(db, "vendors", user.uid);
+    const docSnap = await getDoc(docRef);
+
+    if(docSnap.exists()){
+      setVendorName(docSnap.data()["username"]);
+    }
+  }
 
   const handleMenuItemImage = async (event) => {
     event.preventDefault();
@@ -71,7 +81,8 @@ const VendorAddMenuItem = () => {
         name: foodName,
         price: price,
         quantity : quantity,
-        vendor: user.email,
+        vendor: user.uid,
+        vendor_name : vendorName,
         ingredients: ingredients,
       },
       { merge: true }
@@ -92,6 +103,10 @@ const VendorAddMenuItem = () => {
       setMenuItemId(uuidv4());
     }
   }, [user]);
+
+  useEffect(() => {
+    getVendorDetail();
+  },[])
 
   return (
     <div className="flex justify-center">

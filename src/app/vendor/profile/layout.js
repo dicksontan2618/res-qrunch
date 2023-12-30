@@ -5,7 +5,7 @@ import BottomNavVendor from "@/app/_components/BottomNavVendor";
 export default function VendorProfileLayout({ children }) {
   return (
     <AuthContextProvider>
-      <div className="bg-white h-screen">
+      <div className="bg-white h-min-screen">
         <header className="flex justify-center">
           <h1 className="font-semibold text-xl">ResQrunch</h1>
         </header>

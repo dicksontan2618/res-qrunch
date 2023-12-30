@@ -70,7 +70,6 @@ const VendorMenuItem = ({params}) => {
         name: foodName,
         price: price,
         quantity: quantity,
-        vendor: user.email,
         ingredients: ingredients,
       },
       { merge: true }
