@@ -18,12 +18,19 @@ const CustomerScreen = () => {
   const [isEmpty, setIsEmpty] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [foodItemsCopy, setFoodItemsCopy] = useState([]);
+  const [uniqueIngredients, setUniqueIngredients] = useState([]);
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
+  const [selectedIngredients, setSelectedIngredients] = useState([]);
 
   useEffect(()=>{
     if (user == null && window.localStorage.getItem("session_user") != "user") {
       router.push("/");
     }
   },[user])
+
+  const toggleFilterMenu = () => {
+    setShowFilterMenu(!showFilterMenu);
+  };
 
   useEffect(()=>{
 
@@ -55,6 +62,13 @@ const CustomerScreen = () => {
   useEffect(() => {
     reRenderFoodItems();
   }, [searchTerm]);
+
+  useEffect(() => {
+    // Extract unique ingredients from foodItemsCopy
+    const allIngredients = foodItemsCopy.flatMap((food) => food.ingredients);
+    const uniqueIngredients = [...new Set(allIngredients)];
+    setUniqueIngredients(uniqueIngredients);
+  }, [foodItemsCopy]);
 
   const reRenderFoodItems = () => {
 
@@ -103,8 +117,30 @@ const CustomerScreen = () => {
     console.log("User Location:", userLocation);
   };
 
+  const applyFilter = () => {
+    // Update the food items based on the selected ingredients
+    const filteredFood = foodItemsCopy.filter((food) =>
+      !selectedIngredients.some((ingredient) => food.ingredients.includes(ingredient))
+    );
+    setFoodItems(filteredFood);
+  };
+
+  const handleIngredientFilter = (selectedIngredient) => {
+    // Toggle the selected ingredient
+    const updatedIngredients = selectedIngredients.includes(selectedIngredient)
+      ? selectedIngredients.filter((ingredient) => ingredient !== selectedIngredient)
+      : [...selectedIngredients, selectedIngredient];
+    setSelectedIngredients(updatedIngredients);
+  };
+
+  const clearFilters = () => {
+    // Reset to show all food items
+    setFoodItems(foodItemsCopy);
+    setSelectedIngredients([]);
+  };
+
   return (
-    <div className="flex flex-col justify-center items-center w-max-screen">
+    <div className="flex flex-col justify-center items-center w-max-screen relative">
       {/* <div id="location-section">
         <label htmlFor="location-input">Enter Your Location:</label>
         <input
@@ -117,7 +153,14 @@ const CustomerScreen = () => {
         <button onClick={saveLocation}>Save Location</button>
       </div>*/}
 
-      <div id="search-bar">
+      
+      <div className="flex justify-end mt-3">
+        <button onClick={toggleFilterMenu} className="bg-blue-500 text-white px-2 py-1 rounded">
+          {showFilterMenu ? "Hide Filters" : "Show Filters"}
+        </button>
+      </div>
+
+      <div id="search-bar" className="mt-3">
         <input
           className="input input-bordered w-full max-w-xs bg-white text-black"
           type="text"
@@ -130,7 +173,7 @@ const CustomerScreen = () => {
 
       <div
         id="food-list"
-        className="grid grid-cols-2 gap-8 justify-center items-center w-[80%] mt-12 mb-24"
+        className="grid grid-cols-2 gap-7 justify-center items-center w-[80%] mt-8 mb-24"
       >
         {!isEmpty &&
           foodItems.map((foodItem) => (
@@ -139,8 +182,8 @@ const CustomerScreen = () => {
               key={foodItem.id}
               className="w-full"
             >
-              <div className="card w-full bg-white text-black shadow-xl h-60">
-                <img className="object-cover h-32" src={foodItem.img} />
+              <div className="card w-full h-60 bg-white text-black shadow-xl">
+                <img className="h-32 object-cover" src={foodItem.img} />
                 <div className="card-body">
                   <h2 className="card-title text-2xl font-bold">{foodItem.name}</h2>
                   <p className="font-semibold">RM {foodItem.price}</p>
@@ -149,6 +192,38 @@ const CustomerScreen = () => {
             </Link>
           ))}
       </div>
+
+      {/* Ingredients filter menu */}
+      {showFilterMenu && (
+        <div className="filter-menu absolute top-0 right-0 bg-gray-100 p-4 min-w-[200px] h-[80vh] overflow-auto">
+          <div className="flex items-center mb-2">
+            <button onClick={toggleFilterMenu} className="bg-blue-500 text-white px-2 py-1 rounded">
+              X
+            </button>
+            <h3 className="text-lg font-semibold ml-2">Allergens Filter</h3>
+          </div>
+          {uniqueIngredients.map((ingredient) => (
+            <div key={ingredient} className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                id={ingredient}
+                onChange={() => handleIngredientFilter(ingredient)}
+                checked={selectedIngredients.includes(ingredient)}
+              />
+              <label htmlFor={ingredient} className="ml-2">
+                {ingredient}
+              </label>
+            </div>
+          ))}
+          <button onClick={applyFilter} className="mt-4 mr-2 bg-green-500 text-white px-2 py-1 rounded">
+            Apply Filters
+          </button>
+          <button onClick={clearFilters} className="mt-4 mr-2 bg-blue-500 text-white px-2 py-1 rounded">
+            Clear Filters
+          </button>
+        </div>
+      )}
+
     </div>
   );
 };
