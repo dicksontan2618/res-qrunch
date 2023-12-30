@@ -82,13 +82,13 @@ const FoodItem = ({params}) => {
     return (
       <div className="flex justify-center">
         <div className="flex flex-col w-[85%] gap-y-6 mb-24">
-          <div className="card w-full bg-white shadow-xl mt-12">
+          <div className="card w-full h-[30%] bg-white shadow-xl mt-12">
             <figure>
-              <img src={imgUrl} />
+              <img src={imgUrl}/>
             </figure>
           </div>
           <div className="flex flex-col justify-center items-center gap-y-4">
-            <div className="flex items-center gap-x-4">
+            <div className="flex h-7 items-center gap-x-4">
               <button
                 className="btn btn-circle btn-outline"
                 onClick={decrement}
@@ -103,9 +103,9 @@ const FoodItem = ({params}) => {
                 <FontAwesomeIcon icon={faPlus} />
               </button>
             </div>
-            <p className="font-semibold">Qty : {quantity}</p>
+            <p className="h-3 font-semibold">Qty : {quantity}</p>
           </div>
-          <div className="flex flex-col gap-y-2">
+          <div className="flex flex-col h-8 gap-y-2">
             <p className="font-bold text-3xl text-gray-800">{foodName}</p>
             <p className="text-gray-800 font-semibold">
               {ingredients.join(",")}

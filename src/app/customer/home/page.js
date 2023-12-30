@@ -130,28 +130,24 @@ const CustomerScreen = () => {
 
       <div
         id="food-list"
-        className="flex flex-col w-[80%] mt-12 mb-24 gap-y-8 justify-center items-center"
+        className="grid grid-cols-2 gap-8 justify-center items-center w-[80%] mt-12 mb-24"
       >
         {!isEmpty &&
-          foodItems.map((foodItem) => {
-            return (
-              <Link
-                href={`/customer/${foodItem.id}`}
-                key={foodItem.id}
-                className="w-full"
-              >
-                <div className="card w-full bg-white text-black shadow-xl">
-                  <img className="object-cover h-48" src={foodItem.img} />
-                  <div className="card-body">
-                    <h2 className="card-title text-2xl font-bold">
-                      {foodItem.name}
-                    </h2>
-                    <p className="font-semibold">RM {foodItem.price}</p>
-                  </div>
+          foodItems.map((foodItem) => (
+            <Link
+              href={`/customer/${foodItem.id}`}
+              key={foodItem.id}
+              className="w-full"
+            >
+              <div className="card w-full bg-white text-black shadow-xl h-60">
+                <img className="object-cover h-32" src={foodItem.img} />
+                <div className="card-body">
+                  <h2 className="card-title text-2xl font-bold">{foodItem.name}</h2>
+                  <p className="font-semibold">RM {foodItem.price}</p>
                 </div>
-              </Link>
-            );
-          })}
+              </div>
+            </Link>
+          ))}
       </div>
     </div>
   );
