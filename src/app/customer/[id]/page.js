@@ -38,14 +38,27 @@ const FoodItem = ({params}) => {
     }
 
     const addToCart = async () => {
-      const additionalDetails = {
-        id: id,
-        amount: amount || 1, 
-      };
-      const docRef = doc(db, "menuItems", id);
-      const docSnap = await getDoc(docRef);
-      const cartItem = Object.assign(docSnap.data(), additionalDetails);
-      setCart([...cart, cartItem]);
+      const existingCartItem = cart.find((item) => item.id === id);
+  
+      if (existingCartItem) {
+        // Item already exists in the cart, update the quantity
+        const updatedCart = cart.map((item) =>
+          item.id === id
+            ? { ...item, amount: (item.amount || 1) + (amount || 1) }
+            : item
+        );
+        setCart(updatedCart);
+      } else {
+        // Item is not in the cart, add a new item
+        const additionalDetails = {
+          id: id,
+          amount: amount || 1,
+        };
+        const docRef = doc(db, "menuItems", id);
+        const docSnap = await getDoc(docRef);
+        const cartItem = Object.assign(docSnap.data(), additionalDetails);
+        setCart([...cart, cartItem]);
+      }
   
       router.push("/customer/home");
     };
