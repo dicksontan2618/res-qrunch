@@ -130,7 +130,7 @@ const CustomerScreen = () => {
 
       <div
         id="food-list"
-        className="flex flex-col w-[80%] mt-12 mb-24 gap-y-8 justify-center items-center"
+        className="grid grid-cols-2 gap-8 justify-center items-center w-[80%] mt-12 mb-24"
       >
         {!isEmpty &&
           foodItems.map((foodItem) => {
