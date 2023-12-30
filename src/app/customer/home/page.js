@@ -125,12 +125,12 @@ const CustomerScreen = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
           value={searchTerm}
         />
-
       </div>
 
       <div
         id="food-list"
-        className="grid grid-cols-2 gap-8 justify-center items-center w-[80%] mt-12 mb-24"
+        // className="grid grid-cols-2 gap-8 justify-center items-center w-[80%] mt-12 mb-24"
+        className="flex flex-col w-[80%] mt-12 mb-24 gap-y-8 justify-center items-center"
       >
         {!isEmpty &&
           foodItems.map((foodItem) => {
@@ -146,7 +146,9 @@ const CustomerScreen = () => {
                     <h2 className="card-title text-2xl font-bold">
                       {foodItem.name}
                     </h2>
-                    <p className="font-semibold text-gray-500">{foodItem.vendor_name}</p>
+                    <p className="font-semibold text-gray-500">
+                      {foodItem.vendor_name}
+                    </p>
                     <p className="font-semibold">RM {foodItem.price}</p>
                   </div>
                 </div>
