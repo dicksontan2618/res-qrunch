@@ -44,7 +44,7 @@ const FoodItem = ({params}) => {
         // Item already exists in the cart, update the quantity
         const updatedCart = cart.map((item) =>
           item.id === id
-            ? { ...item, amount: (item.amount || 1) + (amount || 1) }
+            ? { ...item, amount: amount }
             : item
         );
         setCart(updatedCart);
@@ -91,7 +91,7 @@ const FoodItem = ({params}) => {
           // Check if the item is already in the cart
           const existingCartItem = cart.find((item) => item.id === id);
           if (existingCartItem) {
-            setAmount(existingCartItem.amount || 1);
+            setAmount(existingCartItem.amount);
           }
         }
       }
