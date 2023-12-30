@@ -37,18 +37,18 @@ const FoodItem = ({params}) => {
         }
     }
 
-    const addToCart = async() => {
-        const additionalDetails = {
-          id : id,
-          amount: amount
-        };
-        const docRef = doc(db, "menuItems", id);
-        const docSnap = await getDoc(docRef);
-        const cartItem = Object.assign(docSnap.data(), additionalDetails);
-        setCart([...cart, cartItem]);
-
-        router.push("/customer/home")
-    }
+    const addToCart = async () => {
+      const additionalDetails = {
+        id: id,
+        amount: amount || 1, 
+      };
+      const docRef = doc(db, "menuItems", id);
+      const docSnap = await getDoc(docRef);
+      const cartItem = Object.assign(docSnap.data(), additionalDetails);
+      setCart([...cart, cartItem]);
+  
+      router.push("/customer/home");
+    };
 
     useEffect(() => {
       if (
