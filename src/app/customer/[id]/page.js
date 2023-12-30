@@ -80,17 +80,24 @@ const FoodItem = ({params}) => {
       async function getFoodItem() {
         const docRef = doc(db, "menuItems", id);
         const docSnap = await getDoc(docRef);
+        
         if (docSnap.exists()) {
           setFoodName(docSnap.data()["name"]);
           setIngredients(docSnap.data()["ingredients"]);
           setImgUrl(docSnap.data()["img"]);
           setPrice(docSnap.data()["price"]);
           setQuantity(docSnap.data()["quantity"]);
+    
+          // Check if the item is already in the cart
+          const existingCartItem = cart.find((item) => item.id === id);
+          if (existingCartItem) {
+            setAmount(existingCartItem.amount || 1);
+          }
         }
       }
-
+    
       getFoodItem();
-    }, []);
+    }, [id, cart]);
     
     return (
       <div className="flex justify-center">
