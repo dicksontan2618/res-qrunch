@@ -146,6 +146,7 @@ const CustomerScreen = () => {
                     <h2 className="card-title text-2xl font-bold">
                       {foodItem.name}
                     </h2>
+                    <p className="font-semibold text-gray-500">{foodItem.vendor_name}</p>
                     <p className="font-semibold">RM {foodItem.price}</p>
                   </div>
                 </div>

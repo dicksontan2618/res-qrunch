@@ -28,7 +28,7 @@ const VendorMenu = () => {
     async function initVendorMenuItems(vendor) {
       const q = query(
         collection(db, "menuItems"),
-        where("vendor", "==", vendor.email)
+        where("vendor", "==", vendor.uid)
       );
       const querySnapshot = await getDocs(q);
       const menu_items = querySnapshot.docs.map((doc) =>

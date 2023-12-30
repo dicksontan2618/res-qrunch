@@ -154,7 +154,7 @@ const VendorProfile = () => {
             </button>
           </form>
         </div>
-        <button className="btn btn-active" onClick={handleLogout}>
+        <button className="btn btn-active mb-24" onClick={handleLogout}>
           <p className="text-lg font-bold">Logout</p>
         </button>
       </div>

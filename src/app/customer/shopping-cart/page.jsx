@@ -66,7 +66,7 @@ const CartPage = () => {
               <div className="w-[50%]">
                 <div className="text-gray-800">
                   <p className="font-bold text-lg">{cartItem.name}</p>
-                  <p className="font-medium text-gray-500">Vendor Name</p>
+                  <p className="font-medium text-gray-500">{cartItem.vendor_name}</p>
                   <p className="font-bold text-lg">RM {cartItem.price}</p>
                   <p className="">Amount : {cartItem.amount}</p>
                 </div>
