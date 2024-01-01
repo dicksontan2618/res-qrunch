@@ -272,7 +272,7 @@ const ProfilePage = () => {
         </Link>
       </div>
 
-      <div className='flex justify-center items-center'>
+      <div className='flex justify-center items-center mt-8'>
         <button
           className="btn btn-ghost btn-wide bg-main-clr text-white font-semibold"
           onClick={handleLogout}
