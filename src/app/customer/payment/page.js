@@ -2,14 +2,10 @@
 
 // Import necessary libraries
 import { useEffect } from "react";
-import Link from "next/link";
 import { useAuthContext } from "@/context/AuthContextUser";
 import { useRouter } from "next/navigation";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
-
-// Create a functional component for the Profile Page
+import Swal from "sweetalert2";
 
 const PaymentPage = () => {
   const { user } = useAuthContext();
@@ -21,6 +17,28 @@ const PaymentPage = () => {
     } else {
     }
   }, [user]);
+
+  const handlePayment = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Proceed with Payment",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Paid !",
+          text: "Your payment has been processed.",
+          icon: "success",
+        }).then((result)=>{
+          router.push("/customer/home");
+        })
+      }
+    });
+  }
 
   return (
     <div className="w-full">
@@ -66,36 +84,11 @@ const PaymentPage = () => {
         <div className="flex justify-center mt-8">
           <button
             className="btn btn-ghost btn-wide bg-main-clr text-white font-bold"
-            onClick={() => document.getElementById("my_modal_1").showModal()}
+            onClick={() => handlePayment()}
           >
             Order Now
           </button>
         </div>
-        <dialog id="my_modal_1" className="modal">
-          <div className="modal-box flex flex-col items-center bg-white gap-y-4">
-            <FontAwesomeIcon
-              icon={faCheck}
-              size="2xl"
-              style={{ color: "#ff5c5c" }}
-            />
-            <h3 className="font-bold text-gray-800 text-lg text-center">
-              Your order placement is successful.
-            </h3>
-            <p className="text-gray-800 text-center">
-              You can view your order in "Orders" section
-            </p>
-            <div className="modal-action">
-              <form method="dialog">
-                {/* if there is a button in form, it will close the modal */}
-                <Link href="/customer/home">
-                  <button className="btn btn-ghost bg-main-clr text-white font-semibold">
-                    Back to Homepage
-                  </button>
-                </Link>
-              </form>
-            </div>
-          </div>
-        </dialog>
       </div>
     </div>
   );
