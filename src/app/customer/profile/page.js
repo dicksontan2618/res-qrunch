@@ -22,19 +22,27 @@ const ProfilePage = () => {
   const storage = getStorage();
 
   const [username, setUsername]= useState("");
+  const [address, setAddress] = useState("");
   const [imgUrl, setImgUrl] = useState(null);
 
   async function initCustomerProfile() {
     const docRef = doc(db, "customers", user.uid);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      if(docSnap.data()["username"])
-      {
+      setImgUrl(docSnap.data()["profile_pic"]);
+      if (docSnap.data()["username"] && docSnap.data()["address"]) {
         setUsername(docSnap.data()["username"]);
-        setImgUrl(docSnap.data()["profile_pic"]);
-      }
-      else{
-        setUsername("Username");
+        setAddress(docSnap.data()["address"]);
+      } else {
+        if (docSnap.data()["username"])
+        {
+          setUsername(docSnap.data()["username"]);
+          setAddress("Address");
+        }
+        if (docSnap.data()["address"]) {
+          setUsername("Username");
+          setAddress(docSnap.data()["address"]);
+        }
       }
     }
   }
@@ -46,6 +54,18 @@ const ProfilePage = () => {
       doc(db, "customers", user.uid),
       {
         username: username,
+      },
+      { merge: true }
+    );
+  };
+
+  const handleEditAddressForm = async (event) => {
+    event.preventDefault();
+
+    await setDoc(
+      doc(db, "customers", user.uid),
+      {
+        address: address,
       },
       { merge: true }
     );
@@ -135,7 +155,9 @@ const ProfilePage = () => {
         <div className="avatar">
           <div
             className="w-24 rounded-full"
-            onClick={() => document.getElementById("form_modal_image").showModal()}
+            onClick={() =>
+              document.getElementById("form_modal_image").showModal()
+            }
           >
             <img src={imgUrl} />
           </div>
@@ -180,7 +202,7 @@ const ProfilePage = () => {
                 </button>
               </form>
               <h3 className="font-bold text-lg text-gray-800">
-                Change Username
+                Add/Change Username
               </h3>
               <form className="mt-4" onSubmit={handleEditProfileForm}>
                 <input
@@ -201,43 +223,63 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      <div className="profile-button-section mt-12">
-        <Link href="/favourites">
-          <button>Favourites</button>
-        </Link>
-        <Link href="/address">
-          <button>Address</button>
-        </Link>
-        <Link href="/bank-card">
-          <button>Bank Card</button>
-        </Link>
+      {/* Address */}
+      <div className="w-[85%] m-auto mt-8">
+        <p className="font-semibold text-gray-800 text-xl mb-2">Address : </p>
+        <textarea
+          className="textarea textarea-bordered bg-white text-gray-800"
+          placeholder={address}
+        ></textarea>
+        {/* You can open the modal using document.getElementById('ID').showModal() method */}
+        <button
+          className="btn btn-ghost"
+          onClick={() => document.getElementById("form_modal_addr").showModal()}
+        >
+          <FontAwesomeIcon icon={faPen} />
+        </button>
+        <dialog id="form_modal_addr" className="modal">
+          <div className="modal-box bg-white">
+            <form method="dialog">
+              {/* if there is a button in form, it will close the modal */}
+              <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                ✕
+              </button>
+            </form>
+            <h3 className="font-bold text-lg text-gray-800">
+              Add/Change Address
+            </h3>
+            <form className="mt-4" onSubmit={handleEditAddressForm}>
+              <input
+                type="text"
+                onChange={(e) => setAddress(e.target.value)}
+                placeholder="New Address"
+                className="input input-bordered w-full max-w-xs bg-white"
+              />
+              <button
+                type="submit"
+                className="mt-4 text-black font-bold rounded-xl border-2 border-gray-800 p-2"
+              >
+                Update
+              </button>
+            </form>
+          </div>
+        </dialog>
       </div>
 
       <div className="profile-subsection">
-        {/* Language Option */}
-        <div id="language-selection">
-          <label htmlFor="language">Language:</label>
-          <select id="language">
-            <option value="english">English</option>
-            <option value="chinese">Chinese</option>
-            {/* Add more language options as needed */}
-          </select>
-        </div>
-
-        <Link href="/help">
-          <button>Help (FAQ)</button>
+        <Link href="/customer/redeem">
+          <button>Points Shop</button>
         </Link>
-
-        {/* For a toggle button effect, you might want to use a label and an input element */}
-        <label htmlFor="light-mode">
-          <button>
-            Light Mode: <input type="checkbox" id="light-mode" />
-          </button>
-        </label>
       </div>
-      <button className="btn btn-active" onClick={handleLogout}>
-        <p className="text-lg font-bold">Logout</p>
-      </button>
+
+      <div className='flex justify-center items-center'>
+        <button
+          className="btn btn-ghost btn-wide bg-main-clr text-white font-semibold"
+          onClick={handleLogout}
+        >
+          <p className="text-lg font-bold">Logout</p>
+        </button>
+      </div>
     </div>
   );
 };
