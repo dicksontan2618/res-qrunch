@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import signIn from "@/auth/signin";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -23,6 +23,18 @@ function customerSignIn() {
 
     return router.push("/customer/home");
   };
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      window.localStorage.setItem(
+        "curLoc",
+        JSON.stringify({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        })
+      );
+    });
+  }, []);
 
   return (
     <div className="bg-main-clr h-screen flex justify-center items-center">

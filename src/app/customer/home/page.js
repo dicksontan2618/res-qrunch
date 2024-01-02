@@ -7,7 +7,7 @@ import { db } from "@/utils/firebase";
 import { collection, getDocs } from "firebase/firestore";
 
 import Link from "next/link";
-import ShoppingCart from "@/app/_components/ShoppingCart";
+// import NearbyLocation from "@/app/_components/NearbyLocation";
 
 const CustomerScreen = () => {
 
@@ -21,6 +21,7 @@ const CustomerScreen = () => {
   const [uniqueIngredients, setUniqueIngredients] = useState([]);
   const [showFilterMenu, setShowFilterMenu] = useState(false);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
+  // const [loc, setLoc] = useState({});
 
   useEffect(()=>{
     if (user == null && window.localStorage.getItem("session_user") != "user") {
@@ -69,6 +70,15 @@ const CustomerScreen = () => {
     const uniqueIngredients = [...new Set(allIngredients)];
     setUniqueIngredients(uniqueIngredients);
   }, [foodItemsCopy]);
+
+  // useEffect(() => {
+  //   navigator.geolocation.getCurrentPosition(function (position) {
+  //    setLoc({
+  //       lat: position.coords.latitude,
+  //       long: position.coords.longitude
+  //     })
+  //   });
+  // }, []);
 
   const reRenderFoodItems = () => {
 
@@ -141,6 +151,7 @@ const CustomerScreen = () => {
 
   return (
     <div className="flex flex-col justify-center items-center w-max-screen relative">
+      {/* <NearbyLocation loc={loc}></NearbyLocation> */}
       {/* <div id="location-section">
         <label htmlFor="location-input">Enter Your Location:</label>
         <input

@@ -129,6 +129,7 @@ const ProfilePage = () => {
         router.push("/");
         window.localStorage.removeItem("session_user");
         window.localStorage.removeItem("shoppingCart");
+        window.localStorage.removeItem("curLoc");
       })
       .catch((error) => {
         // An error happened.
