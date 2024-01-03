@@ -46,6 +46,10 @@ const CartPage = () => {
     setFee(fee- minusPrice);
   }
 
+  const handleCheckout = () => {
+    window.localStorage.setItem("donation", "[]");
+  }
+
   useEffect(() => {
     getCartLocalStorage();
   }, []);
@@ -78,8 +82,8 @@ const CartPage = () => {
           )
         })}
         <p className={isEmpty ? "block text-2xl font-bold text-black":"hidden"}>Cart Empty !</p>
-        <p className="self-start text-gray-800 font-semibold">Fee : RM {fee}</p>
-        <Link href="/customer/checkout"><button className="btn btn-block bg-main-clr text-white btn-ghost">Checkout</button></Link>
+        <p className="self-start text-gray-800 font-semibold">Fee : RM {fee.toFixed(2)}</p>
+        <Link href="/customer/donation"><button className="btn btn-block bg-main-clr text-white btn-ghost" onClick={handleCheckout}>Checkout</button></Link>
       </div>
     </div>
   );

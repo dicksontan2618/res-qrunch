@@ -151,7 +151,6 @@ const CustomerScreen = () => {
 
   return (
     <div className="flex flex-col justify-center items-center w-max-screen relative">
-      {/* <NearbyLocation loc={loc}></NearbyLocation> */}
       {/* <div id="location-section">
         <label htmlFor="location-input">Enter Your Location:</label>
         <input
