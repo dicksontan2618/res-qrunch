@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "@/utils/firebase";
+import Link from "next/link";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -100,11 +101,13 @@ const CheckoutPage = () => {
           <DonationItem key={index} item={item} limit={Number(donationSellItems[index]["quantity"])}/>
         );
       })}
-      <div className="mt-4 flex justify-center">
-        <button className="btn btn-ghost btn-wide bg-main-clr text-white font-semibold">
-          Proceed to Pay
-        </button>
-      </div>
+      <Link href="/customer/payment">
+        <div className="mt-4 flex justify-center">
+          <button className="btn btn-ghost btn-wide bg-main-clr text-white font-semibold">
+            Proceed to Pay
+          </button>
+        </div>
+      </Link>
     </div>
   );
 };
