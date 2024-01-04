@@ -67,7 +67,7 @@ function DonationItem({item, limit}) {
             <div className="w-[50%]">
                 <div className="text-gray-800">
                 <p className="font-bold text-lg">{item.name}</p>
-                <p className="font-bold text-lg">RM {item.price}</p>
+                <p className="font-bold text-lg">RM {((Number(item.price)/2).toFixed(2)).toString()}</p>
                 </div>
                 <div className="flex justify-center items-center gap-x-2 mt-2">
                 <button className="btn btn-sm btn-circle btn-outline" onClick={decrement}>
