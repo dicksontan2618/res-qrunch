@@ -1,13 +1,28 @@
 "use client";
 
 // Import necessary libraries
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useAuthContext } from "@/context/AuthContextUser";
 import { useRouter } from "next/navigation";
+
+import { collection, doc, addDoc, setDoc, getDoc } from "firebase/firestore"; 
+import { db } from "@/utils/firebase";
 
 import Swal from "sweetalert2";
 
 const PaymentPage = () => {
+
+  const [cartItems, setCartItems] = useState(
+    JSON.parse(window.localStorage.getItem("shoppingCart"))
+  );
+  const [donationItems, setDonationItems] = useState(
+    JSON.parse(window.localStorage.getItem("donation"))
+  );
+
+  const [userPrevPoints, setUserPrevPoints] = useState(0);
+
+  const userDonationPoints = Number(window.localStorage.getItem("donation_points"));
+
   const { user } = useAuthContext();
   const router = useRouter();
 
@@ -17,6 +32,50 @@ const PaymentPage = () => {
     } else {
     }
   }, [user]);
+
+  useEffect(() => {
+    getUserPreviousPoints();
+  }, []);
+
+  const getUserPreviousPoints = async () => {
+    const custRef = doc(db, "customers", user.uid);
+    const docSnap = await getDoc(custRef);
+
+    if (docSnap.exists()) {
+      if(docSnap.data()["points"]){
+        setUserPrevPoints(docSnap.data()["points"]);
+      }
+    } 
+  }
+  
+  const checkOut = () => {
+    cartItems.map(async (tempItem) => {
+        const docRef = await addDoc(collection(db, "orders"), Object.assign(tempItem, {user_id : user.uid}));
+
+        const prodRef = doc(db, "menuItems", tempItem.id);
+        setDoc(prodRef, {quantity : (Number(tempItem.quantity) - tempItem.amount).toString()}, {merge : true});
+    });
+    if (donationItems && donationItems.length){
+      donationItems.map(async (tempItem) => {
+        const docRef = await addDoc(
+          collection(db, "donations"),
+          Object.assign(tempItem, { user_id: user.uid })
+        );
+
+        const prodRef = doc(db, "menuItems", tempItem.id);
+        setDoc(
+          prodRef,
+          {
+            quantity: (Number(tempItem.quantity) - tempItem.amount).toString(),
+          },
+          { merge: true }
+        );
+      });
+
+      const cusRef = doc(db, "customers", user.uid);
+      setDoc(cusRef, { points : (userPrevPoints + userDonationPoints) }, { merge: true });
+    }
+  }
 
   const handlePayment = () => {
     Swal.fire({
@@ -29,11 +88,15 @@ const PaymentPage = () => {
       confirmButtonText: "Yes, Proceed with Payment",
     }).then((result) => {
       if (result.isConfirmed) {
+        checkOut();
         Swal.fire({
           title: "Paid !",
           text: "Your payment has been processed.",
           icon: "success",
         }).then((result)=>{
+          window.localStorage.setItem("shoppingCart","[]")
+          window.localStorage.setItem("donation", "[]");
+          window.localStorage.removeItem("donation_points");
           router.push("/customer/home");
         })
       }

@@ -38,6 +38,10 @@ function SummaryPage() {
         setDonationPoints(((tempDonationPrice / 2)*10));
     }
 
+    const saveDonationPoints = () => {
+      window.localStorage.setItem("donation_points", donationPoints.toString());
+    }
+
     useEffect(()=>{
         getFee();
         getDonation();
@@ -117,7 +121,7 @@ function SummaryPage() {
 
         <Link href="/customer/payment">
           <div className="mt-8 flex justify-center">
-            <button className="btn btn-ghost btn-wide bg-main-clr text-white font-semibold">
+            <button className="btn btn-ghost btn-wide bg-main-clr text-white font-semibold" onClick={saveDonationPoints}>
               Proceed to Payment
             </button>
           </div>
