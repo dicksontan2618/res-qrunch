@@ -4,13 +4,16 @@ import { useState, useEffect } from "react";
 import { useAuthContext } from "@/context/AuthContextUser";
 import { useRouter } from "next/navigation";
 
+import { collection, doc, addDoc, setDoc, getDoc } from "firebase/firestore";
+import { db } from "@/utils/firebase";
+
 import Swal from "sweetalert2";
 
 const RedeemPage = () => {
   const { user } = useAuthContext();
   const router = useRouter();
 
-  const [points, setPoints] = useState(1000);
+  const [points, setPoints] = useState(0);
   const redeemItems = [
     {
       img: "/redeem-item-1.webp",
@@ -20,19 +23,31 @@ const RedeemPage = () => {
     {
       img: "/redeem-item-2.webp",
       name: "Eco Thermo Flask",
-      points_req: 300,
+      points_req: 3000,
     },
     {
       img: "/redeem-item-3.webp",
       name: "Eco Stationary Case",
-      points_req: 500,
+      points_req: 5000,
     },
   ];
 
-// TODO: Implement after checkout is done
-  const getUserPoints = () => {
-    
+  const getUserPoints = async () => {
+    const docRef = doc(db, "customers", user.uid);
+    const docSnap = await getDoc(docRef);
+
+    setPoints(docSnap.data()["points"]);
   };
+
+  const updateUserPoints = (point_req) => {
+    const cusRef = doc(db, "customers", user.uid);
+    setDoc(
+      cusRef,
+      { points: points - point_req },
+      { merge: true }
+    );
+    setPoints(points-point_req);
+  }
 
   const redeem = (point_req) => {
     if(points < point_req){
@@ -43,11 +58,12 @@ const RedeemPage = () => {
         });
     }
     else{
-        Swal.fire({
-          title: "Redeem Success !",
-          text: "Your redeemed item will be sent to your registered address in 3-5 working days.",
-          icon: "success",
-        });
+      updateUserPoints(point_req);
+      Swal.fire({
+        title: "Redeem Success !",
+        text: "Your redeemed item will be sent to your registered address in 3-5 working days.",
+        icon: "success",
+      });
     }
   };
 
