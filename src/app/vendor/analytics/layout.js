@@ -7,7 +7,7 @@ export default function VendorProfileLayout({ children }) {
     <AuthContextProvider>
       <div className="bg-white h-screen">
         <header className="flex justify-center">
-          <h1 className="font-semibold text-xl">ResQrunch</h1>
+          <h1 className="font-semibold text-xl">Manage Your Shop</h1>
         </header>
         {children}
         <BottomNavVendor></BottomNavVendor>

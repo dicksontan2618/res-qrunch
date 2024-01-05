@@ -192,17 +192,20 @@ const CustomerScreen = () => {
                 className="w-full"
               >
                 <div className="card card-compact w-full bg-white text-black shadow-xl">
-                  <img className="object-cover h-20 rounded-t-xl" src={foodItem.img} />
-                  <div className="card-body">
-                    <h2 className="card-title text-xl font-bold">
-                      {foodItem.name}
-                    </h2>
-                    <p className="font-semibold text-gray-500 text-sm">
-                      {foodItem.vendor_name}
-                    </p>
-                    <p className="font-semibold text-sm">RM {foodItem.price}</p>
-                  </div>
-                </div>
+  <div className="relative overflow-hidden bg-white h-20 rounded-t-xl">
+    <img
+      className="w-full h-full object-contain object-center"
+      src={foodItem.img}
+      alt={foodItem.name}
+    />
+  </div>
+  <div className="card-body">
+    <h2 className="card-title text-xl font-bold">{foodItem.name}</h2>
+    <p className="font-semibold text-gray-500 text-sm">{foodItem.vendor_name}</p>
+    <p className="font-semibold text-sm">RM {foodItem.price}</p>
+  </div>
+</div>
+
               </Link>
             );
           })}
