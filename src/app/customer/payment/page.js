@@ -50,7 +50,7 @@ const PaymentPage = () => {
   
   const checkOut = () => {
     cartItems.map(async (tempItem) => {
-        const docRef = await addDoc(collection(db, "orders"), Object.assign(tempItem, {user_id : user.uid}));
+        const docRef = await addDoc(collection(db, "orders"), Object.assign(tempItem, {user_id : user.uid, completion : "pending"}));
 
         const prodRef = doc(db, "menuItems", tempItem.id);
         setDoc(prodRef, {quantity : (Number(tempItem.quantity) - tempItem.amount).toString()}, {merge : true});

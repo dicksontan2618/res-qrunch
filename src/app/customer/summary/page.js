@@ -111,7 +111,7 @@ function SummaryPage() {
           </div>
           <div className="w-full flex justify-between">
             <p>Donation Points Received : </p>
-            <p>{donationPoints}</p>
+            <p>{donationPoints.toFixed(0)}</p>
           </div>
           <div className="w-full flex justify-between mt-4">
             <p>Total : </p>

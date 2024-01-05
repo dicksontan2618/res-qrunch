@@ -271,9 +271,12 @@ const ProfilePage = () => {
         <Link href="/customer/redeem">
           <button>Points Shop</button>
         </Link>
+        <Link href="/customer/orders">
+          <button>My Orders</button>
+        </Link>
       </div>
 
-      <div className='flex justify-center items-center mt-8'>
+      <div className="flex justify-center items-center mt-8">
         <button
           className="btn btn-ghost btn-wide bg-main-clr text-white font-semibold"
           onClick={handleLogout}
