@@ -7,7 +7,6 @@ import { db } from "@/utils/firebase";
 import { collection, getDocs } from "firebase/firestore";
 
 import Link from "next/link";
-// import NearbyLocation from "@/app/_components/NearbyLocation";
 
 const CustomerScreen = () => {
 
@@ -21,7 +20,6 @@ const CustomerScreen = () => {
   const [uniqueIngredients, setUniqueIngredients] = useState([]);
   const [showFilterMenu, setShowFilterMenu] = useState(false);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
-  // const [loc, setLoc] = useState({});
 
   useEffect(()=>{
     if (user == null && window.localStorage.getItem("session_user") != "user") {
@@ -70,15 +68,6 @@ const CustomerScreen = () => {
     const uniqueIngredients = [...new Set(allIngredients)];
     setUniqueIngredients(uniqueIngredients);
   }, [foodItemsCopy]);
-
-  // useEffect(() => {
-  //   navigator.geolocation.getCurrentPosition(function (position) {
-  //    setLoc({
-  //       lat: position.coords.latitude,
-  //       long: position.coords.longitude
-  //     })
-  //   });
-  // }, []);
 
   const reRenderFoodItems = () => {
 
@@ -151,18 +140,6 @@ const CustomerScreen = () => {
 
   return (
     <div className="flex flex-col justify-center items-center w-max-screen relative">
-      {/* <div id="location-section">
-        <label htmlFor="location-input">Enter Your Location:</label>
-        <input
-          type="text"
-          id="location-input"
-          placeholder="E.g., Your City"
-          value={locationInput} // Bind the value to the state variable
-          onChange={(e) => setLocationInput(e.target.value)} // Update the state on input change
-        />
-        <button onClick={saveLocation}>Save Location</button>
-      </div>*/}
-
       <div id="search-bar" className="mt-3">
         <input
           className="input input-bordered w-full max-w-xs bg-white text-black"
@@ -192,19 +169,19 @@ const CustomerScreen = () => {
                 className="w-full"
               >
                 <div className="card card-compact w-full bg-white text-black shadow-xl">
-  <div className="relative overflow-hidden bg-white h-20 rounded-t-xl">
-    <img
-      className="w-full h-full object-contain object-center"
-      src={foodItem.img}
-      alt={foodItem.name}
-    />
-  </div>
-  <div className="card-body">
-    <h2 className="card-title text-xl font-bold">{foodItem.name}</h2>
-    <p className="font-semibold text-gray-500 text-sm">{foodItem.vendor_name}</p>
-    <p className="font-semibold text-sm">RM {foodItem.price}</p>
-  </div>
-</div>
+                  <div className="relative overflow-hidden bg-white h-20 rounded-t-xl">
+                    <img
+                      className="w-full h-full object-contain object-center"
+                      src={foodItem.img}
+                      alt={foodItem.name}
+                    />
+                  </div>
+                  <div className="card-body">
+                    <h2 className="card-title text-xl font-bold">{foodItem.name}</h2>
+                    <p className="font-semibold text-gray-500 text-sm">{foodItem.vendor_name}</p>
+                    <p className="font-semibold text-sm">RM {foodItem.price}</p>
+                  </div>
+                </div>
 
               </Link>
             );

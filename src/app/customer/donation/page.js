@@ -42,9 +42,6 @@ const DonationPage = () => {
     setFee(donationTotal);
   };
   
-  
-
-
   const getShoppingCartVendors = async () => {
     
     let uniqueVendorsList = [];

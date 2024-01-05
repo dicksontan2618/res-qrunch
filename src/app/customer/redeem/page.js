@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useAuthContext } from "@/context/AuthContextUser";
 import { useRouter } from "next/navigation";
 
-import { collection, doc, addDoc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 
 import Swal from "sweetalert2";
@@ -84,7 +84,7 @@ const RedeemPage = () => {
           Redeem your points for goodies!
         </p>
         <p className="text-gray-800 font-semibold">
-          Available Points : {points}
+          Available Points : {points.toFixed(0)}
         </p>
         {redeemItems.map((redeemItem, index) => {
             return (
