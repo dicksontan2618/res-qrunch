@@ -5,7 +5,7 @@ import { useAuthContext } from "@/context/AuthContextUser";
 import { useRouter } from "next/navigation";
 
 import { db } from "@/utils/firebase";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
 
 import Swal from "sweetalert2";
 
@@ -17,6 +17,8 @@ const OrderItem = ({ params }) => {
 
   const [orderItem, setOrderItem] = useState({});
   const [orderStatus, setOrderStatus] = useState(false);
+  const [reviewStatus, setReviewStatus] = useState(false);
+  const [userName, setUserName] = useState("");
 
   const getOrderItem = async () => {
     const docRef = doc(db, "orders", id);
@@ -28,8 +30,20 @@ const OrderItem = ({ params }) => {
       }
       else{
         setOrderStatus(true);
+        if(docSnap.data()["reviewed"]){
+          setReviewStatus(true);
+        }
       }
       setOrderItem(docSnap.data());
+    }
+  }
+
+  const getUserName = async () => {
+    const userRef = doc(db, "customers", user.uid);
+    const docSnap = await getDoc(userRef);
+
+    if(docSnap.exists()){
+      setUserName(docSnap.data()["username"]);
     }
   }
 
@@ -37,10 +51,24 @@ const OrderItem = ({ params }) => {
     const orderRef = doc(db, "orders", id);
 
     await updateDoc(orderRef, {
-      completion: "complete"
+      completion: "complete",
     });
 
-  }
+  };
+
+  const updateReviewStatus = async (msg) => {
+
+    const orderRef = doc(db, "orders", id);
+    await updateDoc(orderRef, {
+      reviewed: true,
+    });
+
+    const foodRef = doc(db, "menuItems", orderItem.id);
+    await updateDoc(foodRef, {
+      reviews: arrayUnion({ cus_name: userName, msg: msg }),
+    });
+
+  };
   
   const completeOrder = () => {
     Swal.fire({
@@ -65,6 +93,28 @@ const OrderItem = ({ params }) => {
     });
   }
 
+  const leaveReview = async () => {
+    const { value: text } = await Swal.fire({
+      input: "textarea",
+      inputLabel: "Review",
+      inputPlaceholder: "Type your review here...",
+      inputAttributes: {
+        "aria-label": "Type your review here"
+      },
+      showCancelButton: true
+    });
+    if (text) {
+      updateReviewStatus(text);
+      Swal.fire({
+        title: "Review Received !",
+        text: "Your review was recorded.",
+        icon: "success",
+      }).then((result) => {
+        router.push("/customer/orders");
+      });
+    }
+  }
+
   useEffect(() => {
     if (user == null && window.localStorage.getItem("session_user") != "user") {
       router.push("/");
@@ -73,6 +123,7 @@ const OrderItem = ({ params }) => {
 
   useEffect(() => {
     getOrderItem();
+    getUserName();
   }, []);
 
   return (
@@ -112,7 +163,8 @@ const OrderItem = ({ params }) => {
         {orderStatus && (
           <div className="self-center mt-8">
             <button
-              className="btn btn-ghost bg-main-clr"
+              className={"btn btn-ghost bg-main-clr" + (reviewStatus ? "btn-disabled" : "") }
+              onClick={leaveReview}
             >
               <p className="text-white">Leave Review</p>
             </button>

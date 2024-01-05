@@ -26,6 +26,9 @@ const FoodItem = ({params}) => {
 
     const [amount, setAmount] =  useState(0);
 
+    const [reviews,setReviews] = useState([]);
+    const [isEmpty, setisEmpty] = useState(true);
+
     const increment = () => {
         if((amount + 1) <= Number(quantity))
         setAmount(amount => amount + 1);
@@ -87,6 +90,12 @@ const FoodItem = ({params}) => {
           setImgUrl(docSnap.data()["img"]);
           setPrice(docSnap.data()["price"]);
           setQuantity(docSnap.data()["quantity"]);
+
+          if(docSnap.data()["reviews"].length){
+            setisEmpty(false);
+            setReviews(docSnap.data()["reviews"]);
+
+          }
     
           // Check if the item is already in the cart
           const existingCartItem = cart.find((item) => item.id === id);
@@ -104,7 +113,7 @@ const FoodItem = ({params}) => {
         <div className="flex flex-col w-[85%] gap-y-6 mb-24">
           <div className="card w-full h-[30%] bg-white shadow-xl mt-12">
             <figure>
-              <img src={imgUrl}/>
+              <img src={imgUrl} />
             </figure>
           </div>
           <div className="flex flex-col justify-center items-center gap-y-4">
@@ -126,17 +135,51 @@ const FoodItem = ({params}) => {
             <p className="h-3 font-semibold">Qty : {quantity}</p>
           </div>
           <div className="flex flex-col h-8 gap-y-2">
-            <p className="font-bold text-3xl text-gray-800">{foodName}</p>
+            <div className="w-full flex justify-between items-center">
+              <p className="font-bold text-3xl text-gray-800">{foodName}</p>
+              <button
+                className="btn btn-ghost underline"
+                onClick={() => document.getElementById("modal").showModal()}
+              >
+                Reviews
+              </button>
+            </div>
             <p className="text-gray-800 font-semibold">
               {ingredients.join(", ")}
             </p>
           </div>
-          <div className="self-center mt-8">
+          <div className="self-center mt-16">
             <button className="btn btn-ghost bg-main-clr" onClick={addToCart}>
               <p className="text-white">Add to Cart</p>
             </button>
           </div>
         </div>
+        <dialog id="modal" className="modal">
+          <div className="modal-box h-1/2 overflow-scroll">
+            <form method="dialog">
+              {/* if there is a button in form, it will close the modal */}
+              <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                ✕
+              </button>
+            </form>
+            <h3 className="font-bold text-lg mb-3">Reviews</h3>
+            {!isEmpty && (
+              reviews.map((review, index)=>{
+                return(
+                  <div key={index} className="flex flex-col gap-y-1 my-4">
+                    <p className="font-bold">{review.cus_name}</p>
+                    <p className="font-medium">{review.msg}</p>
+                  </div>
+                )
+              })
+            )}
+            {isEmpty && (
+              <p className="py-4">
+                No reviews yet !
+              </p>
+            )}
+          </div>
+        </dialog>
       </div>
     );
 }
