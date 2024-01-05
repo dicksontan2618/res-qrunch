@@ -17,7 +17,7 @@ const DonationPage = () => {
     const existingItemIndex = updatedDonationItems.findIndex(
       (donation) => donation.id === item.id
     );
-
+  
     if (existingItemIndex !== -1) {
       if (operation === "add") {
         updatedDonationItems[existingItemIndex].quantity += 1;
@@ -32,15 +32,17 @@ const DonationPage = () => {
       // Add the item if not present
       updatedDonationItems.push({ ...item, quantity: 1 });
     }
-
+  
     // Recalculate the total amount based on selected donation items
     const donationTotal = updatedDonationItems.reduce(
       (donationTotal, item) => donationTotal + item.amount * item.quantity,
       0
     );
-    setTotalAmount(100 + donationTotal); // Assuming initial total is $100
     setDonationItems(updatedDonationItems);
+    setFee(donationTotal);
   };
+  
+  
 
 
   const getShoppingCartVendors = async () => {
@@ -90,14 +92,17 @@ const DonationPage = () => {
   return (
     <div className="w-[90%] m-auto mb-24">
       <p className="mt-4 text-gray-800 font-semibold">
-        Total amount in cart : RM {fee.toFixed(2)}
+        Total amount in cart: RM {fee.toFixed(2)}
       </p>
-      <p className="my-2 text-gray-800">Donation Options:</p>
-      {donationSellItems.map((item, index) => {
-        return (
-          <DonationItem key={index} item={item} limit={Number(donationSellItems[index]["quantity"])}/>
-        );
-      })}
+      <p className="my-2 text-gray-800">Donation Options: <br/>(Selected items will be redeemed by charities for underprivileged)</p>
+      {donationSellItems.map((item, index) => (
+        <DonationItem
+          key={index}
+          item={item}
+          limit={Number(donationSellItems[index]["quantity"])}
+          onToggle={(operation) => handleDonationItemToggle(item, operation)}
+        />
+      ))}
       <Link href="/customer/summary">
         <div className="mt-4 flex justify-center">
           <button className="btn btn-ghost btn-wide bg-main-clr text-white font-semibold">
