@@ -3,12 +3,44 @@
 import { useEffect, useState } from "react";
 import { useAuthContext } from "@/context/AuthContextVendor";
 import { useRouter } from "next/navigation";
+
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "@/utils/firebase";
+
 import OrderList from "@/app/_components/OrderList";
-// import SalesChart from "@/app/_components/SalesChart";
 
 const VendorScreen = () => {
+
   const { user } = useAuthContext();
   const router = useRouter();
+
+  const [orders, setOrders] = useState([]);
+
+  const getOrders = async () => {
+
+    let ordersList = [];
+
+    const q = query(
+      collection(db, "orders"),
+      where("vendor", "==", user.uid)
+    );
+
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) {
+    } else {
+      querySnapshot.forEach((doc) => {
+        if (doc.data()["completion"] == "pending") {
+          ordersList.push(Object.assign(doc.data(), { id: doc.id }));
+        }
+      });
+      
+      setOrders(ordersList);
+    }
+  };
+
+  useEffect(() => {
+    getOrders();
+  }, []);
 
   useEffect(() => {
     if (user == null && window.localStorage.getItem("session_user") != "vendor") {
@@ -16,24 +48,12 @@ const VendorScreen = () => {
     }
   }, [user]);
 
-  const [orders, setOrders] = useState([
-    { id: 1, items: ['Item1', 'Item2'], customer: 'Customer1', message: 'Hi, pls give me sauce'},
-    { id: 2, items: ['Item3', 'Item4'], customer: 'Customer2', messages: 'Hi, pls ive more chili' },
-    // ... more orders
-  ]);
-
   return (
-    <div>
-      <div>
-        <h2>Orders</h2>
+    <div className="flex flex-col justify-center items-center">
+      <div className="flex flex-col items-center w-[85%] gap-y-4 mb-24 mt-12">
+        <h2 className="self-start font-bold text-gray-800 text-xl">Current Orders :</h2>
         <OrderList orders={orders} />
       </div>
-
-      {/* <div>
-        <h2>Sales</h2>
-        <SalesChart data={salesData} />
-      </div> */}
-
     </div>
   );
 };
