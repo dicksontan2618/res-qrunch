@@ -35,9 +35,12 @@ const CustomerScreen = () => {
 
     async function initFoodItems(){
       const docSnapshot = await getDocs(collection(db, "menuItems"));
-      const food_items = docSnapshot.docs.map((doc) =>
-        Object.assign(doc.data(), { id: doc.id })
-      );
+      const food_items = [];
+      docSnapshot.docs.forEach((doc) => {
+        if(doc.data()["quantity"]!="0"){
+          food_items.push(Object.assign(doc.data(), { id: doc.id }));
+        }
+      });
       if (!docSnapshot.empty) {
         setIsEmpty(false);
         setFoodItems(food_items);

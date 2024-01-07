@@ -69,7 +69,11 @@ const DonationPage = () => {
 
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
-        vendorsAllProductsList.push(Object.assign(doc.data(), { id: doc.id }));
+        if (doc.data()["quantity"] != "0"){
+          vendorsAllProductsList.push(
+            Object.assign(doc.data(), { id: doc.id })
+          );
+        }
     });
     
     vendorsAllProductsList.forEach((prod)=>{
