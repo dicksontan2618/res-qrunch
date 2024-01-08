@@ -64,7 +64,7 @@ const VendorMenu = () => {
                   <div className="card-actions justify-end mt-4">
                     {menuItem.ingredients.map((ingredient, index) => {
                       return (
-                        <div className="badge badge-outline" key={index}>{ingredient}</div>
+                        <div className="badge badge-outline" key={index}>{ingredient.ingredient}</div>
                       );
                     })}
                   </div>

@@ -144,9 +144,11 @@ const FoodItem = ({params}) => {
                 Reviews
               </button>
             </div>
-            <p className="text-gray-800 font-semibold">
-              {ingredients.join(", ")}
-            </p>
+            <div className="flex gap-x-2">
+              {ingredients.map((ingredient, index) => {
+                return <p key={index}>{ingredient.ingredient}</p>;
+              })}
+            </div>
           </div>
           <div className="self-center mt-16">
             <button className="btn btn-ghost bg-main-clr" onClick={addToCart}>
@@ -163,21 +165,16 @@ const FoodItem = ({params}) => {
               </button>
             </form>
             <h3 className="font-bold text-lg mb-3">Reviews</h3>
-            {!isEmpty && (
-              reviews.map((review, index)=>{
-                return(
+            {!isEmpty &&
+              reviews.map((review, index) => {
+                return (
                   <div key={index} className="flex flex-col gap-y-1 my-4">
                     <p className="font-bold">{review.cus_name}</p>
                     <p className="font-medium">{review.msg}</p>
                   </div>
-                )
-              })
-            )}
-            {isEmpty && (
-              <p className="py-4">
-                No reviews yet !
-              </p>
-            )}
+                );
+              })}
+            {isEmpty && <p className="py-4">No reviews yet !</p>}
           </div>
         </dialog>
       </div>

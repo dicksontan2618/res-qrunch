@@ -61,6 +61,23 @@ const VendorMenuItem = ({params}) => {
     }
   };
 
+  const handleClick = () => {
+    setIngredients([...ingredients, { ingredient: "", amount: "" }]);
+  };
+
+  const handleChange = (e, i) => {
+    const { name, value } = e.target;
+    const onchangeVal = [...ingredients];
+    onchangeVal[i][name] = value;
+    setIngredients(onchangeVal);
+  };
+
+  const handleDelete = (i) => {
+    const deleteVal = [...ingredients];
+    deleteVal.splice(i, 1);
+    setIngredients(deleteVal);
+  };
+
   const handleMenuItemForm = async (event) => {
     event.preventDefault();
 
@@ -144,12 +161,36 @@ const VendorMenuItem = ({params}) => {
             <div className="w-full my-1">
               <label className="text-gray-800 font-semibold">
                 <p>Ingredients</p>
-                <textarea
-                  type="text"
-                  onChange={(e) => setIngredients(e.target.value.split(","))}
-                  placeholder={ingredients.join(",")}
-                  className="textarea textarea-bordered bg-white"
-                />
+                {ingredients.map((val, i) => (
+                  <div className="flex justify-start gap-x-2" key={i}>
+                    <input
+                      name="ingredient"
+                      value={val.ingredient}
+                      onChange={(e) => handleChange(e, i)}
+                      className="input input-bordered w-full max-w-xs bg-white"
+                      type="text"
+                      placeholder="Ingredient"
+                    />
+                    <input
+                      name="amount"
+                      value={val.amount}
+                      onChange={(e) => handleChange(e, i)}
+                      className="input input-bordered w-full max-w-xs bg-white"
+                      type="text"
+                      placeholder="Amount"
+                    />
+                    <button onClick={() => handleDelete(i)} type="button">
+                      Delete
+                    </button>
+                  </div>
+                ))}
+                <button
+                  onClick={handleClick}
+                  type="button"
+                  className="mt-2 btn btn-ghost bg-main-clr text-white"
+                >
+                  Add
+                </button>
               </label>
             </div>
             <div className="w-full my-1">
@@ -179,7 +220,10 @@ const VendorMenuItem = ({params}) => {
               Update Item
             </button>
           </form>
-          <button className="mt-4 btn btn-error p-2 rounded-xl" onClick={deleteItem}>
+          <button
+            className="mt-4 btn btn-error p-2 rounded-xl"
+            onClick={deleteItem}
+          >
             <p className="text-white">Delete Item</p>
           </button>
         </div>
