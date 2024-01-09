@@ -185,7 +185,6 @@ const CustomerScreen = () => {
                     <p className="font-semibold text-sm">RM {foodItem.price}</p>
                   </div>
                 </div>
-
               </Link>
             );
           })}
