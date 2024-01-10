@@ -67,7 +67,8 @@ const CustomerScreen = () => {
 
   useEffect(() => {
     // Extract unique ingredients from foodItemsCopy
-    const allIngredients = foodItemsCopy.flatMap((food) => food.ingredients);
+    let allIngredients = foodItemsCopy.flatMap((food) => food.ingredients);
+    allIngredients = allIngredients.map((ingredient)=>ingredient.ingredient);
     const uniqueIngredients = [...new Set(allIngredients)];
     setUniqueIngredients(uniqueIngredients);
   }, [foodItemsCopy]);
@@ -81,48 +82,51 @@ const CustomerScreen = () => {
   }
 
   // For future location functionality reference
-  const renderFoodItems = () => {
-    // Filter based on user location
-    if (locationInput) {
-      const formattedLocationInput = locationInput
-        .toLowerCase()
-        .replace(/\s/g, "");
+  // const renderFoodItems = () => {
+  //   // Filter based on user location
+  //   if (locationInput) {
+  //     const formattedLocationInput = locationInput
+  //       .toLowerCase()
+  //       .replace(/\s/g, "");
 
-      filteredFood = filteredFood.filter((food) =>
-        vendorData.some(
-          (vendor) =>
-            vendor.location.some((loc) =>
-              loc
-                .toLowerCase()
-                .replace(/\s/g, "")
-                .includes(formattedLocationInput)
-            ) && vendor.items.includes(food)
-        )
-      );
-    }
+  //     filteredFood = filteredFood.filter((food) =>
+  //       vendorData.some(
+  //         (vendor) =>
+  //           vendor.location.some((loc) =>
+  //             loc
+  //               .toLowerCase()
+  //               .replace(/\s/g, "")
+  //               .includes(formattedLocationInput)
+  //           ) && vendor.items.includes(food)
+  //       )
+  //     );
+  //   }
 
-    return filteredFood.map((food) => (
-      <div key={food.id} className="food-item">
-        <h3>{food.name}</h3>
-        <p>{vendorData.find((vendor) => vendor.items.includes(food))?.name}</p>
-        <p>${food.price.toFixed(2)}</p>
-        <button onClick={() => addToCart(food)}>Add to Cart</button>
-      </div>
-    ));
-  };
+  //   return filteredFood.map((food) => (
+  //     <div key={food.id} className="food-item">
+  //       <h3>{food.name}</h3>
+  //       <p>{vendorData.find((vendor) => vendor.items.includes(food))?.name}</p>
+  //       <p>${food.price.toFixed(2)}</p>
+  //       <button onClick={() => addToCart(food)}>Add to Cart</button>
+  //     </div>
+  //   ));
+  // };
 
-  const saveLocation = () => {
-    // Now use the state variable to get the location value
-    const userLocation = locationInput.toLowerCase().replace(/\s/g, "");
+  // const saveLocation = () => {
+  //   // Now use the state variable to get the location value
+  //   const userLocation = locationInput.toLowerCase().replace(/\s/g, "");
 
-    // You can use the user's location for various purposes
-    console.log("User Location:", userLocation);
-  };
+  //   // You can use the user's location for various purposes
+  //   console.log("User Location:", userLocation);
+  // };
 
   const applyFilter = () => {
     // Update the food items based on the selected ingredients
-    const filteredFood = foodItemsCopy.filter((food) =>
-      !selectedIngredients.some((ingredient) => food.ingredients.includes(ingredient))
+    const filteredFood = foodItemsCopy.filter(
+      (food) =>
+        !food.ingredients.some((ingredientObj) =>
+          selectedIngredients.includes(ingredientObj.ingredient)
+        )
     );
     setFoodItems(filteredFood);
   };
