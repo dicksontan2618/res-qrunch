@@ -53,8 +53,14 @@ const VendorStock = () => {
         const soldQuantity = orders
           .filter((order) => order.name === menuItem.name && order.completion === 'complete')
           .reduce((total, order) => total + order.amount, 0);
+        
+        var totalLeftovers = orders
+          .filter((order) => order.name === menuItem.name && (order.completion === 'complete' || order.completion === 'pending'))
+          .reduce((total, order) => total + order.amount, 0);
+
+        totalLeftovers += menuItem.quantity;
           
-        return { ...menuItem, soldQuantity };
+        return { ...menuItem, soldQuantity, totalLeftovers };
       });
     
       setMenuItems(updatedMenuItems);
@@ -101,7 +107,7 @@ const VendorStock = () => {
                       {menuItem.name}
                     </h2>
                     {/* <p className="font-semibold">Code: {menuItem.id}</p> */}
-                    <p className="font-semibold">Leftovers: {menuItem.quantity}</p>
+                    <p className="font-semibold">Leftovers: {menuItem.totalLeftovers}</p>
                     <p className="font-semibold">Amount Sold: {menuItem.soldQuantity}</p>
                   </div>
                 </div>
