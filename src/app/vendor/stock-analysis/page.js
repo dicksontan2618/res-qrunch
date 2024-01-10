@@ -14,6 +14,7 @@ const VendorStock = () => {
   
     const [menuItems, setMenuItems] = useState([]);
     const [isEmpty, setIsEmpty] = useState(true);
+    const [orders, setOrders] = useState([]);
   
     useEffect(() => {
       if (
@@ -46,21 +47,62 @@ const VendorStock = () => {
       initVendorMenuItems(user);
       
     },[]);
+
+    const getOrders = async () => {
+      const updatedMenuItems = menuItems.map((menuItem) => {
+        const soldQuantity = orders
+          .filter((order) => order.name === menuItem.name && order.completion === 'complete')
+          .reduce((total, order) => total + order.amount, 0);
+          
+        return { ...menuItem, soldQuantity };
+      });
+    
+      setMenuItems(updatedMenuItems);
+    };
+
+    const getSoldItems = async () => {
+
+      let ordersList = [];
+      const q = query(
+        collection(db, "orders"),
+        where("vendor", "==", user.uid)
+      );
+
+      const querySnapshot = await getDocs(q);
+      if (querySnapshot.empty) {
+      } else {
+        querySnapshot.forEach((doc) => {
+          if (doc.data()["completion"] == "complete") {
+            ordersList.push(Object.assign(doc.data(), { id: doc.id }));
+          }
+        });
+        
+        setOrders(ordersList);
+      }
+    };
+
+    useEffect(() => {
+      getSoldItems();
+    }, []);
+    
+    useEffect(() => {
+      getOrders();
+    }, [orders]); 
   
     return (
       <div className="flex justify-center">
         <div className="flex flex-col w-[80%] mt-12 mb-24 gap-y-8 justify-center items-center">
           {!isEmpty && menuItems.map(menuItem=>{
             return (
-              <Link href={`/vendor/menu/${menuItem.id}`} key={menuItem.id} className="w-full">
+              <Link href={`/vendor/stock-analysis/${menuItem.id}`} key={menuItem.id} className="w-full">
                 <div className="card w-full bg-white text-black shadow-xl">
                   <div className="card-body">
                     <h2 className="card-title text-2xl font-bold">
                       {menuItem.name}
                     </h2>
-                    <p className="font-semibold">Code: {menuItem.id}</p>
+                    {/* <p className="font-semibold">Code: {menuItem.id}</p> */}
                     <p className="font-semibold">Leftovers: {menuItem.quantity}</p>
-                    <p className="font-semibold">Amount Sold: {menuItem.quantity}</p>
+                    <p className="font-semibold">Amount Sold: {menuItem.soldQuantity}</p>
                   </div>
                 </div>
               </Link>
