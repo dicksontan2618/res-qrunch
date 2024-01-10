@@ -57,7 +57,7 @@ const SalesChart = () => {
       </select>
 
       {/* Bar chart component */}
-      <Bar
+      {/* <Bar
         data={chartData}
         options={{
           scales: {
@@ -66,7 +66,7 @@ const SalesChart = () => {
             },
           },
         }}
-      />
+      /> */}
     </div>
   );
 };
