@@ -124,7 +124,7 @@ const VendorStock = ({params}) => {
                     return (
                       <tr key={index} className="border border-gray-400">
                         <td className="border border-gray-400 px-4 py-2">{ingredient.ingredient}</td>
-                        <td className="border border-gray-400 px-4 py-2">{ingredient.amount * menuItem.totalLeftovers}</td>
+                        <td className="border border-gray-400 px-4 py-2">{ingredient.amount * menuItem.totalLeftovers - menuItem.soldQuantity}</td>
                       </tr>
                     );
                   })}

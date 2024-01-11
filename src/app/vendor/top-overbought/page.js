@@ -1,70 +1,41 @@
-// "use client"
+"use client"
+import React, { useState } from 'react';
 
-// import React, { useState, useEffect } from 'react';
-// import { BarChart } from '@mui/x-charts';
+const OverboughtChart = () => {
+  const [selectedMonth, setSelectedMonth] = useState('January');
 
-// const SalesChart = () => {
-//   const [selectedMonth, setSelectedMonth] = useState('January'); // Default month
-//   const [chartData, setChartData] = useState({});
+  const handleMonthChange = (event) => {
+    setSelectedMonth(event.target.value);
+  };
 
-//   // Sample data for food item sales
-//   const data = [
-//     {
-//       month: 'January',
-//       sales: [10, 20, 15, 25, 30],
-//     },
-//     {
-//       month: 'February',
-//       sales: [15, 25, 20, 18, 35],
-//     },
-//     // Add data for other months as needed
-//   ];
+  const getChartForMonth = (month) => {
+    // Implement logic to get the corresponding image for the month
+    // For now, using a placeholder URL
+    return `https://placeholder.com/${month}`;
+  };
 
-//   useEffect(() => {
-//     // Find the selected month in the data array
-//     const selectedData = data.find((monthData) => monthData.month === selectedMonth);
+  return (
+    <div>
+      {/* Upper Taskbar */}
+      <div className="p-15 items-center">
+        <label htmlFor="monthDropdown">Select Month: </label>
+        <select
+          id="monthDropdown"
+          value={selectedMonth}
+          onChange={handleMonthChange}
+        >
+          <option value="January">January</option>
+          <option value="February">February</option>
+          {/* Add options for other months as needed */}
+        </select>
+      </div>
 
-//     // If the selected month is found, update chart data
-//     if (selectedData) {
-//       setChartData({
-//         labels: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'],
-//         datasets: [
-//           {
-//             label: `Sales for ${selectedMonth}`,
-//             data: selectedData.sales,
-//             backgroundColor: 'rgba(75, 192, 192, 0.2)',
-//             borderColor: 'rgba(75, 192, 192, 1)',
-//             borderWidth: 1,
-//           },
-//         ],
-//       });
-//     }
-//   }, [selectedMonth]);
+      {/* Body of the Interface */}
+      <div className="body">
+        <img src={getChartForMonth(selectedMonth)} alt={`Chart for ${selectedMonth}`} />
+      </div>
+    </div>
+  );
+};
 
-//   const handleChange = (event) => {
-//     setSelectedMonth(event.target.value);
-//   };
-
-//   return (
-//     <div>
-//       {/* Dropdown for selecting month */}
-//       <select value={selectedMonth} onChange={handleChange}>
-//         {data.map((monthData) => (
-//           <option key={monthData.month} value={monthData.month}>
-//             {monthData.month}
-//           </option>
-//         ))}
-//       </select>
-
-//       {/* Bar chart component */}
-//       <BarChart
-//         xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C'] }]}
-//         series={[{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }]}
-//         width={500}
-//         height={300}
-//       />
-//     </div>
-//   );
-// };
-
-// export default SalesChart;
+export default OverboughtChart;
