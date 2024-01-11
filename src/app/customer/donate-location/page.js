@@ -8,11 +8,11 @@ import { useRouter } from "next/navigation";
 import MapView from "@/app/_components/MapView";
 import GlobalApi from "../../../../shared/GlobalApi";
 
-const LocPage = () => {
+const CLocPage = () => {
   const { user } = useAuthContext();
   const router = useRouter();
 
-  const [businessList, setBusinessList] = useState([]);
+  const [charityList, setCharityList] = useState([]);
   
   useEffect(() => {
     if (user == null && window.localStorage.getItem("session_user") != "user") {
@@ -22,25 +22,25 @@ const LocPage = () => {
   }, [user]);
 
   useEffect(() => {
-    getGooglePlace();
+    getCharityPlace();
   }, []);
 
-  const getGooglePlace = () => {
-      GlobalApi.getGooglePlace(
-        "restaurant",
-        500,
-        JSON.parse(window.localStorage.getItem("curLoc"))["lat"],
-        JSON.parse(window.localStorage.getItem("curLoc"))["lng"]
-      ).then((resp) => {
-        setBusinessList(resp.data.product.results);
-      });
+  const getCharityPlace = () => {
+    GlobalApi.getGooglePlace(
+      "charity",
+      500,
+      JSON.parse(window.localStorage.getItem("curLoc"))["lat"],
+      JSON.parse(window.localStorage.getItem("curLoc"))["lng"]
+    ).then((resp) => {
+      setCharityList(resp.data.product.results);
+    });
   };
 
   return(
     <div className="w-full">
-        <MapView mapList={businessList} isVendor={true}/>
+        <MapView mapList={charityList} isVendor={false}/>
     </div>
   ) 
 };
 
-export default LocPage;
+export default CLocPage;

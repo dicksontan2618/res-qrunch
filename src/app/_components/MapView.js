@@ -2,8 +2,9 @@ import { GoogleMap, LoadScript, MarkerF } from '@react-google-maps/api'
 import React, { useState } from 'react'
 
 import Markers from './Markers';
+import CMarkers from './CMarkers';
 
-function MapView({businessList}) {
+function MapView({mapList, isVendor}) {
 
     const [map,setMap] = useState();
 
@@ -32,10 +33,20 @@ function MapView({businessList}) {
                 },
               }}
             />
-            {businessList.map(
-              (item, index) =>
-                index <= 10 && <Markers business={item} key={index} />
-            )}
+            {isVendor &&
+              mapList.map(
+                (item, index) =>
+                  index <= 10 && (
+                    <Markers business={item} key={index}/>
+                  )
+              )}
+            {!isVendor &&
+              mapList.map(
+                (item, index) =>
+                  index <= 10 && (
+                    <CMarkers business={item} key={index}/>
+                  )
+              )}
           </GoogleMap>
         </LoadScript>
       </div>
