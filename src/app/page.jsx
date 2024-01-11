@@ -27,6 +27,11 @@ const StartScreen = () => {
                             Vendor Login
                         </button>
                     </Link>
+                    <Link href="./charity/sign-in">
+                        <button className='btn btn-wide bg-white text-main-clr text-md border-white'>
+                            Charity Login
+                        </button>
+                    </Link>
                 </div>
             </div>
         </div>
