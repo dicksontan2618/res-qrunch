@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuthContext } from "@/context/AuthContextVendor";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Table from 'react-bootstrap/Table';
 
 import { db } from "@/utils/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
@@ -16,6 +17,7 @@ const VendorStock = ({params}) => {
     const [menuItems, setMenuItems] = useState([]);
     const [isEmpty, setIsEmpty] = useState(true);
     const [orders, setOrders] = useState([]);
+    const [ingredients, setIngredients] = useState([]);
   
     useEffect(() => {
         if (user == null && window.localStorage.getItem("session_user") !== "vendor") {
@@ -93,7 +95,7 @@ const VendorStock = ({params}) => {
     
     useEffect(() => {
       getOrders();
-    }, [orders]); 
+    }, [orders]);
   
     return (
       <div className="flex justify-center">
@@ -108,14 +110,33 @@ const VendorStock = ({params}) => {
                     <p className="font-semibold">Leftovers: {menuItem.totalLeftovers}</p>
                     <p className="font-semibold">Amount Sold: {menuItem.soldQuantity}</p>
                     <p className="font-semibold">Leftover (Last Week): {menuItem.soldQuantity}</p>
-              </Link>
-            );
-          })}
-          <p className="font-semibold">Amount of ingredients that should be reduced to restock:</p>
-          <p className={isEmpty ? "block text-2xl font-bold text-black":"hidden"}>No Items !</p>
-        </div>
+                    <br/>
+                    <p className="font-semibold">Amount of ingredients that should be reduced to restock:</p> <br />
+              <table className="table-auto border-collapse border border-gray-400">
+                <thead>
+                  <tr className="bg-gray-200">
+                    <th className="border border-gray-400 px-4 py-2">Ingredients</th>
+                    <th className="border border-gray-400 px-4 py-2">Quantity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {menuItem.ingredients.map((ingredient, index) => {
+                    return (
+                      <tr key={index} className="border border-gray-400">
+                        <td className="border border-gray-400 px-4 py-2">{ingredient.ingredient}</td>
+                        <td className="border border-gray-400 px-4 py-2">{ingredient.amount * menuItem.totalLeftovers}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </Link>
+          );
+        })}
+        <p className={isEmpty ? "block text-2xl font-bold text-black" : "hidden"}>No Items !</p>
       </div>
-    );
-  };
-  
-  export default VendorStock;
+    </div>
+  );
+};
+
+export default VendorStock;
