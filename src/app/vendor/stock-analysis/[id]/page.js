@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { useAuthContext } from "@/context/AuthContextVendor";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Table from 'react-bootstrap/Table';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 
 import { db } from "@/utils/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
@@ -89,6 +90,13 @@ const VendorStock = ({params}) => {
       }
     };
 
+    const getIcon = (value) => {
+      if(value > 0){
+        return <FontAwesomeIcon icon={faArrowUp} style={{color: "#ec043e",}} />;
+      }
+      return <FontAwesomeIcon icon={faArrowDown} style={{color: "#0ec890",}} />;
+    };
+
     useEffect(() => {
       getSoldItems();
     }, []);
@@ -107,16 +115,29 @@ const VendorStock = ({params}) => {
                       {menuItem.name}
                     </h2>
                     {/* <p className="font-semibold">Code: {menuItem.id}</p> */}
-                    <p className="font-semibold">Leftovers: {menuItem.totalLeftovers}</p>
-                    <p className="font-semibold">Amount Sold: {menuItem.soldQuantity}</p>
-                    <p className="font-semibold">Leftover (Last Week): {menuItem.soldQuantity}</p>
+                    <div className="flex">
+                      <div className="mt-5 w-1/2 pr-4">
+                        <p className="font-semibold">Leftovers: {menuItem.totalLeftovers}</p>
+                        <p className="font-semibold">Amount Sold: {menuItem.soldQuantity}</p>
+                        <p className="font-semibold">Leftover (Last Week): {menuItem.soldQuantity + 2}</p>
+                      </div>
+                      <div className="mt-5 w-1/2">
+                        <div className="bg-orange-50 p-4 rounded border border-brown">
+                          <p className="font-medium">Weekly leftover rate:</p>
+                          <p className="font-semibold">{getIcon(((menuItem.totalLeftovers / (menuItem.soldQuantity + 2)) * 10))}{" "}
+                            {((menuItem.totalLeftovers / (menuItem.soldQuantity + 2)) * 10).toFixed(2)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
                     <br/>
                     <p className="font-semibold">Amount of ingredients that should be reduced to restock:</p> <br />
               <table className="table-auto border-collapse border border-gray-400">
                 <thead>
                   <tr className="bg-gray-200">
                     <th className="border border-gray-400 px-4 py-2">Ingredients</th>
-                    <th className="border border-gray-400 px-4 py-2">Quantity</th>
+                    <th className="border border-gray-400 px-4 py-2">Amount</th>
                   </tr>
                 </thead>
                 <tbody>
