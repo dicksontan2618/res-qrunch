@@ -6,19 +6,19 @@ export default function BottomNavCharity(){
 
     return (
         <div className="btm-nav bg-nav-bg-clr">
-            <Link href="/vendor/home">
+            <Link href="/charity/home">
                 <button className="flex flex-col items-center gap-y-1">
                     <FontAwesomeIcon icon={faHouse}></FontAwesomeIcon>
                     <span className="btm-nav-label text-nav-text-clr">Home</span>
                 </button>
             </Link>
-            <Link href="/vendor/claimed">
+            <Link href="/charity/claimed">
                 <button className="flex flex-col items-center gap-y-1">
                     <FontAwesomeIcon icon={faBasketShopping}></FontAwesomeIcon>
                     <span className="btm-nav-label text-nav-text-clr">Claimed Food</span>
                 </button>
             </Link>
-            <Link href="/vendor/profile">
+            <Link href="/charity/profile">
                 <button className="flex flex-col items-center gap-y-1">
                     <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
                     <span className="btm-nav-label text-nav-text-clr">Profile</span>

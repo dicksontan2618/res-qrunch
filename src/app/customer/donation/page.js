@@ -5,12 +5,17 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import Link from "next/link";
 
+import Select from "react-select";
+
 import DonationItem from "@/app/_components/DonationItem";
+
 
 const DonationPage = () => {
   const [fee, setFee] = useState(0);
   const [donationSellItems, setDonationSellItems] = useState([]);
   const [donationItems, setDonationItems] = useState([]);
+  const [charityList, setCharityList] = useState([]);
+  const [charityChoice, setCharityChoice] = useState({});
 
   const handleDonationItemToggle = (item, operation) => {
     const updatedDonationItems = [...donationItems];
@@ -86,8 +91,26 @@ const DonationPage = () => {
     setDonationSellItems(vendorsAllProductsList);
   }
 
+  const getCharityDetails = async () => {
+
+    let tempCharityList = []
+
+    const querySnapshot = await getDocs(collection(db, "charities"));
+    querySnapshot.forEach((doc) => {
+      let tempObj = {
+        value: doc.data()["username"],
+        label: doc.data()["username"],
+      };
+      tempCharityList.push(tempObj);
+    });
+
+    setCharityList(tempCharityList);
+
+  }
+
   useEffect(()=>{
     getShoppingCartVendors();
+    getCharityDetails();
   },[])
 
   return (
@@ -95,7 +118,10 @@ const DonationPage = () => {
       <p className="mt-4 text-gray-800 font-semibold">
         Total amount in cart: RM {fee.toFixed(2)}
       </p>
-      <p className="my-2 text-gray-800">Donation Options: <br/>(Selected items will be redeemed by charities for underprivileged)</p>
+      <p className="my-2 text-gray-800">
+        Donation Options: <br />
+        (Selected items will be redeemed by charities for underprivileged)
+      </p>
       {donationSellItems.map((item, index) => (
         <DonationItem
           key={index}
@@ -104,6 +130,13 @@ const DonationPage = () => {
           onToggle={(operation) => handleDonationItemToggle(item, operation)}
         />
       ))}
+      // TODO: Save Choice in LocalStorage
+      <div className="my-8">
+        <Select
+          options={charityList}
+          onChange={(choice) => setCharityChoice(choice)}
+        />
+      </div>
       <Link href="/customer/summary">
         <div className="mt-4 flex justify-center">
           <button className="btn btn-ghost btn-wide bg-main-clr text-white font-semibold">
