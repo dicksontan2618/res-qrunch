@@ -32,7 +32,7 @@ const DonationSummary = () => {
     </div>
 
       {/* Body of the Interface */}
-      <div className="justify-items-center content-center items-center">
+      <div className="flex justify-center items-center flex-col">
         <img src={getChartForMonth(selectedMonth)} alt={`Chart for ${selectedMonth}`} />
       </div>
     </div>

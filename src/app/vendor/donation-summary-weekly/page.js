@@ -56,7 +56,7 @@ const DonationSummary = () => {
     </div>
 
       {/* Body of the Interface */}
-      <div className="body">
+      <div className="flex justify-center items-center flex-col">
         <img src={getChartForWeek(selectedWeek, selectedItem)} alt={`Chart for ${selectedWeek}`} />
       </div>
     </div>
