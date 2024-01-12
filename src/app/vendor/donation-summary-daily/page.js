@@ -9,8 +9,8 @@ const DonationSummary = () => {
   };
 
   const getChartForDay = (day) => {
-    
-    return `${day}`;
+    console.log(`/vendor/donation-summary-daily/Graph/${day}.png`)
+    return `/vendor/donation-summary-daily/Graph/${day}.png`;
   };
 
   return (
@@ -24,7 +24,7 @@ const DonationSummary = () => {
             value={selectedDay}
             onChange={handleDayChange}
           >
-            <option value="https://drive.google.com/file/d/1CnCYcN9cnVrOHJ5izkY7o0VEERqhy_-z/view?usp=sharing">Monday</option>
+            <option value="Monday">Monday</option>
             <option value="Tuesday">Tuesday</option>
             <option value="Wednesday">Wednesday</option>
             <option value="Thursday">Thursday</option>
@@ -37,7 +37,7 @@ const DonationSummary = () => {
 
       {/* Body of the Interface */}
       <div className="body">
-        <img src="https://drive.google.com/file/d/1CnCYcN9cnVrOHJ5izkY7o0VEERqhy_-z/view?usp=sharing" alt={`Chart for ${selectedDay}`} />
+        <img src={getChartForDay(selectedDay)} alt={`Chart for ${selectedDay}`} />
       </div>
     </div>
   );
