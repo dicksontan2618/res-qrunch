@@ -9,8 +9,7 @@ const DonationSummary = () => {
   };
 
   const getChartForMonth = (month) => {
-    var link = "/vendor/donation-summary-monthly/Graph/" + month + ".png";
-    return link;
+    return `/${month}.png`;
   };
 
   return (
@@ -32,7 +31,7 @@ const DonationSummary = () => {
     </div>
 
       {/* Body of the Interface */}
-      <div className="flex justify-center items-center flex-col">
+      <div className="flex mt-10 justify-center items-center flex-col">
         <img src={getChartForMonth(selectedMonth)} alt={`Chart for ${selectedMonth}`} />
       </div>
     </div>

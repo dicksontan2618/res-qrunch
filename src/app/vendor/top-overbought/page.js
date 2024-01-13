@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 
 const DonationSummary = () => {
-  const [selectedMonth, setSelectedMonth] = useState('Month1');
+  const [selectedMonth, setSelectedMonth] = useState('WeekTotal1');
   var selectedItem = "Chicken Burger";
 
   const handleMonthChange = (event) => {
@@ -10,18 +10,18 @@ const DonationSummary = () => {
   };
 
   const getChartForMonth = (month) => {
-    var link = "/vendor/donation-summary-monthly/Graph/" + month + ".png";
+    var link = "/" + month + ".png";
     return link;
   };
 
   const getItem = (month) => {
-    if(month == "Month1"){
+    if(month == "WeekTotal1"){
       selectedItem = "Chicken Burger";
-    }else if(month == "Month2"){
+    }else if(month == "WeekTotal4"){
       selectedItem = "Beef Burger";
-    }else if(month == "Month3"){
-      selectedItem = "Caesar Salad";
-    }else if(month == "Month4"){
+    }else if(month == "WeekTotal3"){
+      selectedItem = "Fried Chicken & Bubble Milk Tea";
+    }else if(month == "WeekTotal2"){
       selectedItem = "Chicken Burger";
     }
     return selectedItem;
@@ -37,10 +37,10 @@ const DonationSummary = () => {
             value={selectedMonth}
             onChange={handleMonthChange}
           >
-            <option value="Month1">October 2023</option>
-            <option value="Month2">November 2023</option>
-            <option value="Month3">December 2023</option>
-            <option value="Month4">January 2024</option>
+            <option value="WeekTotal1">October 2023</option>
+            <option value="WeekTotal2">November 2023</option>
+            <option value="WeekTotal3">December 2023</option>
+            <option value="WeekTotal4">January 2024</option>
           </select>
         </div>
     </div>

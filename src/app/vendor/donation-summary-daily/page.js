@@ -10,7 +10,7 @@ const DonationSummary = () => {
 
   const getChartForDay = (day) => {
     console.log(`/vendor/donation-summary-daily/Graph/${day}.png`)
-    return `/vendor/donation-summary-daily/Graph/${day}.png`;
+    return `/${day}.png`;
   };
 
   return (
@@ -36,7 +36,7 @@ const DonationSummary = () => {
     </div>
 
       {/* Body of the Interface */}
-      <div className="flex justify-center items-center flex-col">
+      <div className="flex mt-20 justify-center items-center flex-col">
         <img src={getChartForDay(selectedDay)} alt={`Chart for ${selectedDay}`} />
       </div>
     </div>
