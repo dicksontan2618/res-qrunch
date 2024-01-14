@@ -4,6 +4,7 @@
 import { useState, useEffect } from "react";
 import { useAuthContext } from "@/context/AuthContextUser";
 import { useRouter } from "next/navigation";
+import { Timestamp } from "firebase/firestore";
 
 import { collection, doc, addDoc, setDoc, getDoc } from "firebase/firestore"; 
 import { db } from "@/utils/firebase";
@@ -50,7 +51,15 @@ const PaymentPage = () => {
   
   const checkOut = () => {
     cartItems.map(async (tempItem) => {
-        const docRef = await addDoc(collection(db, "orders"), Object.assign(tempItem, {user_id : user.uid, completion : "pending", reviewed : false}));
+        const docRef = await addDoc(
+          collection(db, "orders"),
+          Object.assign(tempItem, {
+            user_id: user.uid,
+            completion: "pending",
+            reviewed: false,
+            createdAt: Timestamp.now(),
+          })
+        );
 
         const prodRef = doc(db, "menuItems", tempItem.id);
         setDoc(prodRef, {quantity : (Number(tempItem.quantity) - tempItem.amount).toString()}, {merge : true});
@@ -59,7 +68,10 @@ const PaymentPage = () => {
       donationItems.map(async (tempItem) => {
         const docRef = await addDoc(
           collection(db, "donations"),
-          Object.assign(tempItem, { user_id: user.uid })
+          Object.assign(tempItem, {
+            user_id: user.uid,
+            createdAt: Timestamp.now(),
+          })
         );
 
         const prodRef = doc(db, "menuItems", tempItem.id);
