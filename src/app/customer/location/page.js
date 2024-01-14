@@ -38,7 +38,7 @@ const LocPage = () => {
 
   return(
     <div className="w-full">
-        <MapView mapList={businessList} isVendor={true}/>
+        <MapView mapList={businessList}/>
     </div>
   ) 
 };

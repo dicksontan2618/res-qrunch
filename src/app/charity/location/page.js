@@ -2,7 +2,7 @@
 
 // Import necessary libraries
 import { useEffect, useState } from "react";
-import { useAuthContext } from "@/context/AuthContextUser";
+import { useAuthContext } from "@/context/AuthContextCharity";
 import { useRouter } from "next/navigation";
 
 import MapView from "@/app/_components/MapView";
@@ -12,33 +12,33 @@ const CLocPage = () => {
   const { user } = useAuthContext();
   const router = useRouter();
 
-  const [charityList, setCharityList] = useState([]);
+  const [restaurantList, setRestaurantList] = useState([]);
   
   useEffect(() => {
-    if (user == null && window.localStorage.getItem("session_user") != "user") {
+    if (user == null && window.localStorage.getItem("session_user") != "charity") {
       router.push("/");
     } else {
     }
   }, [user]);
 
   useEffect(() => {
-    getCharityPlace();
+    getRestaurantPlace();
   }, []);
 
-  const getCharityPlace = () => {
+  const getRestaurantPlace = () => {
     GlobalApi.getGooglePlace(
-      "charity",
+      "restaurant",
       500,
       JSON.parse(window.localStorage.getItem("curLoc"))["lat"],
       JSON.parse(window.localStorage.getItem("curLoc"))["lng"]
     ).then((resp) => {
-      setCharityList(resp.data.product.results);
+      setRestaurantList(resp.data.product.results);
     });
   };
 
   return(
     <div className="w-full">
-        <MapView mapList={charityList} isVendor={false}/>
+        <MapView mapList={restaurantList}/>
     </div>
   ) 
 };
