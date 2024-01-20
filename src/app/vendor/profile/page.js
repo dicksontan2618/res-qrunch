@@ -8,6 +8,7 @@ import { db } from "@/utils/firebase";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { signOut } from "firebase/auth";
 import { auth } from "@/utils/firebase";
+import Link from "next/link";
 
 const VendorProfile = () => {
   const { user } = useAuthContext();
@@ -154,6 +155,9 @@ const VendorProfile = () => {
             </button>
           </form>
         </div>
+        <div className="divider divider-error"></div>
+        <Link href="/vendor/donation-claim">Claimed Donations</Link>
+        <div className="divider divider-error"></div>
         <button className="btn btn-active mb-24" onClick={handleLogout}>
           <p className="text-lg font-bold">Logout</p>
         </button>

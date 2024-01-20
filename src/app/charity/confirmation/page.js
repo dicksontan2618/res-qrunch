@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useAuthContext } from "@/context/AuthContextCharity";
 import { useRouter } from "next/navigation";
-import { doc, setDoc, collection, addDoc } from "firebase/firestore";
+import { doc, setDoc, collection, addDoc, getDoc } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 
 import Swal from "sweetalert2";
@@ -12,6 +12,7 @@ const ConfirmationScreen = () => {
   const { user } = useAuthContext();
   const router = useRouter();
 
+  const [charityName, setCharityName] = useState();
   const [claimList, setClaimList] = useState([]);
   const [currentDate,setCurrentDate] = useState("");
 
@@ -25,6 +26,7 @@ const ConfirmationScreen = () => {
   }, [user]);
 
   useEffect(() => {
+    getCharityName();
     getClaimList();
     getCurrentDate();
   }, []);
@@ -62,6 +64,13 @@ const ConfirmationScreen = () => {
 
   }
 
+  const getCharityName = async () => {
+    const docRef = doc(db, "charities", user.uid);
+    const docSnap = await getDoc(docRef);
+
+    setCharityName(docSnap.data()["username"]);
+  }
+
   const confirm = () => {
     let tempClaimList = claimList;
     let claimedIdentifier = [];
@@ -69,6 +78,7 @@ const ConfirmationScreen = () => {
         Object.assign(item, {
           claimedAt: document.getElementById("claim-time").value,
           charity:user.uid,
+          charityName: charityName
         });
         claimedIdentifier.push(item.uid);
         await addDoc(collection(db, "claimedDonations"), item);

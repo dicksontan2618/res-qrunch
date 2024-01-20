@@ -6,7 +6,7 @@ const OrderList = ({ orders }) => {
       {orders.length &&
         orders.map((order) => (
           <div
-            className="w-full flex gap-x-4 shadow-md h-36 items-center"
+            className="w-full flex gap-x-4 shadow-md h-36 items-center p-4"
             key={order.id}
           >
             <img
