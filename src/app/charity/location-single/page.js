@@ -38,7 +38,7 @@ const CLocPage = () => {
 
   return(
     <div className="w-full">
-        <MapView mapList={restaurantList} num={10}/>
+        <MapView mapList={restaurantList} num={1}/>
     </div>
   ) 
 };

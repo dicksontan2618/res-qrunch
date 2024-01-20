@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 
 import Markers from './Markers';
 
-function MapView({mapList}) {
+function MapView({mapList,num}) {
 
     const [map,setMap] = useState();
 
@@ -35,7 +35,7 @@ function MapView({mapList}) {
             {
               mapList.map(
                 (item, index) =>
-                  index <= 10 && (
+                  index <= num && (
                     <Markers business={item} key={index}/>
                   )
               )}
