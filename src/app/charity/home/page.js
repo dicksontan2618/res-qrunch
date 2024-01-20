@@ -15,6 +15,7 @@ const CharityScreen = () => {
   const router = useRouter();
 
   const [donationList, setDonationList] = useState([])
+  const [claimCart, setClaimCart] = useState([])
 
   useEffect(() => {
     if (
@@ -27,7 +28,8 @@ const CharityScreen = () => {
 
   useEffect(() => {
     getDonationList();
-  })
+    window.localStorage.setItem("claimList", "[]");
+  },[])
 
   const getDonationList = async () => {
 
@@ -38,11 +40,29 @@ const CharityScreen = () => {
       query(donationsRef, orderBy("createdAt"))
     );
     querySnapshot.forEach((doc) => {
-      tempList.push(doc.data());
+      if(!(doc.data()["claimed"])){
+        tempList.push(Object.assign(doc.data(), { uid: doc.id }));
+      }
     });
 
     setDonationList(tempList);
   };
+
+  const handleClick = (obj,uid) => {
+    if(claimCart.length == 0){
+      setClaimCart([obj]);
+    }
+    else{
+      setClaimCart([...claimCart, obj]);
+    }
+    const newDList = donationList.filter((item)=>item.uid != uid)
+    setDonationList(newDList)
+  }
+
+  const handleClaim = () => {
+    window.localStorage.setItem("claimList",JSON.stringify(claimCart));
+    router.push("/charity/confirmation")
+  }
 
   return (
     <div className="flex flex-col justify-center items-center">
@@ -55,14 +75,17 @@ const CharityScreen = () => {
             <p className="text-sm text-center underline">View nearby vendors</p>
           </Link>
         </div>
-        {donationList.map((item, index) => {
+        {donationList.map((item) => {
           return (
-            <div key={index} className="card w-full bg-white shadow-xl p-4">
+            <div key={item.uid} className={`card w-full bg-white shadow-xl p-4`}>
               <div className="flex justify-between">
                 <p className="text-gray-800 font-bold text-lg">
                   {item.vendor_name}
                 </p>
-                <button className="btn btn-xs btn-circle btn-outline">
+                <button
+                  className="btn btn-xs btn-circle btn-outline"
+                  onClick={() => handleClick(item,item.uid)}
+                >
                   <FontAwesomeIcon icon={faPlus} />
                 </button>
               </div>
@@ -73,6 +96,7 @@ const CharityScreen = () => {
             </div>
           );
         })}
+        <button className="mt-4 btn btn-wide btn-ghost bg-main-clr text-white font-bold" onClick={handleClaim}>Continue</button>
       </div>
     </div>
   );
