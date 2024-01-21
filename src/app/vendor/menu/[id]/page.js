@@ -21,6 +21,9 @@ const VendorMenuItem = ({params}) => {
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState(0);
 
+  const [isEmpty,setisEmpty]= useState(true);
+  const [reviews,setReviews] = useState([]);
+
   const handleMenuItemImage = async (event) => {
     event.preventDefault();
     const file = event.target[0]?.files[0];
@@ -156,6 +159,10 @@ const VendorMenuItem = ({params}) => {
         setImgUrl(docSnap.data()["img"]);
         setPrice(docSnap.data()["price"]);
         setQuantity(docSnap.data()["quantity"]);
+        if (docSnap.data()["reviews"].length) {
+          setisEmpty(false);
+          setReviews(docSnap.data()["reviews"]);
+        }
        }
      }
 
@@ -178,6 +185,12 @@ const VendorMenuItem = ({params}) => {
               Upload
             </button>
           </form>
+          <button
+            className="btn btn-ghost underline -my-8 self-end"
+            onClick={() => document.getElementById("modal").showModal()}
+          >
+            Reviews
+          </button>
         </div>
         <div>
           <form onSubmit={handleMenuItemForm} className="form">
@@ -262,6 +275,27 @@ const VendorMenuItem = ({params}) => {
           </button>
         </div>
       </div>
+      <dialog id="modal" className="modal">
+        <div className="modal-box h-1/2 overflow-scroll">
+          <form method="dialog">
+            {/* if there is a button in form, it will close the modal */}
+            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+              ✕
+            </button>
+          </form>
+          <h3 className="font-bold text-lg mb-3">Reviews</h3>
+          {!isEmpty &&
+            reviews.map((review, index) => {
+              return (
+                <div key={index} className="flex flex-col gap-y-1 my-4">
+                  <p className="font-bold">{review.cus_name}</p>
+                  <p className="font-medium">{review.msg}</p>
+                </div>
+              );
+            })}
+          {isEmpty && <p className="py-4">No reviews yet !</p>}
+        </div>
+      </dialog>
     </div>
   );
 };

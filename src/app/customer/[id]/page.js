@@ -94,7 +94,6 @@ const FoodItem = ({params}) => {
           if(docSnap.data()["reviews"].length){
             setisEmpty(false);
             setReviews(docSnap.data()["reviews"]);
-
           }
     
           // Check if the item is already in the cart
