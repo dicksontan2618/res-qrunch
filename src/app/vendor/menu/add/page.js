@@ -7,6 +7,7 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import { v4 as uuidv4 } from "uuid";
+import Swal from "sweetalert2";
 
 const VendorAddMenuItem = () => {
   const { user } = useAuthContext();
@@ -92,21 +93,37 @@ const VendorAddMenuItem = () => {
 
     event.preventDefault();
 
-    await setDoc(
-      doc(db, "menuItems", menuItemId),
-      {
-        name: foodName,
-        price: price,
-        quantity : quantity,
-        vendor: user.uid,
-        vendor_name : vendorName,
-        ingredients: ingredients,
-      },
-      { merge: true }
-    );
-
-    router.push("/vendor/menu");
-
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Proceed with Add",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await setDoc(
+          doc(db, "menuItems", menuItemId),
+          {
+            name: foodName,
+            price: price,
+            quantity : quantity,
+            vendor: user.uid,
+            vendor_name : vendorName,
+            ingredients: ingredients,
+          },
+          { merge: true }
+        );
+        Swal.fire({
+          title: "Menu Added !",
+          text: "Your menu items has been added.",
+          icon: "success",
+        }).then((result) => {
+          router.push("/vendor/menu");
+        });
+      }
+    });
   };
 
   useEffect(() => {

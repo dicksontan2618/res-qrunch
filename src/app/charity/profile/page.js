@@ -8,6 +8,8 @@ import { db } from "@/utils/firebase";
 import { signOut } from "firebase/auth";
 import { auth } from "@/utils/firebase";
 
+import Swal from "sweetalert2";
+
 const CharityProfile = () => {
   const { user } = useAuthContext();
   const router = useRouter();
@@ -45,6 +47,12 @@ const CharityProfile = () => {
       },
       { merge: true }
     );
+
+    Swal.fire({
+      title: "Edit Success!",
+      text: "Profile Details Edited Successfully!",
+      icon: "success",
+    });
   };
 
   // function invoked when user logout

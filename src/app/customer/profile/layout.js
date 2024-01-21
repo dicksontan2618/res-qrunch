@@ -13,9 +13,6 @@ export default function CustomerLayout({ children }) {
             <button className="text-white-500">Back</button>
           </Link>
           <h1 className="flex-grow text-center font-semibold text-xl">Profile</h1>
-          <Link href="/settings">
-            <button>Settings</button>
-          </Link>
         </header>
         
         {children}

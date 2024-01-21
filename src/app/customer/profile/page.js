@@ -12,6 +12,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import { signOut } from "firebase/auth";
 import { auth } from "@/utils/firebase";
+import Swal from 'sweetalert2';
 
 // Create a functional component for the Profile Page
 
@@ -57,6 +58,12 @@ const ProfilePage = () => {
       },
       { merge: true }
     );
+
+    Swal.fire({
+      title: "Edit Success!",
+      text: "Profile Name Edited Successfully!",
+      icon: "success",
+    });
   };
 
   const handleEditAddressForm = async (event) => {
@@ -69,6 +76,12 @@ const ProfilePage = () => {
       },
       { merge: true }
     );
+
+    Swal.fire({
+      title: "Edit Success!",
+      text: "Address Edited Successfully!",
+      icon: "success",
+    });
   };
 
   const handleProfileImage = async (event) => {
@@ -116,6 +129,11 @@ const ProfilePage = () => {
               },
               { merge: true }
             );
+            Swal.fire({
+              title: "Upload Success!",
+              text: "Profile Picture Uploaded Successfully!",
+              icon: "success",
+            });
           });
         }
       );

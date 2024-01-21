@@ -16,10 +16,10 @@ export default function VendorMenuLayout({ children }) {
           </button>
         </header> */}
         <div className="navbar bg-main-clr flex justify-between">
-          <div className="justify-self-center">
+          <div className="ml-8">
             <p className="text-white text-xl font-bold">ResQrunch</p>
           </div>
-          <div className="">
+          <div className="mr-8">
             <Link href="/vendor/menu/add">
               <button className="btn btn-square">
                 <FontAwesomeIcon icon={faPlus} />

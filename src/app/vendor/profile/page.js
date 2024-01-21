@@ -9,6 +9,7 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/
 import { signOut } from "firebase/auth";
 import { auth } from "@/utils/firebase";
 import Link from "next/link";
+import Swal from "sweetalert2";
 
 const VendorProfile = () => {
   const { user } = useAuthContext();
@@ -46,6 +47,12 @@ const VendorProfile = () => {
       address: vendorAddress,
     },{merge: true});
 
+    Swal.fire({
+      title: "Edit Success!",
+      text: "Profile Details Edited Successfully!",
+      icon: "success",
+    });
+
   };
 
   const handleProfileImage = async (event) => {
@@ -77,6 +84,11 @@ const VendorProfile = () => {
             await setDoc(doc(db, "vendors", user.uid), {
               profile_pic : downloadURL,
             },{merge: true});
+            Swal.fire({
+              title: "Upload Success!",
+              text: "Profile Picture Uploaded Successfully!",
+              icon: "success",
+            });
           });
         }
       );

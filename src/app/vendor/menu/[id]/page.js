@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { db } from "@/utils/firebase";
 import { doc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import Swal from "sweetalert2";
 
 const VendorMenuItem = ({params}) => {
   const { user } = useAuthContext();
@@ -81,26 +82,59 @@ const VendorMenuItem = ({params}) => {
   const handleMenuItemForm = async (event) => {
     event.preventDefault();
 
-    await setDoc(
-      doc(db, "menuItems", id),
-      {
-        name: foodName,
-        price: price,
-        quantity: quantity,
-        ingredients: ingredients,
-      },
-      { merge: true }
-    );
-
-    router.push("/vendor/menu");
+    Swal.fire({
+      title: "Are you sure?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Proceed with Update",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await setDoc(
+          doc(db, "menuItems", id),
+          {
+            name: foodName,
+            price: price,
+            quantity: quantity,
+            ingredients: ingredients,
+          },
+          { merge: true }
+        );
+        Swal.fire({
+          title: "Menu Item Updated !",
+          text: "Your menu items has been updated.",
+          icon: "success",
+        }).then((result) => {
+          router.push("/vendor/menu");
+        });
+      }
+    });
   };
 
   const deleteItem = async (event) => {
     event.preventDefault();
 
-    await deleteDoc(doc(db, "menuItems", id));
-
-    router.push("/vendor/menu");
+    Swal.fire({
+      title: "Are you sure?",
+      text: "There is no revert from this action !",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Proceed with Delete",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteDoc(doc(db, "menuItems", id));
+        Swal.fire({
+          title: "Menu Item Deleted !",
+          text: "Your menu item has been deleted.",
+          icon: "success",
+        }).then((result) => {
+          router.push("/vendor/menu");
+        });
+      }
+    });
   };
 
   useEffect(() => {
