@@ -4,6 +4,7 @@ import { useState } from "react";
 import signUp from "@/auth/signup";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Swal from "sweetalert2";
 
 function charitySignUp () {
 
@@ -18,7 +19,12 @@ function charitySignUp () {
       const { result, error } = await signUp(email, password);
 
       if(error) {
-          return console.log(error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Some error occured. Please try again.",
+        });
+        return router.push("/charity/sign-up");
       }
 
       return router.push("/charity/home");

@@ -5,6 +5,8 @@ import signIn from "@/auth/signin";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
+import Swal from "sweetalert2";
+
 function customerSignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,9 +18,13 @@ function customerSignIn() {
 
     const { result, error } = await signIn(email, password);
 
-    // TODO: Add display error
     if (error) {
-      return console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Wrong credentials!",
+      });
+      return router.push("/customer/sign-in");
     }
 
     return router.push("/customer/home");

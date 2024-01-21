@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import signIn from "@/auth/signin";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Swal from "sweetalert2";
 
 function charitySignIn() {
   const [email, setEmail] = useState("");
@@ -16,9 +17,13 @@ function charitySignIn() {
 
     const { result, error } = await signIn(email, password);
 
-    // TODO: Add display error
     if (error) {
-      return console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Wrong credentials!",
+      });
+      return router.push("/charity/sign-in");
     }
 
     return router.push("/charity/home");

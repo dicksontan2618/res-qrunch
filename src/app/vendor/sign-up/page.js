@@ -4,6 +4,7 @@ import { useState } from "react";
 import signUp from "@/auth/signup";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Swal from "sweetalert2";
 
 function vendorSignUp() {
   const [email, setEmail] = useState("");
@@ -16,7 +17,12 @@ function vendorSignUp() {
     const { result, error } = await signUp(email, password);
 
     if (error) {
-      return console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Some error occured. Please try again.",
+      });
+      return router.push("/vendor/sign-up");
     }
 
     return router.push("/vendor/home");

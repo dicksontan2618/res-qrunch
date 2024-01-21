@@ -4,6 +4,7 @@ import { useState } from "react";
 import signIn from "@/auth/signin";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Swal from "sweetalert2";
 
 function vendorSignIn() {
   const [email, setEmail] = useState("");
@@ -15,9 +16,13 @@ function vendorSignIn() {
 
     const { result, error } = await signIn(email, password);
 
-    // TODO: Add display error
     if (error) {
-      return console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Wrong credentials!",
+      });
+      return router.push("/vendor/sign-in");
     }
 
     return router.push("/vendor/home");
