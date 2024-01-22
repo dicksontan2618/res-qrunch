@@ -22,6 +22,8 @@ const PaymentPage = () => {
 
   const [userPrevPoints, setUserPrevPoints] = useState(0);
 
+  const [customerName, setCustomerName] = useState("");
+
   const userDonationPoints = Number(window.localStorage.getItem("donation_points"));
 
   const { user } = useAuthContext();
@@ -46,6 +48,7 @@ const PaymentPage = () => {
       if(docSnap.data()["points"]){
         setUserPrevPoints(docSnap.data()["points"]);
       }
+      setCustomerName(docSnap.data()["username"]);
     } 
   }
   
@@ -58,6 +61,7 @@ const PaymentPage = () => {
             completion: "pending",
             reviewed: false,
             createdAt: Timestamp.now(),
+            customer_name: customerName
           })
         );
 
@@ -71,6 +75,7 @@ const PaymentPage = () => {
           Object.assign(tempItem, {
             user_id: user.uid,
             createdAt: Timestamp.now(),
+            customer_name: customerName,
           })
         );
 
