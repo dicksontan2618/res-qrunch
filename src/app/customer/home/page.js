@@ -108,6 +108,9 @@ const CustomerScreen = () => {
 
   return (
     <div className="flex flex-col justify-center items-center w-max-screen relative">
+      <Link href="/customer/location">
+        <p className="underline mt-6">Get Nearby Restaurants</p>
+      </Link>
       <div id="search-bar" className="mt-3">
         <input
           className="input input-bordered w-full max-w-xs bg-white text-black"
@@ -119,7 +122,10 @@ const CustomerScreen = () => {
       </div>
 
       <div className="flex justify-end mt-3">
-        <button onClick={toggleFilterMenu} className="bg-blue-500 text-white px-2 py-1 rounded">
+        <button
+          onClick={toggleFilterMenu}
+          className="bg-blue-500 text-white px-2 py-1 rounded"
+        >
           {showFilterMenu ? "Hide Filters" : "Show Allergens Filters"}
         </button>
       </div>
@@ -145,8 +151,12 @@ const CustomerScreen = () => {
                     />
                   </div>
                   <div className="card-body">
-                    <h2 className="card-title text-xl font-bold">{foodItem.name}</h2>
-                    <p className="font-semibold text-gray-500 text-sm">{foodItem.vendor_name}</p>
+                    <h2 className="card-title text-xl font-bold">
+                      {foodItem.name}
+                    </h2>
+                    <p className="font-semibold text-gray-500 text-sm">
+                      {foodItem.vendor_name}
+                    </p>
                     <p className="font-semibold text-sm">RM {foodItem.price}</p>
                   </div>
                 </div>
@@ -159,7 +169,10 @@ const CustomerScreen = () => {
       {showFilterMenu && (
         <div className="filter-menu absolute top-0 right-0 bg-gray-100 p-4 min-w-[200px] h-[80vh] overflow-auto">
           <div className="flex items-center mb-2">
-            <button onClick={toggleFilterMenu} className="bg-blue-500 text-white px-2 py-1 rounded">
+            <button
+              onClick={toggleFilterMenu}
+              className="bg-blue-500 text-white px-2 py-1 rounded"
+            >
               X
             </button>
             <h3 className="text-lg font-semibold ml-2">Allergens Filter</h3>
@@ -177,15 +190,20 @@ const CustomerScreen = () => {
               </label>
             </div>
           ))}
-          <button onClick={applyFilter} className="mt-4 mr-2 bg-green-500 text-white px-2 py-1 rounded">
+          <button
+            onClick={applyFilter}
+            className="mt-4 mr-2 bg-green-500 text-white px-2 py-1 rounded"
+          >
             Apply Filters
           </button>
-          <button onClick={clearFilters} className="mt-4 mr-2 bg-blue-500 text-white px-2 py-1 rounded">
+          <button
+            onClick={clearFilters}
+            className="mt-4 mr-2 bg-blue-500 text-white px-2 py-1 rounded"
+          >
             Clear Filters
           </button>
         </div>
       )}
-
     </div>
   );
 };
