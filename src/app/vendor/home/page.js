@@ -20,6 +20,7 @@ const VendorScreen = () => {
   const router = useRouter();
   const [donatedItems, setDonatedItems] = useState([]);
   const [isEmpty, setIsEmpty] = useState(true);
+  var dateStr;
 
   var globalTimeFormatOption = {
     year: "numeric",
@@ -44,7 +45,7 @@ const VendorScreen = () => {
     if (querySnapshot.empty) {
     } else {
       querySnapshot.forEach((doc) => {
-        let dateStr = doc.data()["createdAt"];
+        dateStr = doc.data()["createdAt"];
         let dateObject = new Date(dateStr.seconds * 1000);
         let formattedDate = dateObject.toLocaleString("en-US", globalTimeFormatOption);
         if (doc.data()["completion"] === "pending") {
@@ -70,22 +71,35 @@ const VendorScreen = () => {
     async function initDonatedItems() {
       try {
         const docSnapshot = await getDocs(collection(db, "claimedDonations"));
-
+  
+        let hour, minute; // Declare hour and minute using let
+  
         // Check if there are documents in the collection
         if (docSnapshot.size > 0) {
           const donated_items = [];
-
+  
           // Iterate through each document
           docSnapshot.docs.forEach((doc) => {
-            console.log(doc.data());
-
+            const stringDate = doc.data()["claimedAt"];
+            const dateFromStr = new Date(stringDate);
+            hour = dateFromStr.getHours();
+            minute = dateFromStr.getMinutes();
+            console.log(hour, minute);
+            dateFromStr.setHours(0, 0, 0, 0); // Set time to midnight
+  
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Set time to midnight
+  
             // Check a specific condition (e.g., quantity is not "0")
-            if (doc.data()["quantity"] !== "0" && doc.data()["vendor"] === user.uid) {
-              console.log(doc.data());
+            if (
+              doc.data()["quantity"] !== "0" &&
+              doc.data()["vendor"] === user.uid &&
+              dateFromStr.getTime() === today.getTime()
+            ) {
               donated_items.push(Object.assign(doc.data(), { id: doc.id }));
             }
           });
-
+  
           // Set state based on the retrieved data
           if (donated_items.length > 0) {
             setDonatedItems(donated_items);
@@ -101,10 +115,11 @@ const VendorScreen = () => {
         // Handle errors appropriately (e.g., set an error state)
       }
     }
-
+  
     // Call the function when the component mounts
     initDonatedItems();
-  }, []);
+  }, []);  
+
 
   const handleRemoveItem = async (itemId) => {
     try {
@@ -117,11 +132,11 @@ const VendorScreen = () => {
 
   return (
     <div className="flex flex-col justify-center items-center">
-      <div className="flex flex-col items-center w-[85%] gap-y-2 mb-20 mt-12">
+      <div className="flex flex-col items-center w-[85%] gap-y-2 mb-19 mt-12">
         <h2 className="self-start font-bold text-gray-800 text-xl">Current Orders :</h2>
         <OrderList orders={orders} />
       </div>
-      <div className="flex flex-col items-center w-[85%] gap-y-2 mb-24 mt-0">
+      <div className="flex flex-col items-center w-[85%] gap-y-2 mb-24 mt-5">
         <h2 className="self-start font-bold text-gray-800 text-xl">Claimed Items :</h2>
         {!isEmpty &&
           donatedItems.map((claimedItem) => (
@@ -130,7 +145,8 @@ const VendorScreen = () => {
                 <h2>Charity Name: {claimedItem.charityName}</h2>
                 <p>Food Claimed: {claimedItem.name}</p>
                 <p>Amount: {claimedItem.amount}</p>
-                <button class="relative inline-flex items-center justify-center p-1.5 mt-1 mb-2 me-2 bg-red-500 text-white rounded-full" 
+                {/* <p>Time: {hour}</p> */}
+                <button className="relative inline-flex items-center justify-center p-1.5 mt-1 mb-2 me-2 bg-red-500 text-white rounded-full" 
                 onClick={() => handleRemoveItem(claimedItem.id)}>Claimed</button>
               </div>
             </div>
