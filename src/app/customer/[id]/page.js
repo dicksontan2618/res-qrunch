@@ -143,13 +143,13 @@ const FoodItem = ({params}) => {
                 Reviews
               </button>
             </div>
-            <div className="flex gap-x-2">
+            <div className="flex gap-x-2 flex-wrap">
               {ingredients.map((ingredient, index) => {
                 return <p key={index}>{ingredient.ingredient}</p>;
               })}
             </div>
           </div>
-          <div className="self-center mt-16">
+          <div className="self-center mt-24">
             <button className="btn btn-ghost bg-main-clr" onClick={addToCart}>
               <p className="text-white">Add to Cart</p>
             </button>
