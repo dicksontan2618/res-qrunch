@@ -47,7 +47,11 @@ const ClaimedScreen = () => {
       // Format the date as MM/DD/YY
       const formattedDate = `${month}/${day}/${year}`;
 
-      tempClaimedList.push(Object.assign(doc.data(), { claimedStringDate: formattedDate }));
+      if(!doc.data()["completed"]){
+        tempClaimedList.push(
+          Object.assign(doc.data(), { claimedStringDate: formattedDate })
+        );
+      }
     });
 
     setClaimedList(tempClaimedList);
