@@ -61,7 +61,7 @@ const DonationPage = () => {
     })
 
     tempCart.map((tempItem) => {
-      tempPrice = tempPrice + tempItem.amount * Number(tempItem.price);
+      tempPrice = tempPrice + tempItem.amount * Number(tempItem.sellingPrice);
     });
     setFee(tempPrice);
 

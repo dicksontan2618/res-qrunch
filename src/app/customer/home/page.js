@@ -157,7 +157,7 @@ const CustomerScreen = () => {
                     <p className="font-semibold text-gray-500 text-sm">
                       {foodItem.vendor_name}
                     </p>
-                    <p className="font-semibold text-sm">RM {foodItem.price}</p>
+                    <p className="font-semibold text-sm">RM {foodItem.sellingPrice.toFixed(2)}</p>
                   </div>
                 </div>
               </Link>

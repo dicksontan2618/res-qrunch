@@ -113,6 +113,7 @@ const VendorAddMenuItem = () => {
             vendor: user.uid,
             vendor_name : vendorName,
             ingredients: ingredients,
+            sellingPrice: (price*1.05)
           },
           { merge: true }
         );

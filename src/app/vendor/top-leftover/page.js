@@ -91,11 +91,14 @@ const LeftoverSummary = () => {
   },[])
 
   return (
-    <div className="mt-24 flex flex-col justify-center">
-      {data.labels && <Pie data={data} />}
+    <div className="mt-24 flex flex-col items-center">
+      <div className="w-[50%] max-w-screen-md mx-auto text-center">
+        {data.labels && <Pie data={data} />}
+      </div>
       <p className="text-center font-bold mt-8">Max Leftover Item is: {maxLeftover}</p>
     </div>
   );
+  
 };
 
 export default LeftoverSummary;
