@@ -20,7 +20,6 @@ const OrderList = ({ orders }) => {
                     <p className="font-medium text-gray-500">
                       Customer: {order.customer_name}
                     </p>
-                    <p className="text-lg">RM {order.price}</p>
                     <p className="font-bold">Amount : {order.amount}</p>
                   </div>
                 </div>

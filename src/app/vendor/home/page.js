@@ -4,22 +4,25 @@ import { useAuthContext } from "@/context/AuthContextVendor";
 import { useRouter } from "next/navigation";
 
 import {
+  doc,
   collection,
   query,
   where,
   getDocs,
   orderBy,
-  deleteDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 
 import OrderList from "@/app/_components/OrderList";
 
+import Swal from "sweetalert2";
+
 const VendorScreen = () => {
   const { user } = useAuthContext();
   const router = useRouter();
-  const [donatedItems, setDonatedItems] = useState([]);
-  const [isEmpty, setIsEmpty] = useState(true);
+
+  const [claims, setClaims] = useState([])
   var dateStr;
 
   var globalTimeFormatOption = {
@@ -57,8 +60,69 @@ const VendorScreen = () => {
     }
   };
 
+  const getClaims = async () => {
+    let claimList = [];
+
+    const docRef = collection(db, "claimedDonations");
+
+    const q = query(
+      docRef,
+      where("vendor", "==", user.uid),
+      orderBy("claimedAt")
+    );
+
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) {
+    } else {
+      querySnapshot.forEach((doc) => {
+        let dateStr = doc.data()["claimedAt"];
+        let dateObject = new Date(dateStr);
+        let formattedDate = dateObject.toLocaleString(
+          "en-US",
+          globalTimeFormatOption
+        );
+        
+        if(!doc.data()["completed"]){
+          claimList.push(
+            Object.assign(doc.data(), { formattedClaimedAt: formattedDate, claimId:doc.id })
+          );
+        }
+      });
+
+      setClaims(claimList);
+    }
+  }
+
+  const confirmClaim = (identifier) => {
+    const claimRef = doc(db, "claimedDonations", identifier);
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Confirm Claim",
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            await updateDoc(claimRef, {
+          completed: true
+        });
+        getClaims();
+        Swal.fire({
+          title: "Done !",
+          text: "The donation was claimed.",
+          icon: "success",
+        }).then((result) => {
+        });
+      }
+    });
+  }
+
   useEffect(() => {
     getOrders();
+    getClaims();
   }, []);
 
   useEffect(() => {
@@ -67,90 +131,41 @@ const VendorScreen = () => {
     }
   }, [user]);
 
-  useEffect(() => {
-    async function initDonatedItems() {
-      try {
-        const docSnapshot = await getDocs(collection(db, "claimedDonations"));
-  
-        let hour, minute; // Declare hour and minute using let
-  
-        // Check if there are documents in the collection
-        if (docSnapshot.size > 0) {
-          const donated_items = [];
-  
-          // Iterate through each document
-          docSnapshot.docs.forEach((doc) => {
-            const stringDate = doc.data()["claimedAt"];
-            const dateFromStr = new Date(stringDate);
-            hour = dateFromStr.getHours();
-            minute = dateFromStr.getMinutes();
-            // console.log(hour, minute);
-            dateFromStr.setHours(0, 0, 0, 0); // Set time to midnight
-  
-            const today = new Date();
-            today.setHours(0, 0, 0, 0); // Set time to midnight
-  
-            // Check a specific condition (e.g., quantity is not "0")
-            if (
-              doc.data()["quantity"] !== "0" &&
-              doc.data()["vendor"] === user.uid &&
-              dateFromStr.getTime() === today.getTime()
-            ) {
-              donated_items.push(Object.assign(doc.data(), { id: doc.id }));
-            }
-          });
-  
-          // Set state based on the retrieved data
-          if (donated_items.length > 0) {
-            setDonatedItems(donated_items);
-            setIsEmpty(false); // Set to false since there is data
-          } else {
-            setIsEmpty(true);
-          }
-        } else {
-          setIsEmpty(true); // Set to true if there are no documents
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        // Handle errors appropriately (e.g., set an error state)
-      }
-    }
-  
-    // Call the function when the component mounts
-    initDonatedItems();
-  }, []);  
-
-
-  const handleRemoveItem = async (itemId) => {
-    try {
-      setDonatedItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
-    } catch (error) {
-      console.error("Error removing item:", error);
-      // Handle errors appropriately
-    }
-  };
-
   return (
     <div className="flex flex-col justify-center items-center">
-      <div className="flex flex-col items-center w-[85%] gap-y-2 mb-19 mt-12">
-        <h2 className="self-start font-bold text-gray-800 text-xl">Current Orders :</h2>
+      <div className="flex flex-col items-center w-[85%] gap-y-2 mb-19 mt-8">
+        <h2 className="self-start font-bold text-gray-800 text-xl">
+          Current Orders :
+        </h2>
         <OrderList orders={orders} />
       </div>
       <div className="flex flex-col items-center w-[85%] gap-y-2 mb-24 mt-5">
-        <h2 className="self-start font-bold text-gray-800 text-xl">Claimed Items :</h2>
-        {!isEmpty &&
-          donatedItems.map((claimedItem) => (
-            <div key={claimedItem.id} className="m-2 w-[85%]">
-              <div className="text-black">
-                <h2>Charity Name: {claimedItem.charityName}</h2>
-                <p>Food Claimed: {claimedItem.name}</p>
-                <p>Amount: {claimedItem.amount}</p>
-                {/* <p>Time: {hour}</p> */}
-                <button className="relative inline-flex items-center justify-center p-1.5 mt-1 mb-2 me-2 bg-red-500 text-white rounded-full" 
-                onClick={() => handleRemoveItem(claimedItem.id)}>Claimed</button>
+        <h2 className="self-start font-bold text-gray-800 text-xl">
+          Donations to be Claimed :
+        </h2>
+        {claims.map((claim, index) => {
+          return (
+            <div key={index} className="flex flex-col">
+              <p>{claim.formattedClaimedAt}</p>
+              <div className="card card-side">
+                <img
+                  src={claim.img}
+                  className="w-[100px] h-[100px] object-cover rounded-md ml-4 mt-12"
+                ></img>
+                <div className="card-body">
+                  <div className="text-gray-800">
+                    <p className="font-bold text-lg">{claim.name}</p>
+                    <p className="font-bold text-md">Amount : {claim.amount}</p>
+                    <p className="font-bold text-md text-gray-400">
+                      To Claimed By : {claim.charityName}
+                    </p>
+                    <button className="mt-2 btn btn-ghost bg-main-clr text-white" onClick={() => confirmClaim(claim.claimId)}>Claimed</button>
+                  </div>
+                </div>
               </div>
             </div>
-          ))}
+          );
+        })}
       </div>
     </div>
   );

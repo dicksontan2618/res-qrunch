@@ -78,7 +78,8 @@ const ConfirmationScreen = () => {
         Object.assign(item, {
           claimedAt: document.getElementById("claim-time").value,
           charity:user.uid,
-          charityName: charityName
+          charityName: charityName,
+          completed: false
         });
         claimedIdentifier.push(item.uid);
         await addDoc(collection(db, "claimedDonations"), item);

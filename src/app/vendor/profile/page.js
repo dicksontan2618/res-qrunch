@@ -167,9 +167,11 @@ const VendorProfile = () => {
             </button>
           </form>
         </div>
-        <div className="divider divider-error"></div>
-        <Link href="/vendor/donation-claim">Claimed Donations</Link>
-        <div className="divider divider-error"></div>
+        <div>
+          <div className="divider divider-error"></div>
+          <Link href="/vendor/donation-claim">Claimed Donations</Link>
+          <div className="divider divider-error"></div>
+        </div>
         <button className="btn btn-active mb-24" onClick={handleLogout}>
           <p className="text-lg font-bold">Logout</p>
         </button>

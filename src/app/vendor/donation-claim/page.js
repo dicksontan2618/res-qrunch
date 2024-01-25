@@ -41,7 +41,11 @@ const VendorClaimScreen = () => {
           let dateObject = new Date(dateStr);
           let formattedDate = dateObject.toLocaleString("en-US", globalTimeFormatOption);
 
-          claimList.push(Object.assign(doc.data(),{formattedClaimedAt:formattedDate}));
+          if(doc.data()["completed"]){
+            claimList.push(
+              Object.assign(doc.data(), { formattedClaimedAt: formattedDate })
+            );
+          }
       });
       
       setClaims(claimList);
@@ -61,7 +65,7 @@ const VendorClaimScreen = () => {
   return (
     <div className="flex flex-col justify-center items-center">
       <div className="flex flex-col items-center w-[85%] gap-y-4 mb-24 mt-8">
-        <h2 className="self-start font-bold text-gray-800 text-xl">Donations to be Claimed :</h2>
+        <h2 className="self-start font-bold text-gray-800 text-xl">Claimed Donations :</h2>
         {claims.map((claim,index)=>{
           return (
             <div key={index} className="flex flex-col">
@@ -69,7 +73,7 @@ const VendorClaimScreen = () => {
               <div className="card card-side">
                 <img
                   src={claim.img}
-                  className="w-[100px] h-[100px] object-cover rounded-md ml-4"
+                  className="w-[100px] h-[100px] object-cover rounded-md ml-4 mt-8"
                 ></img>
                 <div className="card-body">
                   <div className="text-gray-800">
