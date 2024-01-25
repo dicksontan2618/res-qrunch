@@ -31,7 +31,7 @@ const CartPage = () => {
       const tempCart = JSON.parse(window.localStorage.getItem("shoppingCart"));
       let tempPrice = 0;
       tempCart.map((tempItem)=>{
-        tempPrice = tempPrice + tempItem.amount * Number((tempItem.price));
+        tempPrice = tempPrice + tempItem.amount * Number((tempItem.sellingPrice));
       })
       setFee(tempPrice);
     };
@@ -39,7 +39,7 @@ const CartPage = () => {
 
   const deleteItem = (index) => {
     const temp = [...checkoutCart]
-    const minusPrice = Number(temp[index].price * temp[index].amount);
+    const minusPrice = Number(temp[index].sellingPrice * temp[index].amount);
     temp.splice(index, 1)
     setCheckoutCart(temp)
     window.localStorage.setItem("shoppingCart", JSON.stringify(temp));
@@ -71,7 +71,7 @@ const CartPage = () => {
                 <div className="text-gray-800">
                   <p className="font-bold text-lg">{cartItem.name}</p>
                   <p className="font-medium text-gray-500">{cartItem.vendor_name}</p>
-                  <p className="font-bold text-lg">RM {cartItem.price}</p>
+                  <p className="font-bold text-lg">RM {cartItem.sellingPrice.toFixed(2)}</p>
                   <p className="">Amount : {cartItem.amount}</p>
                 </div>
               </div>

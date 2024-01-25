@@ -53,19 +53,8 @@ const VendorStock = () => {
         const soldQuantity = orders
           .filter((order) => order.name === menuItem.name && (order.completion === 'complete' || order.completion === 'pending'))
           .reduce((total, order) => total + order.amount, 0);
-        
-        var totalLeftovers = orders
-          .filter((order) => order.name === menuItem.name && (order.completion === 'complete' || order.completion === 'pending'))
-          .reduce((total, order) => total + order.amount, 0);
-
-          if(menuItem.quantity>0){
-            // Add the quantity of item in menu to get the total leftovers
-            totalLeftovers += parseInt(menuItem.quantity);
-            console.log(menuItem.quantity);
-            console.log(totalLeftovers);
-          }
           
-        return { ...menuItem, soldQuantity, totalLeftovers };
+        return { ...menuItem, soldQuantity };
       });
     
       setMenuItems(updatedMenuItems);
@@ -112,7 +101,7 @@ const VendorStock = () => {
                       {menuItem.name}
                     </h2>
                     {/* <p className="font-semibold">Code: {menuItem.id}</p> */}
-                    <p className="font-semibold">Leftovers: {menuItem.totalLeftovers}</p>
+                    <p className="font-semibold">Leftovers: {menuItem.ori_quantity}</p>
                     <p className="font-semibold">Amount Sold: {menuItem.soldQuantity}</p>
                   </div>
                 </div>

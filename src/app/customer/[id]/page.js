@@ -88,7 +88,7 @@ const FoodItem = ({params}) => {
           setFoodName(docSnap.data()["name"]);
           setIngredients(docSnap.data()["ingredients"]);
           setImgUrl(docSnap.data()["img"]);
-          setPrice(docSnap.data()["price"]);
+          setPrice(docSnap.data()["sellingPrice"]);
           setQuantity(docSnap.data()["quantity"]);
 
           if(docSnap.data()["reviews"].length){
@@ -145,7 +145,7 @@ const FoodItem = ({params}) => {
             </div>
             <div className="flex gap-x-2 flex-wrap">
               {ingredients.map((ingredient, index) => {
-                return <p key={index}>{ingredient.ingredient}</p>;
+                return <p key={index}>{ingredient.ingredient},</p>;
               })}
             </div>
           </div>

@@ -15,7 +15,7 @@ function SummaryPage() {
     const getFee = () => {
         let tempCartPrice = 0;
         cartItems.map((tempItem) => {
-          tempCartPrice = tempCartPrice + tempItem.amount * Number(tempItem.price);
+          tempCartPrice = tempCartPrice + tempItem.amount * Number(tempItem.sellingPrice);
         });
         setCartFee(tempCartPrice.toFixed(2));
     }
@@ -23,7 +23,7 @@ function SummaryPage() {
     const getDonation = () => {
         let tempDonationPrice = 0;
         donationItems.map((tempItem) => {
-          tempDonationPrice = tempDonationPrice + tempItem.amount * Number(tempItem.price);
+          tempDonationPrice = tempDonationPrice + tempItem.amount * Number(tempItem.sellingPrice);
         });
         setDonationFee((tempDonationPrice/2).toFixed(2));
     }
@@ -33,7 +33,7 @@ function SummaryPage() {
         let tempDonationPrice = 0;
         donationItems.map((tempItem) => {
           tempDonationPrice =
-            tempDonationPrice + tempItem.amount * Number(tempItem.price);
+            tempDonationPrice + tempItem.amount * Number(tempItem.sellingPrice);
         });
         setDonationPoints(((tempDonationPrice / 2)*10));
     }
@@ -67,7 +67,7 @@ function SummaryPage() {
                   <p className="font-medium text-gray-500">
                     {cartItem.vendor_name}
                   </p>
-                  <p className="font-bold text-lg">RM {cartItem.price}</p>
+                  <p className="font-bold text-lg">RM {cartItem.sellingPrice.toFixed(2)}</p>
                   <p className="">Amount : {cartItem.amount}</p>
                 </div>
               </div>
