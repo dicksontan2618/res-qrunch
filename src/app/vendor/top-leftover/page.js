@@ -47,7 +47,7 @@ const DonationSummary = () => {
 
       {/* Body of the Interface */}
       <div className="flex justify-center items-center flex-col">
-        <h2 className="mt-6 mb-3 font-medium text-center">Most Overbought</h2>
+        <h2 className="mt-6 mb-3 font-medium text-center">Most Over Prepared Food</h2>
         <h3 className="mb-5 font-semibold text-red-500 bg-pink-100 p-2 rounded">{getItem(selectedMonth)}</h3>
         <img src={getChartForMonth(selectedMonth)} alt={`Chart for ${selectedMonth}`} />
       </div>

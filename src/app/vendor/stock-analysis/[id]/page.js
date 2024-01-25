@@ -18,7 +18,6 @@ const VendorStock = ({params}) => {
     const [menuItems, setMenuItems] = useState([]);
     const [isEmpty, setIsEmpty] = useState(true);
     const [orders, setOrders] = useState([]);
-    const [ingredients, setIngredients] = useState([]);
   
     useEffect(() => {
         if (user == null && window.localStorage.getItem("session_user") !== "vendor") {
@@ -49,23 +48,28 @@ const VendorStock = ({params}) => {
       
     },[]);
 
+    // Calculate the updated menu items based on sold quantities
     const getOrders = async () => {
       const updatedMenuItems = menuItems
-      .filter((menuItem) => menuItem.id === id)
-      .map((menuItem) => {
-        const soldQuantity = orders
-          .filter((order) => order.name === menuItem.name && order.completion === 'complete')
-          .reduce((total, order) => total + order.amount, 0);
-        
-        var totalLeftovers = orders
-          .filter((order) => order.name === menuItem.name && (order.completion === 'complete' || order.completion === 'pending'))
-          .reduce((total, order) => total + order.amount, 0);
-
-        totalLeftovers += menuItem.quantity;
+        .filter((menuItem) => menuItem.id === id)
+        .map((menuItem) => {
+          // Calculate the total quantity sold for a specific menu item
+          const soldQuantity = orders
+            .filter((order) => order.name === menuItem.name && (order.completion === 'complete' || order.completion === 'pending'))
+            .reduce((total, order) => total + order.amount, 0);
           
-        return { ...menuItem, soldQuantity, totalLeftovers };
-      });
-    
+          // Calculate the total leftovers (all food registered in system are leftover in the store), considering both complete and pending orders
+          var totalLeftovers = orders
+            .filter((order) => order.name === menuItem.name && (order.completion === 'complete' || order.completion === 'pending'))
+            .reduce((total, order) => total + order.amount, 0);
+
+          // Add the quantity of item in menu to get the total leftovers
+          totalLeftovers += menuItem.quantity;
+          console.log(menuItem.quantity);
+            
+          return { ...menuItem, soldQuantity, totalLeftovers };
+        });
+
       setMenuItems(updatedMenuItems);
     };
 
@@ -125,7 +129,7 @@ const VendorStock = ({params}) => {
                         <div className="bg-orange-50 p-4 rounded border border-brown">
                           <p className="font-medium">Weekly leftover rate:</p>
                           <p className="font-semibold">{getIcon(((menuItem.totalLeftovers / (menuItem.soldQuantity + 2)) * 10))}{" "}
-                            {((menuItem.totalLeftovers / (menuItem.soldQuantity + 2)) * 10).toFixed(2)}
+                            {((menuItem.totalLeftovers / (menuItem.soldQuantity + 2)) * 10).toFixed(2)}%
                           </p>
                         </div>
                       </div>

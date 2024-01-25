@@ -51,7 +51,7 @@ const VendorStock = () => {
     const getOrders = async () => {
       const updatedMenuItems = menuItems.map((menuItem) => {
         const soldQuantity = orders
-          .filter((order) => order.name === menuItem.name && order.completion === 'complete')
+          .filter((order) => order.name === menuItem.name && (order.completion === 'complete' || order.completion === 'pending'))
           .reduce((total, order) => total + order.amount, 0);
         
         var totalLeftovers = orders
