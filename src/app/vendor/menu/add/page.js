@@ -108,6 +108,7 @@ const VendorAddMenuItem = () => {
           {
             name: foodName,
             price: price,
+            ori_quantity: quantity,
             quantity : quantity,
             vendor: user.uid,
             vendor_name : vendorName,
