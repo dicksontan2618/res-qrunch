@@ -84,7 +84,7 @@ const VendorScreen = () => {
             const dateFromStr = new Date(stringDate);
             hour = dateFromStr.getHours();
             minute = dateFromStr.getMinutes();
-            console.log(hour, minute);
+            // console.log(hour, minute);
             dateFromStr.setHours(0, 0, 0, 0); // Set time to midnight
   
             const today = new Date();
