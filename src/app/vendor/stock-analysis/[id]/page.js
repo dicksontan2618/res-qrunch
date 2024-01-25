@@ -56,22 +56,9 @@ const VendorStock = ({params}) => {
           // Calculate the total quantity sold for a specific menu item
           const soldQuantity = orders
             .filter((order) => order.name === menuItem.name && (order.completion === 'complete' || order.completion === 'pending'))
-            .reduce((total, order) => total + order.amount, 0);
-          
-          // Calculate the total leftovers (all food registered in system are leftover in the store), considering both complete and pending orders
-          var totalLeftovers = orders
-            .filter((order) => order.name === menuItem.name && (order.completion === 'complete' || order.completion === 'pending'))
-            .reduce((total, order) => total + order.amount, 0);
-
-            if(menuItem.quantity>0){
-              // Add the quantity of item in menu to get the total leftovers
-              totalLeftovers += parseInt(menuItem.quantity);
-              console.log(menuItem.quantity);
-              console.log(totalLeftovers);
-            }
-          
+            .reduce((total, order) => total + order.amount, 0);          
             
-          return { ...menuItem, soldQuantity, totalLeftovers };
+          return { ...menuItem, soldQuantity};
         });
 
       setMenuItems(updatedMenuItems);
@@ -125,15 +112,15 @@ const VendorStock = ({params}) => {
                     {/* <p className="font-semibold">Code: {menuItem.id}</p> */}
                     <div className="flex">
                       <div className="mt-5 w-1/2 pr-4">
-                        <p className="font-semibold">Leftovers: {menuItem.totalLeftovers}</p>
+                        <p className="font-semibold">Leftovers: {menuItem.ori_quantity}</p>
                         <p className="font-semibold">Amount Sold: {menuItem.soldQuantity}</p>
                         <p className="font-semibold">Leftover (Last Week): {menuItem.soldQuantity + 2}</p>
                       </div>
                       <div className="mt-5 w-1/2">
                         <div className="bg-orange-50 p-4 rounded border border-brown">
                           <p className="font-medium">Weekly leftover rate:</p>
-                          <p className="font-semibold">{getIcon((( (menuItem.totalLeftovers -(menuItem.soldQuantity + 2) )/ (menuItem.soldQuantity + 2)) * 10))}{" "}
-                            {((( (menuItem.totalLeftovers -(menuItem.soldQuantity + 2) )/ (menuItem.soldQuantity + 2)) * 10)).toFixed(2)}%
+                          <p className="font-semibold">{getIcon((( (menuItem.ori_quantity -(menuItem.soldQuantity + 2) )/ (menuItem.soldQuantity + 2)) * 10))}{" "}
+                            {((( (menuItem.ori_quantity -(menuItem.soldQuantity + 2) )/ (menuItem.soldQuantity + 2)) * 10)).toFixed(2)}%
                           </p>
                         </div>
                       </div>
@@ -153,7 +140,7 @@ const VendorStock = ({params}) => {
                     return (
                       <tr key={index} className="border border-gray-400">
                         <td className="border border-gray-400 px-4 py-2">{ingredient.ingredient}</td>
-                        <td className="border border-gray-400 px-4 py-2">{ingredient.amount * menuItem.totalLeftovers - menuItem.soldQuantity}</td>
+                        <td className="border border-gray-400 px-4 py-2">{ingredient.amount * menuItem.ori_quantity - menuItem.soldQuantity}</td>
                       </tr>
                     );
                   })}
