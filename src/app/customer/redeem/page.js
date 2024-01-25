@@ -18,7 +18,7 @@ const RedeemPage = () => {
     {
       img: "/redeem-item-1.webp",
       name: "Eco Tote Bag",
-      points_req: 100,
+      points_req: 1000,
     },
     {
       img: "/redeem-item-2.webp",

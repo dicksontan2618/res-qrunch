@@ -23,7 +23,7 @@ function SummaryPage() {
     const getDonation = () => {
         let tempDonationPrice = 0;
         donationItems.map((tempItem) => {
-          tempDonationPrice = tempDonationPrice + tempItem.amount * Number(tempItem.price);
+          tempDonationPrice = tempDonationPrice + tempItem.amount * Number(tempItem.sellingPrice);
         });
         setDonationFee((tempDonationPrice/2).toFixed(2));
     }
@@ -33,7 +33,7 @@ function SummaryPage() {
         let tempDonationPrice = 0;
         donationItems.map((tempItem) => {
           tempDonationPrice =
-            tempDonationPrice + tempItem.amount * Number(tempItem.price);
+            tempDonationPrice + tempItem.amount * Number(tempItem.sellingPrice);
         });
         setDonationPoints(((tempDonationPrice / 2)*10));
     }

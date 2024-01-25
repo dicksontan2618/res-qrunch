@@ -101,6 +101,7 @@ const VendorMenuItem = ({params}) => {
             price: price,
             quantity: quantity,
             ingredients: ingredients,
+            sellingPrice: (price*1.05)
           },
           { merge: true }
         );
