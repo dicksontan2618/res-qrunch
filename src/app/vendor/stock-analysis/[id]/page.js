@@ -63,9 +63,13 @@ const VendorStock = ({params}) => {
             .filter((order) => order.name === menuItem.name && (order.completion === 'complete' || order.completion === 'pending'))
             .reduce((total, order) => total + order.amount, 0);
 
-          // Add the quantity of item in menu to get the total leftovers
-          totalLeftovers += menuItem.quantity;
-          console.log(menuItem.quantity);
+            if(menuItem.quantity>0){
+              // Add the quantity of item in menu to get the total leftovers
+              totalLeftovers += parseInt(menuItem.quantity);
+              console.log(menuItem.quantity);
+              console.log(totalLeftovers);
+            }
+          
             
           return { ...menuItem, soldQuantity, totalLeftovers };
         });
@@ -128,8 +132,8 @@ const VendorStock = ({params}) => {
                       <div className="mt-5 w-1/2">
                         <div className="bg-orange-50 p-4 rounded border border-brown">
                           <p className="font-medium">Weekly leftover rate:</p>
-                          <p className="font-semibold">{getIcon(((menuItem.totalLeftovers / (menuItem.soldQuantity + 2)) * 10))}{" "}
-                            {((menuItem.totalLeftovers / (menuItem.soldQuantity + 2)) * 10).toFixed(2)}%
+                          <p className="font-semibold">{getIcon((( (menuItem.totalLeftovers -(menuItem.soldQuantity + 2) )/ (menuItem.soldQuantity + 2)) * 10))}{" "}
+                            {((( (menuItem.totalLeftovers -(menuItem.soldQuantity + 2) )/ (menuItem.soldQuantity + 2)) * 10)).toFixed(2)}%
                           </p>
                         </div>
                       </div>
