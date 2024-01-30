@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useAuthContext } from "@/context/AuthContextUser";
 import { useRouter } from "next/navigation";
 
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 
 import Link from "next/link";
@@ -23,7 +23,7 @@ const OrdersPage = () => {
     let pendingOrdersList = [];
     let completedOrdersList = [];
 
-    const q = query(collection(db, "orders"), where("user_id", "==", user.uid));
+    const q = query(collection(db, "orders"), where("user_id", "==", user.uid), orderBy("createdAt"));
 
     const querySnapshot = await getDocs(q);
     if(querySnapshot.empty){
@@ -56,8 +56,14 @@ const OrdersPage = () => {
 
   return (
     <div className="flex flex-col justify-center items-center">
-      <div className="flex flex-col items-center w-[85%] gap-y-4 mb-24 mt-12">
-        <p className="self-start text-gray-800 font-semibold">Pending Orders :</p>
+      <div className="flex flex-col items-center w-[85%] gap-y-4 mb-24 mt-6">
+        <p className="self-start text-gray-400 font-semibold text-xs text-center">
+          Kindly show this page during pick up for verification purposes! Don't
+          forget to press "Complete Order" after pick up the food!
+        </p>
+        <p className="self-start text-gray-800 font-semibold">
+          Pending Orders :
+        </p>
         {!isEmpty &&
           userPendingOrders.map((order, index) => {
             return (
@@ -77,7 +83,9 @@ const OrdersPage = () => {
                       <p className="font-medium text-gray-500">
                         {order.vendor_name}
                       </p>
-                      <p className="font-bold text-lg">RM {order.price}</p>
+                      <p className="font-bold text-lg">
+                        RM {order.sellingPrice}
+                      </p>
                       <p className="">Amount : {order.amount}</p>
                     </div>
                   </div>
@@ -85,7 +93,13 @@ const OrdersPage = () => {
               </Link>
             );
           })}
-        <p className="self-start text-gray-800 font-semibold mt-2">Completed Orders :</p>
+        <div className="divider"></div>
+        <p className="self-start text-gray-400 font-semibold text-xs text-center">
+          Kindly left a review after completing your orders to help other users!
+        </p>
+        <p className="self-start text-gray-800 font-semibold">
+          Completed Orders :
+        </p>
         {!isEmpty &&
           userCompletedOrders.map((order, index) => {
             return (
@@ -105,7 +119,9 @@ const OrdersPage = () => {
                       <p className="font-medium text-gray-500">
                         {order.vendor_name}
                       </p>
-                      <p className="font-bold text-lg">RM {order.price}</p>
+                      <p className="font-bold text-lg">
+                        RM {order.sellingPrice}
+                      </p>
                       <p className="">Amount : {order.amount}</p>
                     </div>
                   </div>
