@@ -31,6 +31,10 @@ header {
   justify-content: space-between;
 }
 
+nextjs-portal {
+  display: none;
+}
+
 #search-bar {
   padding: 1em;
   display: flex;
