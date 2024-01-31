@@ -92,7 +92,7 @@ function SummaryPage() {
                     {donationItem.vendor_name}
                   </p>
                   <p className="font-bold text-lg">
-                    RM {(Number(donationItem.price) / 2).toFixed(2).toString()}
+                    RM {(Number(donationItem.sellingPrice) / 2).toFixed(2).toString()}
                   </p>
                   <p className="">Amount : {donationItem.amount}</p>
                 </div>
