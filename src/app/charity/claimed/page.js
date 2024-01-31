@@ -62,7 +62,7 @@ const ClaimedScreen = () => {
       <div className="flex flex-col items-center w-[85%] gap-y-4 mb-24 mt-8">
         <div>
           <p className="font-bold text-gray-800 text-xl text-center mb-2">
-            Claimed Donation Items
+            Claim Donation Items
           </p>
           <p className="text-sm text-center">
             Please collect the food on the date selected to avoid food waste

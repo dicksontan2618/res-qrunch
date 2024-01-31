@@ -1,48 +1,175 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCartShopping, faHouse, faUser } from "@fortawesome/free-solid-svg-icons";
+import { useState, useEffect } from "react";
+import { useAuthContext } from "@/context/AuthContextVendor";
+import { useRouter } from "next/navigation";
 
-const DonationSummaryPage = () => {
+import { db } from "@/utils/firebase";
+import { collection, query, where, getDocs } from "firebase/firestore";
 
-  return (
-    <div className="flex flex-col items-center text-left">
-        <h1 className="mt-8 text-black text-xl font-bold text-left">Summary On Products</h1>
-      <div className="flex flex-col items-center w-[85%] gap-y-6 mb-24 mt-10">
-        <div className="card card-compact w-full bg-white text-black shadow-xl">
-          <Link href="/vendor/donation-summary-daily">
-            <div className="card-body">
-                <h2 className="card-title text-red-500 text-xl font-bold">Daily Donation</h2>
-            </div>
-          </Link>
-        </div>
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { Bar } from 'react-chartjs-2';
 
-        <div className="card card-compact w-full bg-white text-black shadow-xl">
-          <Link href="/vendor/donation-summary-weekly">
-            <div className="card-body">
-                <h2 className="card-title text-red-500 text-xl font-bold">Weekly Donation</h2>
-            </div>
-          </Link>
-        </div>
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
-        <div className="card card-compact w-full bg-white text-black shadow-xl">
-          <Link href="/vendor/donation-summary-monthly">
-            <div className="card-body">
-                <h2 className="card-title text-red-500 text-xl font-bold">Monthly Donation</h2>
-            </div>
-          </Link>
-        </div>
-
-      </div>
-    </div>
-  );
+export const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'top',
+    },
+    title: {
+      display: true,
+      text: 'Donation Summary',
+    },
+  },
 };
 
-export default DonationSummaryPage;
+const colorsList = [
+  "rgba(255, 99, 132, 0.2)",
+];
 
+const DonationSummary = () => {
 
+  const { user } = useAuthContext();
+  const router = useRouter();
 
-          
+  const [data,setData] = useState([])
 
-          
+  const getDonationData = async () => {
+
+    let tempArr = []
+    let tempLabelList = []
+    let tempQtyList = []
+
+    const q = query(
+      collection(db, "donations"),
+      where("vendor", "==", user.uid)
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.docs.forEach((doc) => {
+      tempArr.push({name:doc.data()["name"],amount:doc.data()["amount"]});
+    })
+
+    console.log(tempArr)
+    const mergedArr = mergeObjects(tempArr);
+
+    mergedArr.forEach((item)=>{
+      tempLabelList.push(item.name)
+      tempQtyList.push(item.amount)
+    })
+
+    renderChart(tempLabelList,tempQtyList);
+  }
+
+  const getSpecificDonationData = async (start,end) => {
+    let tempArr = [];
+    let tempLabelList = [];
+    let tempQtyList = [];
+
+    const q = query(
+      collection(db, "donations"),
+      where("vendor", "==", user.uid), where("createdAt",">=",start),where("createdAt","<=",end)
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.docs.forEach((doc) => {
+      tempArr.push({ name: doc.data()["name"], amount: doc.data()["amount"] });
+    });
+
+    console.log(tempArr);
+    const mergedArr = mergeObjects(tempArr);
+
+    mergedArr.forEach((item) => {
+      tempLabelList.push(item.name);
+      tempQtyList.push(item.amount);
+    });
+
+    renderChart(tempLabelList, tempQtyList);
+  };
+
+  const mergeObjects = (arr) => {
+    const result = [];
+    const objMap = {};
+
+    arr.forEach((item) => {
+      const { name, amount } = item;
+
+      if (objMap[name] === undefined) {
+        objMap[name] = { name, amount };
+        result.push(objMap[name]);
+      } else {
+        objMap[name].amount += amount;
+      }
+    });
+
+    return result;
+  };
+
+  const renderChart = (label,qt) => {
+    console.log(label)
+    let tempData = {
+      labels: label,
+      datasets: [
+        {
+          label: "Number of Donations",
+          data: qt,
+          backgroundColor: colorsList.slice(0,label.length),
+        },
+      ],
+    };
+
+    setData(tempData);
+  }
+
+  const check = () => {
+    const startDate = new Date(document.getElementById("start").value)
+    const endDate = new Date(document.getElementById("end").value);
+    getSpecificDonationData(startDate,endDate);
+  }
+
+  useEffect(() => {
+    if (
+      user == null &&
+      window.localStorage.getItem("session_user") !== "vendor"
+    ) {
+      router.push("/");
+    }
+  }, [user]);
+
+  useEffect(() => {
+    getDonationData();
+  },[])
+
+  return (
+    <div className="mt-24 flex flex-col items-center">
+      <div className="flex flex-col gap-y-4">
+        <div>
+          <label htmlFor="start">Start date:</label>
+
+          <input type="date" id="start" />
+        </div>
+        <div>
+          <label htmlFor="end">End date:</label>
+
+          <input type="date" id="end" />
+        </div>
+      </div>
+
+      <button className="btn btn-sm bg-main-clr text-white my-2" onClick={check}>
+        Check
+      </button>
+
+      {data.labels && <Bar options={options} data={data} />}
+    </div>
+  );
+  
+};
+
+export default DonationSummary;

@@ -15,7 +15,7 @@ export default function BottomNavCharity(){
             <Link href="/charity/claimed">
                 <button className="flex flex-col items-center gap-y-1">
                     <FontAwesomeIcon icon={faBasketShopping}></FontAwesomeIcon>
-                    <span className="btm-nav-label text-nav-text-clr">Claimed Food</span>
+                    <span className="btm-nav-label text-nav-text-clr">Food to Claim</span>
                 </button>
             </Link>
             <Link href="/charity/profile">

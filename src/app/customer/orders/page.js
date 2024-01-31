@@ -84,7 +84,7 @@ const OrdersPage = () => {
                         {order.vendor_name}
                       </p>
                       <p className="font-bold text-lg">
-                        RM {order.sellingPrice}
+                        RM {(order.sellingPrice).toFixed(2)}
                       </p>
                       <p className="">Amount : {order.amount}</p>
                     </div>
@@ -120,7 +120,7 @@ const OrdersPage = () => {
                         {order.vendor_name}
                       </p>
                       <p className="font-bold text-lg">
-                        RM {order.sellingPrice}
+                        RM {(order.sellingPrice).toFixed(2)}
                       </p>
                       <p className="">Amount : {order.amount}</p>
                     </div>
